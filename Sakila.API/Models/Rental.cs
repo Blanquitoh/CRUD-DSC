@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Sakila.API.Models;
 
-namespace Sakila.API.Models;
-
-public partial class Rental
+public class Rental
 {
     public int RentalId { get; set; }
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Sakila.API.Models;
 
-namespace Sakila.API.Models;
-
-public partial class Film
+public class Film
 {
     public int FilmId { get; set; }
 
