@@ -75,10 +75,11 @@ El sistema está compuesto por dos proyectos separados que siguen buenas prácti
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona el repositorio
-2. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
-3. Ejecuta `Sakila.API` (API)
-4. Ejecuta `Sakila.Web` (cliente Razor)
-5. Navega a `/films`, `/cities`, etc. para interactuar con el sistema
+2. Ejecutar los scripts en 'Sakila SQL Server' en orden en SQL Server para la creacion de la base de datos Sakila
+3. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
+4. Ejecuta `Sakila.API` (API)
+5. Ejecuta `Sakila.Web` (cliente Razor)
+6. Navega a `/films`, `/cities`, etc. para interactuar con el sistema
 
 ---
 
