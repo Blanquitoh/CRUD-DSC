@@ -1,5 +1,5 @@
 
-# 🧠 Caso Práctico 2 – CRUD/ORM con MySQL y Sakila
+# 🧠 Caso Práctico 2 – CRUD/ORM con SQL Server y Sakila
 
 **Maestría en Ciencia de Datos e Inteligencia Artificial (MACDIA)**  
 **Materia:** Ciencia de Datos I – INF-7303-C1  
@@ -9,7 +9,7 @@
 
 ## 🎯 Objetivo del proyecto
 
-Este repositorio forma parte del segundo caso práctico colaborativo de la materia, en el cual se desarrolla un sistema CRUD/ORM sobre la base de datos Sakila (MySQL), aplicando los principios de programación orientada a objetos, estructuras de datos y arquitectura escalable para el consumo estandarizado de datos.
+Este repositorio forma parte del segundo caso práctico colaborativo de la materia, en el cual se desarrolla un sistema CRUD/ORM sobre la base de datos Sakila (SQL Server), aplicando los principios de programación orientada a objetos, estructuras de datos y arquitectura escalable para el consumo estandarizado de datos.
 
 ---
 
@@ -39,7 +39,7 @@ El sistema está compuesto por dos proyectos separados que siguen buenas prácti
 | Backend      | ASP.NET Core 8.0 Web API      |
 | ORM          | Entity Framework Core         |
 | Frontend     | Razor Pages (ASP.NET Core)    |
-| Base de Datos| MySQL + Sakila                |
+| Base de Datos| SQL Server + Sakila           |
 | IDE          | Visual Studio 2022 Community  |
 
 ---
@@ -86,4 +86,5 @@ El sistema está compuesto por dos proyectos separados que siguen buenas prácti
 
 - [Entity Framework Core Docs](https://learn.microsoft.com/en-us/ef/core/)
 - [ASP.NET Core Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/)
-- [MySQL Sakila Sample DB](https://dev.mysql.com/doc/sakila/en/)
+- [SQL Server Documentation](https://learn.microsoft.com/en-us/sql/)
+- [SQL Server Sakila Sample DB](https://github.com/jOOQ/sakila/tree/main)
