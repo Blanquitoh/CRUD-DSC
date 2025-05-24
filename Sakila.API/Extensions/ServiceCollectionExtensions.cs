@@ -15,6 +15,17 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddSakilaApplication(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSakilaWeb", policy =>
+            {
+                policy.WithOrigins("https://localhost:7188")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
+
+
         services.AddDbContext<SakilaContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
@@ -28,11 +39,6 @@ public static class ServiceCollectionExtensions
             .AddValidatorsFromAssembly(typeof(CreateValidator).Assembly)
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        return services;
-    }
-
-    public static IServiceCollection AddSakilaSwagger(this IServiceCollection services)
-    {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
@@ -44,5 +50,22 @@ public static class ServiceCollectionExtensions
         });
 
         return services;
+    }
+
+    public static IApplicationBuilder AddSakilaApp(this WebApplication app)
+    {
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sakila API v1");
+                options.RoutePrefix = "swagger";
+            });
+        }
+
+        app.UseCors("AllowSakilaWeb");
+
+        return app;
     }
 }

@@ -1,25 +1,12 @@
-using Sakila.Contracts.Services;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Sakila.Web;
 using Sakila.Web.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddRazorPages();
+builder.AddSakilaServices();
 
-builder.Services.AddSakilaServices(builder.Configuration);
-
-var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthorization();
-
-app.MapStaticAssets();
-app.MapRazorPages().WithStaticAssets();
-
-app.Run();
+await builder.Build().RunAsync();

@@ -1,0 +1,30 @@
+﻿@page "/languages"
+
+<h3>Languages</h3>
+
+@if (_params == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var language in _params.Languages)
+        {
+            <tr>
+                <td>@language.Id</td>
+                <td>@language.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
