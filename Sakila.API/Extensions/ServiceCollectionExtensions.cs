@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Sakila.API.Options;
 using Sakila.Application.Common.Behaviors;
 using Sakila.Application.Languages.Commands.Handlers;
 using Sakila.Application.Languages.Commands.Validators;
@@ -12,14 +14,19 @@ namespace Sakila.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    private const string SakilaPolicyName = "AllowSakilaWeb";
+    private const string AppName = "Sakila.API";
+    private const string AppVersion = "v1";
+
     public static IServiceCollection AddSakilaApplication(this IServiceCollection services,
         IConfiguration configuration)
     {
+        var webOptions = configuration.GetSection("Sakila.Web").Get<SakilaWebOptions>()!;
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowSakilaWeb", policy =>
+            options.AddPolicy(SakilaPolicyName, policy =>
             {
-                policy.WithOrigins("https://localhost:7188")
+                policy.WithOrigins(webOptions.Endpoint)
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
@@ -42,10 +49,10 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
+            c.SwaggerDoc(AppVersion, new OpenApiInfo
             {
-                Title = "Sakila.API",
-                Version = "v1"
+                Title = AppName,
+                Version = AppVersion
             });
         });
 
@@ -59,12 +66,12 @@ public static class ServiceCollectionExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sakila API v1");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", $"{AppName} {AppVersion}");
                 options.RoutePrefix = "swagger";
             });
         }
 
-        app.UseCors("AllowSakilaWeb");
+        app.UseCors(SakilaPolicyName);
 
         return app;
     }

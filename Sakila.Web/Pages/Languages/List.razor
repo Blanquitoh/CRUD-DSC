@@ -2,6 +2,8 @@
 
 <h3>Languages</h3>
 
+<button class="btn btn-primary mb-3" @onclick="() => ShowDialog()">Add Language</button>
+
 @if (_params == null)
 {
     <p>
@@ -13,18 +15,61 @@ else
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Id</th>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var language in _params.Languages)
         {
             <tr>
-                <td>@language.Id</td>
                 <td>@language.Name</td>
+                <td>
+                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowDialog(language)">Edit</button>
+                    <button class="btn btn-sm btn-danger" @onclick="() => ShowDeleteDialog(language)">Delete</button>
+                </td>
             </tr>
         }
         </tbody>
     </table>
+}
+
+@if (_isDialogOpen)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@_actionName Language</h5>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" @bind="_selectedLanguage.Name" placeholder="Language Name"/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseDialog">Cancel</button>
+                    <button class="btn btn-primary" @onclick="SubmitLanguage">@_actionName</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (_isDeleteDialogOpen)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this language?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseDeleteDialog">No</button>
+                    <button class="btn btn-danger" @onclick="ConfirmDelete">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }

@@ -8,7 +8,7 @@ public interface ILanguageService
 {
     Task<LanguageGetAllResponse> GetAllAsync();
     Task<LanguageGetByIdResponse> GetByIdAsync(int id);
-    Task<int> CreateAsync(LanguageCreateRequest request);
+    Task CreateAsync(LanguageCreateRequest request);
     Task UpdateAsync(LanguageUpdateRequest request);
     Task DeleteAsync(int id);
 }

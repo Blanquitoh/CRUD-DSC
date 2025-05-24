@@ -21,11 +21,10 @@ public class LanguageService(HttpClient httpClient) : ILanguageService
         return await response.Content.ReadFromJsonAsync<LanguageGetByIdResponse>() ?? new LanguageGetByIdResponse();
     }
 
-    public async Task<int> CreateAsync(LanguageCreateRequest request)
+    public async Task CreateAsync(LanguageCreateRequest request)
     {
         var response = await httpClient.PostAsJsonAsync("api/languages", request);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<int>();
     }
 
     public async Task UpdateAsync(LanguageUpdateRequest request)
