@@ -15,14 +15,33 @@ Este repositorio forma parte del segundo caso práctico colaborativo de la mater
 
 ## 🧱 Arquitectura de la solución
 
-El sistema está compuesto por dos proyectos separados que siguen buenas prácticas de desacoplamiento y responsabilidad única:
+La solución está organizada siguiendo los principios de **Clean Architecture** y **CQRS (Command Query Responsibility Segregation)**, lo que permite un desacoplamiento claro entre la lógica de negocio, los contratos de comunicación y la infraestructura de persistencia.
 
 ### 🔹 `Sakila.API` – ASP.NET Core Web API
-- **Entity Framework Core** (ORM)
-- `DbContext` (`SakilaContext`) para mapear la base de datos
-- `Entities` como mapeo de las tablas del DBMS
-- Controladores RESTful (`FilmController`, `CityController`, etc.)
-- Exposición de endpoints API (`/api/films`, `/api/countries`, ...)
+- Exposición de endpoints RESTful (`/api/languages`, etc.)
+- Controladores minimalistas con `IMediator` (MediatR)
+- Validaciones automáticas con `FluentValidation` vía `ValidationBehavior`
+- Proyecciones eficientes de datos con `AutoMapper.ProjectTo<>`
+
+### 🔹 `Sakila.Application` – Lógica de aplicación y casos de uso
+- Separación clara entre comandos (`Language/Commands`) y consultas (`Language/Queries`)
+- Handlers desacoplados para cada operación (`Language/CreateHandler`, `Language/GetByIdHandler`, etc.)
+- Validadores específicos por tipo de request (`Language/CreateValidator`, etc.)
+- Perfiles de mapeo organizados por entidad (`Language/CreateProfile`, etc.)
+
+### 🔹 `Sakila.Contracts` – Modelos de comunicación (request/response)
+- Contiene los `Request` y `Response` usados por los controladores y handlers
+- Evita exponer detalles internos de la base de datos como nombres de columnas (`Id` en vez de `LanguageId`)
+- Preparado para ser reutilizado por otros proyectos como `Sakila.Web`
+
+### 🔹 `Sakila.Domain` – Entidades del dominio (mapeo del DBMS)
+- Contiene los modelos `Entity Framework` (`Language`, `Film`, etc.)
+- Propiedades como `LanguageId`, `FilmId`, etc., reflejan fielmente la estructura SQL Server
+
+### 🔹 `Sakila.Infrastructure` – Infraestructura de acceso a datos
+- Implementación del `DbContext` (`SakilaContext`)
+- Conexión a SQL Server
+- Configuración de EF Core
 
 ### 🔹 `Sakila.Web` – Razor Pages UI
 - UI web desarrollada con Razor Pages (ASP.NET Core)
