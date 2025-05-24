@@ -1,18 +1,27 @@
 using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Sakila.API.Data;
+using Sakila.Application.Common.Behaviors;
+using Sakila.Application.Languages.Commands.Handlers;
+using Sakila.Application.Languages.Commands.Validators;
+using Sakila.Application.Languages.Queries.Mapping;
+using Sakila.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register DbContext
 builder.Services.AddDbContext<SakilaContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .EnableSensitiveDataLogging()
+        .LogTo(Console.WriteLine, LogLevel.Information));
+builder.Services
+    .AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(CreateHandler).Assembly))
+    .AddAutoMapper(typeof(GetByIdProfile).Assembly)
+    .AddValidatorsFromAssembly(typeof(CreateValidator).Assembly)
+    .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-// Register controllers
 builder.Services.AddControllers();
 
-// Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -23,19 +32,15 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// FluentValidation v11+ recommended setup
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
-
 var app = builder.Build();
 
-// Enable Swagger in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    app.UseSwaggerUI(options =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sakila API v1");
-        c.RoutePrefix = "swagger";
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sakila API v1");
+        options.RoutePrefix = "swagger";
     });
 }
 
