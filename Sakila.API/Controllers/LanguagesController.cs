@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Contracts.Languages.Responses;
-using Sakila.Domain.Models;
 
 namespace Sakila.API.Controllers;
 
@@ -12,7 +11,7 @@ namespace Sakila.API.Controllers;
 public class LanguagesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Language>>> GetAll()
+    public async Task<ActionResult<LanguageGetAllResponse>> GetAll()
     {
         var languages = await mediator.Send(new LanguageGetAllRequest());
         return Ok(languages);
@@ -43,11 +42,9 @@ public class LanguagesController(IMediator mediator) : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteLanguage(int id, LanguageDeleteRequest command)
+    public async Task<IActionResult> DeleteLanguage(int id)
     {
-        if (id != command.Id) return BadRequest();
-
-        var result = await mediator.Send(command);
+        var result = await mediator.Send(new LanguageDeleteRequest { Id = id });
         return result ? NoContent() : NotFound();
     }
 }

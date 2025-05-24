@@ -2,14 +2,13 @@
 using Sakila.Contracts.Languages.Responses;
 using Sakila.Domain.Models;
 
-namespace Sakila.Application.Languages.Queries.Mapping
+namespace Sakila.Application.Languages.Queries.Mapping;
+
+public class GetByIdProfile : Profile
 {
-    public class GetByIdProfile : Profile
+    public GetByIdProfile()
     {
-        public GetByIdProfile()
-        {
-            CreateMap<Language, LanguageGetByIdResponse>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LanguageId)).ReverseMap();
-        }
+        CreateMap<Language, LanguageGetByIdResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LanguageId)).ReverseMap();
     }
 }

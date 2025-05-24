@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakila.Application", "Sakil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakila.Contracts", "Sakila.Contracts\Sakila.Contracts.csproj", "{50DD2308-FB01-4FAF-8268-398441CD23EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sakila.Web", "Sakila.Web\Sakila.Web.csproj", "{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{50DD2308-FB01-4FAF-8268-398441CD23EC}.Release|x64.Build.0 = Release|Any CPU
 		{50DD2308-FB01-4FAF-8268-398441CD23EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{50DD2308-FB01-4FAF-8268-398441CD23EC}.Release|x86.Build.0 = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|x64.Build.0 = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|x64.ActiveCfg = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|x64.Build.0 = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{05A55DAF-658F-47E3-8C42-ECFC787BC2B7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
