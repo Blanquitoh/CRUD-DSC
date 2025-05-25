@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -8,6 +7,8 @@ namespace Sakila.Web.Common;
 public class ApiClient(HttpClient httpClient) : IApiClient
 {
     private const string Base = "api/";
+
+    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
     public async Task<TResponse> GetAsync<TResponse>(string url)
     {
@@ -32,8 +33,6 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         var response = await httpClient.DeleteAsync($"{Base}{url}");
         await HandleResponse<object>(response);
     }
-
-    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
     private static async Task<T> HandleResponse<T>(HttpResponseMessage response)
     {

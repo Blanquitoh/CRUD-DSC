@@ -8,15 +8,12 @@ namespace Sakila.Web.Pages.Languages;
 
 public partial class List
 {
-    [Inject] public ILanguageService LanguageService { get; set; } = null!;
-
-    private LanguageGetAllResponse? _params;
-
-    private bool _isDialogOpen;
     private bool _isDeleteDialogOpen;
+    private bool _isDialogOpen;
+    private LanguageGetAllResponse? _params;
     private LanguageGetByIdResponse _selectedLanguage = new();
-    private string _actionName = "Add";
-    private List<string> ValidationMessages { get; set; } = [];
+    [Inject] public ILanguageService LanguageService { get; set; } = null!;
+    private Dictionary<string, string[]> Errors { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -25,17 +22,7 @@ public partial class List
 
     private void ShowDialog(LanguageGetByIdResponse? language = null)
     {
-        if (language == null)
-        {
-            _selectedLanguage = new LanguageGetByIdResponse();
-            _actionName = "Add";
-        }
-        else
-        {
-            _selectedLanguage = language;
-            _actionName = "Edit";
-        }
-
+        _selectedLanguage = language ?? new LanguageGetByIdResponse();
         _isDialogOpen = true;
     }
 
@@ -56,23 +43,15 @@ public partial class List
             }
             else
             {
-                var request = new LanguageUpdateRequest
-                    { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
+                var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
                 await LanguageService.UpdateAsync(request);
             }
 
-            _params = await LanguageService.GetAllAsync();
-            _isDialogOpen = false;
+            CloseDialog();
         }
-        catch (ApiValidationException vex)
+        catch (ApiValidationException exception)
         {
-            foreach (var (field, errors) in vex.Errors)
-            {
-                foreach (var error in errors)
-                {
-                    ValidationMessages.Add($"{field}: {error}");
-                }
-            }
+            Errors = exception.Errors;
         }
     }
 
@@ -89,8 +68,15 @@ public partial class List
 
     private async Task ConfirmDelete()
     {
-        await LanguageService.DeleteAsync(_selectedLanguage.Id);
-        _params = await LanguageService.GetAllAsync();
-        _isDeleteDialogOpen = false;
+        try
+        {
+            await LanguageService.DeleteAsync(_selectedLanguage.Id);
+            _params!.Languages.Remove(_selectedLanguage);
+            CloseDeleteDialog();
+        }
+        catch (ApiValidationException exception)
+        {
+            Errors = exception.Errors;
+        }
     }
 }
