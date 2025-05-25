@@ -2,6 +2,7 @@
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Responses;
 using Sakila.Contracts.Services;
+using Sakila.Web.Common;
 
 namespace Sakila.Web.Pages.Languages;
 
@@ -15,6 +16,7 @@ public partial class List
     private bool _isDeleteDialogOpen;
     private LanguageGetByIdResponse _selectedLanguage = new();
     private string _actionName = "Add";
+    private List<string> ValidationMessages { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,12 +42,12 @@ public partial class List
     private void CloseDialog()
     {
         _isDialogOpen = false;
-        _selectedLanguage = null;
+        _selectedLanguage = new LanguageGetByIdResponse();
     }
 
     private async Task SubmitLanguage()
     {
-        if (!string.IsNullOrWhiteSpace(_selectedLanguage.Name))
+        try
         {
             if (_selectedLanguage.Id == 0)
             {
@@ -54,14 +56,24 @@ public partial class List
             }
             else
             {
-                var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
+                var request = new LanguageUpdateRequest
+                    { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
                 await LanguageService.UpdateAsync(request);
             }
 
             _params = await LanguageService.GetAllAsync();
+            _isDialogOpen = false;
         }
-
-        _isDialogOpen = false;
+        catch (ApiValidationException vex)
+        {
+            foreach (var (field, errors) in vex.Errors)
+            {
+                foreach (var error in errors)
+                {
+                    ValidationMessages.Add($"{field}: {error}");
+                }
+            }
+        }
     }
 
     private void ShowDeleteDialog(LanguageGetByIdResponse language)

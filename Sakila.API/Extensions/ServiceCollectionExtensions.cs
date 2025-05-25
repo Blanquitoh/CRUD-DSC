@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Sakila.API.Middleware;
 using Sakila.API.Options;
 using Sakila.Application.Common.Behaviors;
 using Sakila.Application.Languages.Commands.Handlers;
@@ -61,6 +61,8 @@ public static class ServiceCollectionExtensions
 
     public static IApplicationBuilder AddSakilaApp(this WebApplication app)
     {
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

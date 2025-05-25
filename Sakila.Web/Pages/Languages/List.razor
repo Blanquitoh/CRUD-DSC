@@ -34,6 +34,16 @@ else
     </table>
 }
 
+@if (ValidationMessages.Any())
+{
+    <ul class="text-danger">
+        @foreach (var msg in ValidationMessages)
+        {
+            <li>@msg</li>
+        }
+    </ul>
+}
+
 @if (_isDialogOpen)
 {
     <div class="modal show d-block" tabindex="-1">

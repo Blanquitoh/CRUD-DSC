@@ -1,41 +1,36 @@
-﻿using System.Net.Http.Json;
-using Sakila.Contracts.Languages.Commands;
+﻿using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Responses;
 using Sakila.Contracts.Services;
+using Sakila.Web.Common;
 
 namespace Sakila.Web.Services;
 
-public class LanguageService(HttpClient httpClient) : ILanguageService
+public class LanguageService(IApiClient apiClient) : ILanguageService
 {
+    private readonly string _resource = "languages";
+
     public async Task<LanguageGetAllResponse> GetAllAsync()
     {
-        var response = await httpClient.GetAsync("api/languages");
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<LanguageGetAllResponse>() ?? new LanguageGetAllResponse();
+        return await apiClient.GetAsync<LanguageGetAllResponse>(_resource);
     }
 
     public async Task<LanguageGetByIdResponse> GetByIdAsync(int id)
     {
-        var response = await httpClient.GetAsync($"api/languages/{id}");
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<LanguageGetByIdResponse>() ?? new LanguageGetByIdResponse();
+        return await apiClient.GetAsync<LanguageGetByIdResponse>($"{_resource}/{id}");
     }
 
     public async Task CreateAsync(LanguageCreateRequest request)
     {
-        var response = await httpClient.PostAsJsonAsync("api/languages", request);
-        response.EnsureSuccessStatusCode();
+        await apiClient.PostAsync(_resource, request);
     }
 
     public async Task UpdateAsync(LanguageUpdateRequest request)
     {
-        var response = await httpClient.PutAsJsonAsync($"api/languages/{request.Id}", request);
-        response.EnsureSuccessStatusCode();
+        await apiClient.PutAsync($"{_resource}/{request.Id}", request);
     }
 
     public async Task DeleteAsync(int id)
     {
-        var response = await httpClient.DeleteAsync($"api/languages/{id}");
-        response.EnsureSuccessStatusCode();
+        await apiClient.DeleteAsync($"{_resource}/{id}");
     }
 }
