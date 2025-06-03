@@ -22,7 +22,20 @@ public partial class List
 
     private void ShowDialog(LanguageGetByIdResponse? language = null)
     {
-        _selectedLanguage = language ?? new LanguageGetByIdResponse();
+        if (language is null)
+        {
+            _selectedLanguage = new LanguageGetByIdResponse();
+        }
+        else
+        {
+            _selectedLanguage = new LanguageGetByIdResponse
+            {
+                Id = language.Id,
+                Name = language.Name
+            };
+        }
+
+        Errors = new();
         _isDialogOpen = true;
     }
 
@@ -30,6 +43,7 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedLanguage = new LanguageGetByIdResponse();
+        Errors = new();
     }
 
     private async Task SubmitLanguage()
@@ -46,7 +60,7 @@ public partial class List
                 var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
                 await LanguageService.UpdateAsync(request);
             }
-
+            await RefreshLanguages();
             CloseDialog();
         }
         catch (ApiValidationException exception)
@@ -55,15 +69,22 @@ public partial class List
         }
     }
 
+    private async Task RefreshLanguages()
+    {
+        _params = await LanguageService.GetAllAsync();
+    }
+
     private void ShowDeleteDialog(LanguageGetByIdResponse language)
     {
         _selectedLanguage = language;
+        Errors = new();
         _isDeleteDialogOpen = true;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
+        Errors = new();
     }
 
     private async Task ConfirmDelete()
@@ -71,7 +92,7 @@ public partial class List
         try
         {
             await LanguageService.DeleteAsync(_selectedLanguage.Id);
-            _params!.Languages.Remove(_selectedLanguage);
+            await RefreshLanguages();
             CloseDeleteDialog();
         }
         catch (ApiValidationException exception)
