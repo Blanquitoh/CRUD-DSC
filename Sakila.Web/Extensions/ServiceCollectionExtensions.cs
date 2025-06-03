@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         builder.Services.AddScoped<IApiClient, ApiClient>();
         builder.Services.AddScoped<ILanguageService, LanguageService>();
+        builder.Services.AddScoped<ICountryService, CountryService>();
         builder.Services.AddScoped(sp => new HttpClient
             { BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!) });
         return builder;
