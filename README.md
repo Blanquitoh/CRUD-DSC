@@ -55,7 +55,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 
 | Capa         | Tecnología                    |
 |--------------|-------------------------------|
-| Backend      | ASP.NET Core 8.0 Web API      |
+| Backend      | ASP.NET Core 9.0 Web API      |
 | ORM          | Entity Framework Core         |
 | Frontend     | Razor Pages (ASP.NET Core)    |
 | Base de Datos| SQL Server + Sakila           |
