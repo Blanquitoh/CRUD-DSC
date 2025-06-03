@@ -1,0 +1,20 @@
+@using Sakila.Web.Pages.Components
+@if (Visible)
+{
+    <div class="modal show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Title Country</h5>
+                </div>
+                <div class="modal-body">
+                    <FormTextInput @bind-Value="Country.Name" Label="Country Name" Field="Name" Errors="Errors"/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+                    <button class="btn btn-primary" @onclick="OnSubmit">@Title</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
