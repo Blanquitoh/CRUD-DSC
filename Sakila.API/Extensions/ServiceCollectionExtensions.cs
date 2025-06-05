@@ -14,34 +14,30 @@ namespace Sakila.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    private const string SakilaPolicyName = "AllowSakilaWeb";
+    private const string AppPolicyName = "AllowSakilaWeb";
     private const string AppName = "Sakila.API";
     private const string AppVersion = "v1";
 
-    public static IServiceCollection AddSakilaApplication(this IServiceCollection services,
+    public static void AddApplicationLayer(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var webOptions = configuration.GetSection("Sakila.Web").Get<SakilaWebOptions>()!;
+        var webOptions = configuration.GetSection("App.Web").Get<AppWebOptions>()!;
         services.AddCors(options =>
         {
-            options.AddPolicy(SakilaPolicyName, policy =>
-            {
-                policy.WithOrigins(webOptions.Endpoint)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
+            options.AddPolicy(AppPolicyName,
+                policy => { policy.WithOrigins(webOptions.Endpoint).AllowAnyMethod().AllowAnyHeader(); });
         });
 
 
         services.AddDbContext<SakilaContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-                .EnableSensitiveDataLogging()
-                .LogTo(Console.WriteLine, LogLevel.Information);
+                .EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
         });
 
         services
-            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateHandler).Assembly))
+            .AddMediatR(serviceConfiguration =>
+                serviceConfiguration.RegisterServicesFromAssembly(typeof(CreateHandler).Assembly))
             .AddAutoMapper(typeof(GetByIdProfile).Assembly)
             .AddValidatorsFromAssembly(typeof(CreateValidator).Assembly)
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -55,11 +51,9 @@ public static class ServiceCollectionExtensions
                 Version = AppVersion
             });
         });
-
-        return services;
     }
 
-    public static IApplicationBuilder AddSakilaApp(this WebApplication app)
+    public static void AddWebApplicationLayer(this WebApplication app)
     {
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
@@ -68,13 +62,11 @@ public static class ServiceCollectionExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", $"{AppName} {AppVersion}");
+                options.SwaggerEndpoint($"/swagger/{AppVersion}/swagger.json", $"{AppName} {AppVersion}");
                 options.RoutePrefix = "swagger";
             });
         }
 
-        app.UseCors(SakilaPolicyName);
-
-        return app;
+        app.UseCors(AppPolicyName);
     }
 }
