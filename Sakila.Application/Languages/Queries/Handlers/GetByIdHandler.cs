@@ -1,8 +1,7 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Sakila.Domain.Models;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Contracts.Languages.Responses;
 using Sakila.Infrastructure.Data;
@@ -20,9 +19,8 @@ public class GetByIdHandler(
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        return await context.Languages
-            .Where(l => l.LanguageId == request.Id)
-            .ProjectTo<LanguageGetByIdResponse>(mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);
+        var ctx = new ValidationContext<LanguageGetByIdRequest>(request);
+        var language = (Language)ctx.RootContextData["language"];
+        return mapper.Map<LanguageGetByIdResponse>(language);
     }
 }

@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Validators;
 using Sakila.Infrastructure.Data;
@@ -12,7 +13,13 @@ public class DeleteValidator : AbstractValidator<CountryDeleteRequest>
         Include(new CountryDeleteValidator());
 
         RuleFor(x => x.Id)
-            .Must(id => context.Countries.Any(c => c.CountryId == id))
+            .MustAsync(async (_, id, ctx, ct) =>
+            {
+                var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
+                if (country == null) return false;
+                ctx.RootContextData["country"] = country;
+                return true;
+            })
             .WithMessage("Country not found.");
     }
 }

@@ -1,6 +1,6 @@
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Sakila.Domain.Models;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Infrastructure.Data;
 
@@ -14,7 +14,8 @@ public class DeleteHandler(
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var language = await context.Languages.FirstAsync(l => l.LanguageId == request.Id, cancellationToken);
+        var ctx = new ValidationContext<LanguageDeleteRequest>(request);
+        var language = (Language)ctx.RootContextData["language"];
         context.Languages.Remove(language);
         await context.SaveChangesAsync(cancellationToken);
         return true;
