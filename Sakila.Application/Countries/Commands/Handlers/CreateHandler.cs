@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
@@ -8,10 +9,13 @@ namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class CreateHandler(
     SakilaContext context,
-    IMapper mapper) : IRequestHandler<CountryCreateRequest, int>
+    IMapper mapper,
+    IValidator<CountryCreateRequest> validator) : IRequestHandler<CountryCreateRequest, int>
 {
     public async Task<int> Handle(CountryCreateRequest request, CancellationToken cancellationToken)
     {
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
         var country = mapper.Map<Country>(request);
 
         context.Countries.Add(country);

@@ -20,7 +20,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 ### 🔹 `Sakila.API` – ASP.NET Core Web API
 - Exposición de endpoints RESTful (`/api/languages`, etc.)
 - Controladores minimalistas con `IMediator` (MediatR)
-- Validaciones automáticas con `FluentValidation` vía `ValidationBehavior`
+- Validaciones ejecutadas en los handlers con `FluentValidation`
 - Proyecciones eficientes de datos con `AutoMapper.ProjectTo<>`
 
 ### 🔹 `Sakila.Application` – Lógica de aplicación y casos de uso
