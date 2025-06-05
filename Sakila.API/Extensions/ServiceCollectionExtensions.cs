@@ -1,15 +1,10 @@
 ﻿using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Sakila.API.Middleware;
 using Sakila.API.Options;
 using Sakila.Application.Languages.Commands.Handlers;
-using Sakila.Application.Languages.Commands.Validators;
 using Sakila.Application.Languages.Queries.Mapping;
-using Sakila.Application.Languages.Queries.Validators;
-using Sakila.Application.Countries.Commands.Validators;
-using Sakila.Application.Countries.Queries.Validators;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Contracts.Countries.Commands;
@@ -41,19 +36,26 @@ public static class ServiceCollectionExtensions
                 .EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
         });
 
-        services
-            .AddMediatR(serviceConfiguration =>
+        services.AddMediatR(serviceConfiguration =>
                 serviceConfiguration.RegisterServicesFromAssembly(typeof(CreateHandler).Assembly))
             .AddAutoMapper(typeof(GetByIdProfile).Assembly);
 
-        services.AddTransient<IValidator<LanguageCreateRequest>, CreateValidator>();
-        services.AddTransient<IValidator<LanguageUpdateRequest>, UpdateValidator>();
-        services.AddTransient<IValidator<LanguageDeleteRequest>, DeleteValidator>();
-        services.AddTransient<IValidator<LanguageGetByIdRequest>, GetByIdValidator>();
-        services.AddTransient<IValidator<CountryCreateRequest>, Sakila.Application.Countries.Commands.Validators.CreateValidator>();
-        services.AddTransient<IValidator<CountryUpdateRequest>, Sakila.Application.Countries.Commands.Validators.UpdateValidator>();
-        services.AddTransient<IValidator<CountryDeleteRequest>, Sakila.Application.Countries.Commands.Validators.DeleteValidator>();
-        services.AddTransient<IValidator<CountryGetByIdRequest>, Sakila.Application.Countries.Queries.Validators.GetByIdValidator>();
+        services.AddTransient<IValidator<LanguageCreateRequest>,
+            Application.Languages.Commands.Validators.CreateValidator>();
+        services.AddTransient<IValidator<LanguageUpdateRequest>,
+            Application.Languages.Commands.Validators.UpdateValidator>();
+        services.AddTransient<IValidator<LanguageDeleteRequest>,
+            Application.Languages.Commands.Validators.DeleteValidator>();
+        services.AddTransient<IValidator<LanguageGetByIdRequest>,
+            Application.Languages.Queries.Validators.GetByIdValidator>();
+        services.AddTransient<IValidator<CountryCreateRequest>,
+            Application.Countries.Commands.Validators.CreateValidator>();
+        services.AddTransient<IValidator<CountryUpdateRequest>,
+            Application.Countries.Commands.Validators.UpdateValidator>();
+        services.AddTransient<IValidator<CountryDeleteRequest>,
+            Application.Countries.Commands.Validators.DeleteValidator>();
+        services.AddTransient<IValidator<CountryGetByIdRequest>,
+            Application.Countries.Queries.Validators.GetByIdValidator>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
