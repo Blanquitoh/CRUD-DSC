@@ -55,7 +55,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 
 | Capa         | Tecnología                    |
 |--------------|-------------------------------|
-| Backend      | ASP.NET Core 8.0 Web API      |
+| Backend      | ASP.NET Core 9.0 Web API      |
 | ORM          | Entity Framework Core         |
 | Frontend     | Razor Pages (ASP.NET Core)    |
 | Base de Datos| SQL Server + Sakila           |
@@ -94,7 +94,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona el repositorio
-2. Ejecutar los scripts en 'Sakila SQL Server' en orden en SQL Server para la creacion de la base de datos Sakila
+2. Ejecutar los scripts en 'Sakila SQL Server' en orden en SQL Server para la creación de la base de datos Sakila
 3. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
 4. Ejecuta `Sakila.API` (API)
 5. Ejecuta `Sakila.Web` (cliente Razor)
