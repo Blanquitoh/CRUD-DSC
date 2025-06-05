@@ -67,6 +67,9 @@
     <Compile Include="Languages\Queries\LanguageGetByIdRequest.cs" />
     <Compile Include="Languages\Responses\LanguageGetAllResponse.cs" />
     <Compile Include="Languages\Responses\LanguageGetByIdResponse.cs" />
+    <Compile Include="Languages\Validators\LanguageCreateValidator.cs" />
+    <Compile Include="Languages\Validators\LanguageUpdateValidator.cs" />
+    <Compile Include="Languages\Validators\LanguageDeleteValidator.cs" />
     <Compile Include="Countries\Commands\CountryCreateRequest.cs" />
     <Compile Include="Countries\Commands\CountryDeleteRequest.cs" />
     <Compile Include="Countries\Commands\CountryUpdateRequest.cs" />
@@ -74,6 +77,9 @@
     <Compile Include="Countries\Queries\CountryGetByIdRequest.cs" />
     <Compile Include="Countries\Responses\CountryGetAllResponse.cs" />
     <Compile Include="Countries\Responses\CountryGetByIdResponse.cs" />
+    <Compile Include="Countries\Validators\CountryCreateValidator.cs" />
+    <Compile Include="Countries\Validators\CountryUpdateValidator.cs" />
+    <Compile Include="Countries\Validators\CountryDeleteValidator.cs" />
     <Compile Include="Services\ICountryService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
