@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Sakila.Contracts.Countries.Responses;
 
 public class CountryGetAllResponse

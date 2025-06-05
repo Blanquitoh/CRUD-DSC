@@ -23,19 +23,15 @@ public partial class List
     private void ShowDialog(LanguageGetByIdResponse? language = null)
     {
         if (language is null)
-        {
             _selectedLanguage = new LanguageGetByIdResponse();
-        }
         else
-        {
             _selectedLanguage = new LanguageGetByIdResponse
             {
                 Id = language.Id,
                 Name = language.Name
             };
-        }
 
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
         _isDialogOpen = true;
     }
 
@@ -43,7 +39,7 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedLanguage = new LanguageGetByIdResponse();
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task SubmitLanguage()
@@ -60,6 +56,7 @@ public partial class List
                 var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
                 await LanguageService.UpdateAsync(request);
             }
+
             await RefreshLanguages();
             CloseDialog();
         }
@@ -77,14 +74,14 @@ public partial class List
     private void ShowDeleteDialog(LanguageGetByIdResponse language)
     {
         _selectedLanguage = language;
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
         _isDeleteDialogOpen = true;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task ConfirmDelete()

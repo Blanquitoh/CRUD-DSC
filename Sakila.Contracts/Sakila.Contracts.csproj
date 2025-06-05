@@ -74,6 +74,7 @@
     <Compile Include="Countries\Queries\CountryGetByIdRequest.cs" />
     <Compile Include="Countries\Responses\CountryGetAllResponse.cs" />
     <Compile Include="Countries\Responses\CountryGetByIdResponse.cs" />
+    <Compile Include="Services\ICountryService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

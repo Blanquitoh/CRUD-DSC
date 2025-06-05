@@ -23,19 +23,15 @@ public partial class List
     private void ShowDialog(CountryGetByIdResponse? country = null)
     {
         if (country is null)
-        {
             _selectedCountry = new CountryGetByIdResponse();
-        }
         else
-        {
             _selectedCountry = new CountryGetByIdResponse
             {
                 Id = country.Id,
                 Name = country.Name
             };
-        }
 
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
         _isDialogOpen = true;
     }
 
@@ -43,7 +39,7 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedCountry = new CountryGetByIdResponse();
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task SubmitCountry()
@@ -60,6 +56,7 @@ public partial class List
                 var request = new CountryUpdateRequest { Id = _selectedCountry.Id, Name = _selectedCountry.Name };
                 await CountryService.UpdateAsync(request);
             }
+
             await RefreshCountries();
             CloseDialog();
         }
@@ -77,14 +74,14 @@ public partial class List
     private void ShowDeleteDialog(CountryGetByIdResponse country)
     {
         _selectedCountry = country;
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
         _isDeleteDialogOpen = true;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
-        Errors = new();
+        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task ConfirmDelete()

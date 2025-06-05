@@ -58,10 +58,7 @@ public partial class SakilaContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=DefaultConnection");
-        }
+        if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer("Name=DefaultConnection");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
