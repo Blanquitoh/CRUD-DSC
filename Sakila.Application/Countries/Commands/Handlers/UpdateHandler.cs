@@ -1,8 +1,8 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Commands;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
@@ -15,10 +15,13 @@ public class UpdateHandler(
 {
     public async Task<Unit> Handle(CountryUpdateRequest request, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
 
-        var country = await context.Countries
-            .FirstAsync(c => c.CountryId == request.Id, cancellationToken);
+        var country = (Country)validationResult.RootContextData["country"];
 
         mapper.Map(request, country);
         await context.SaveChangesAsync(cancellationToken);
