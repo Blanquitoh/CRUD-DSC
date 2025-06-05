@@ -1,8 +1,7 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Sakila.Domain.Models;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Countries.Responses;
 using Sakila.Infrastructure.Data;
@@ -20,9 +19,8 @@ public class GetByIdHandler(
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        return await context.Countries
-            .Where(c => c.CountryId == request.Id)
-            .ProjectTo<CountryGetByIdResponse>(mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);
+        var ctx = new ValidationContext<CountryGetByIdRequest>(request);
+        var country = (Country)ctx.RootContextData["country"];
+        return mapper.Map<CountryGetByIdResponse>(country);
     }
 }

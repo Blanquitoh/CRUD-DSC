@@ -1,6 +1,6 @@
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Sakila.Domain.Models;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Infrastructure.Data;
 
@@ -14,7 +14,8 @@ public class DeleteHandler(
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-        var country = await context.Countries.FirstAsync(c => c.CountryId == request.Id, cancellationToken);
+        var ctx = new ValidationContext<CountryDeleteRequest>(request);
+        var country = (Country)ctx.RootContextData["country"];
         context.Countries.Remove(country);
         await context.SaveChangesAsync(cancellationToken);
         return true;

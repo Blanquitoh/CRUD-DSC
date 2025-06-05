@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Validators;
 using Sakila.Infrastructure.Data;
@@ -12,7 +13,13 @@ public class DeleteValidator : AbstractValidator<LanguageDeleteRequest>
         Include(new LanguageDeleteValidator());
 
         RuleFor(x => x.Id)
-            .Must(id => context.Languages.Any(l => l.LanguageId == id))
+            .MustAsync(async (_, id, ctx, ct) =>
+            {
+                var language = await context.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
+                if (language == null) return false;
+                ctx.RootContextData["language"] = language;
+                return true;
+            })
             .WithMessage("Language not found.");
     }
 }

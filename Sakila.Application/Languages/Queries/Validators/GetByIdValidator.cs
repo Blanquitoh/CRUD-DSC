@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Infrastructure.Data;
 
@@ -9,7 +10,13 @@ public class GetByIdValidator : AbstractValidator<LanguageGetByIdRequest>
     public GetByIdValidator(SakilaContext context)
     {
         RuleFor(x => x.Id)
-            .Must(id => context.Languages.Any(l => l.LanguageId == id))
+            .MustAsync(async (_, id, ctx, ct) =>
+            {
+                var language = await context.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
+                if (language == null) return false;
+                ctx.RootContextData["language"] = language;
+                return true;
+            })
             .WithMessage("Language not found.");
     }
 }
