@@ -4,6 +4,7 @@ using MediatR;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
 
@@ -21,7 +22,8 @@ public class UpdateHandler(
             throw new ValidationException(validationResult.Errors);
         }
 
-        var country = (Country)validationResult.RootContextData["country"];
+        var ctx = new ValidationContext<CountryUpdateRequest>(request);
+        var country = (Country)ctx.RootContextData["country"];
 
         mapper.Map(request, country);
         await context.SaveChangesAsync(cancellationToken);

@@ -14,7 +14,7 @@ public class UpdateValidator : AbstractValidator<CountryUpdateRequest>
         Include(new CountryUpdateValidator());
 
         RuleFor(x => x.Id)
-            .MustAsync(async (cmd, id, ctx, ct) =>
+            .MustAsync(async (_, id, ctx, ct) =>
             {
                 var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
@@ -24,8 +24,8 @@ public class UpdateValidator : AbstractValidator<CountryUpdateRequest>
             .WithMessage("Country not found.");
 
         RuleFor(x => x.Name)
-            .MustAsync(async (cmd, name, _, ct) =>
-                !await context.Countries.AnyAsync(c => c.Country1 == name && c.CountryId != cmd.Id, ct))
+            .MustAsync(async (request, name, _, ct) =>
+                !await context.Countries.AnyAsync(c => c.Country1 == name && c.CountryId != request.Id, ct))
             .WithMessage("Another country with this name already exists.");
     }
 }

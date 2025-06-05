@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
@@ -21,7 +22,8 @@ public class UpdateHandler(
             throw new ValidationException(validationResult.Errors);
         }
 
-        var language = (Language)validationResult.RootContextData["language"];
+        var ctx = new ValidationContext<LanguageUpdateRequest>(request);
+        var language = (Language)ctx.RootContextData["language"];
 
         mapper.Map(request, language);
         await context.SaveChangesAsync(cancellationToken);
