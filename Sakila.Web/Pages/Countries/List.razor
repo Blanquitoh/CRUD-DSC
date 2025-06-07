@@ -37,12 +37,12 @@ else
 
 <CountryFormDialog Visible="_isDialogOpen"
                    Country="_selectedCountry"
-                   Errors="_apiResponse.Errors"
+                   ApiResponse="_otherResponse"
                    OnCancel="CloseDialog"
                    OnSubmit="SubmitCountry"/>
 
 <ConfirmDelete Visible="_isDeleteDialogOpen"
                Country="_selectedCountry"
-               Errors="_apiResponse.Errors"
+               ApiResponse="_otherResponse"
                OnCancel="CloseDeleteDialog"
                OnConfirm="ConfirmDelete"/>

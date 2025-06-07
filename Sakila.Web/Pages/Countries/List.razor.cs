@@ -12,6 +12,7 @@ public partial class List
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
     private IApiResponse<CountryGetAllResponse> _apiResponse;
+    private IApiResponse<object>? _otherResponse;
     private CountryGetByIdResponse _selectedCountry = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
@@ -31,6 +32,7 @@ public partial class List
                 Name = country.Name
             };
 
+        _otherResponse = null;
         _isDialogOpen = true;
     }
 
@@ -38,10 +40,12 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedCountry = new CountryGetByIdResponse();
+        _otherResponse = null;
     }
 
     private async Task SubmitCountry()
     {
+        _otherResponse = null;
         IApiResponse<object> apiResponse;
         if (_selectedCountry.Id == 0)
         {
@@ -54,6 +58,7 @@ public partial class List
             apiResponse = await CountryService.UpdateAsync(request);
         }
 
+        _otherResponse = apiResponse;
         if (apiResponse.IsSuccess)
         {
             await RefreshCountries();
@@ -70,17 +75,19 @@ public partial class List
     {
         _selectedCountry = country;
         _isDeleteDialogOpen = true;
+        _otherResponse = null;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
+        _otherResponse = null;
     }
 
     private async Task ConfirmDelete()
     {
-        var apiResponse = await CountryService.DeleteAsync(_selectedCountry.Id);
-        if (apiResponse.IsSuccess)
+        _otherResponse = await CountryService.DeleteAsync(_selectedCountry.Id);
+        if (_otherResponse.IsSuccess)
         {
             await RefreshCountries();
             CloseDeleteDialog();
