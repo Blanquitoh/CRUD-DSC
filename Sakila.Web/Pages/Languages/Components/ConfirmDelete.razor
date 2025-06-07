@@ -8,8 +8,8 @@
                     <h5 class="modal-title">Confirm Deletion</h5>
                 </div>
                 <div class="modal-body">
-                    <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
                     <p>Are you sure you want to delete <strong>@Language.Name</strong>?</p>
+                    <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @onclick="OnCancel">No</button>

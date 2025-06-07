@@ -12,10 +12,12 @@ public class DeleteHandler(
 {
     public async Task<bool> Handle(CountryDeleteRequest request, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        var validationContext = new ValidationContext<CountryDeleteRequest>(request);
+        var result = await validator.ValidateAsync(validationContext, cancellationToken);
 
-        var ctx = new ValidationContext<CountryDeleteRequest>(request);
-        var country = (Country)ctx.RootContextData["country"];
+        if (!result.IsValid) throw new ValidationException(result.Errors);
+
+        var country = (Country)validationContext.RootContextData["country"];
         context.Countries.Remove(country);
         await context.SaveChangesAsync(cancellationToken);
         return true;

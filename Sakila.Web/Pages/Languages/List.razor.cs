@@ -44,6 +44,7 @@ public partial class List
 
     private async Task SubmitLanguage()
     {
+        _otherResponse = null;
         if (_selectedLanguage.Id == 0)
         {
             var request = new LanguageCreateRequest { Name = _selectedLanguage.Name };

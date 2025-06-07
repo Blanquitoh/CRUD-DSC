@@ -1,6 +1,5 @@
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries.Responses;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sakila.Contracts.Common;
 

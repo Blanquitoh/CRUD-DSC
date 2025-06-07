@@ -3,7 +3,6 @@ using Sakila.Contracts.Common;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Contracts.Services;
-using Sakila.Web.Common;
 
 namespace Sakila.Web.Pages.Countries;
 
@@ -11,14 +10,14 @@ public partial class List
 {
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
-    private IApiResponse<CountryGetAllResponse> _apiResponse;
+    private IApiResponse<CountryGetAllResponse>? _getAllResponse;
     private IApiResponse<object>? _otherResponse;
     private CountryGetByIdResponse _selectedCountry = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
-        _apiResponse = await CountryService.GetAllAsync();
+        await RefreshCountries();
     }
 
     private void ShowDialog(CountryGetByIdResponse? country = null)
@@ -46,20 +45,18 @@ public partial class List
     private async Task SubmitCountry()
     {
         _otherResponse = null;
-        IApiResponse<object> apiResponse;
         if (_selectedCountry.Id == 0)
         {
             var request = new CountryCreateRequest { Name = _selectedCountry.Name };
-            apiResponse = await CountryService.CreateAsync(request);
+            _otherResponse = await CountryService.CreateAsync(request);
         }
         else
         {
             var request = new CountryUpdateRequest { Id = _selectedCountry.Id, Name = _selectedCountry.Name };
-            apiResponse = await CountryService.UpdateAsync(request);
+            _otherResponse = await CountryService.UpdateAsync(request);
         }
 
-        _otherResponse = apiResponse;
-        if (apiResponse.IsSuccess)
+        if (_otherResponse.IsSuccess)
         {
             await RefreshCountries();
             CloseDialog();
@@ -68,7 +65,7 @@ public partial class List
 
     private async Task RefreshCountries()
     {
-        _apiResponse = await CountryService.GetAllAsync();
+        _getAllResponse = await CountryService.GetAllAsync();
     }
 
     private void ShowDeleteDialog(CountryGetByIdResponse country)
