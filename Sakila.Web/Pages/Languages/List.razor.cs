@@ -31,6 +31,7 @@ public partial class List
                 Name = language.Name
             };
 
+        _otherResponse = null;
         _isDialogOpen = true;
     }
 
@@ -38,6 +39,7 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedLanguage = new LanguageGetByIdResponse();
+        _otherResponse = null;
     }
 
     private async Task SubmitLanguage()
@@ -69,11 +71,13 @@ public partial class List
     {
         _selectedLanguage = language;
         _isDeleteDialogOpen = true;
+        _otherResponse = null;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
+        _otherResponse = null;
     }
 
     private async Task ConfirmDelete()

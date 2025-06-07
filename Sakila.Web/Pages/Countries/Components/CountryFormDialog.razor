@@ -8,7 +8,8 @@
                     <h5 class="modal-title">@Title Country</h5>
                 </div>
                 <div class="modal-body">
-                    <FormTextInput @bind-Value="Country.Name" Label="Country Name" Field="Name" Errors="Errors"/>
+                    <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
+                    <FormTextInput @bind-Value="Country.Name" Label="Country Name" Field="Name" Errors="ApiResponse?.Errors"/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @onclick="OnCancel">Cancel</button>

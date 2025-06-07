@@ -11,6 +11,8 @@ public class ApiResponse<TResponse> : IApiResponse<TResponse>
 
     public ApiResponse(TResponse? data) => Data = data;
     public ApiResponse(Dictionary<string, string[]> errors) => Errors = errors;
+    public ApiResponse(string error) => GeneralErrors.Add(error);
+    public ApiResponse(IEnumerable<string> errors) => GeneralErrors.AddRange(errors);
 
     public ApiResponse(ValidationException exception)
     {
@@ -20,6 +22,7 @@ public class ApiResponse<TResponse> : IApiResponse<TResponse>
     }
 
     public Dictionary<string, string[]> Errors { get; set; } = new();
-    public bool IsSuccess => !Errors.Any();
+    public List<string> GeneralErrors { get; set; } = new();
+    public bool IsSuccess => !Errors.Any() && !GeneralErrors.Any();
     public TResponse? Data { get; set; }
 }

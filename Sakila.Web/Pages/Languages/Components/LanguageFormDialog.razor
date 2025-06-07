@@ -8,6 +8,7 @@
                     <h5 class="modal-title">@Title Language</h5>
                 </div>
                 <div class="modal-body">
+                    <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
                     <FormTextInput @bind-Value="Language.Name" Label="Language Name" Field="Name" Errors="ApiResponse?.Errors"/>
                 </div>
                 <div class="modal-footer">

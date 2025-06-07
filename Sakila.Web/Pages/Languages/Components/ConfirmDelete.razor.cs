@@ -9,7 +9,6 @@ public partial class ConfirmDelete
     [Parameter] public bool Visible { get; set; }
     [Parameter] public LanguageGetByIdResponse Language { get; set; } = new();
     [Parameter] public IApiResponse<object>? ApiResponse { get; set; }
-    // WE MUST HANDLE SERVER ERRORS
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
 }

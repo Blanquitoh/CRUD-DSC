@@ -1,6 +1,8 @@
 using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sakila.API.Middleware;
 
@@ -26,6 +28,38 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
                 Status = 400,
                 Title = "Validation failed",
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+            };
+
+            var json = JsonSerializer.Serialize(problem);
+            await context.Response.WriteAsync(json);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/problem+json";
+
+            var problem = new ProblemDetails
+            {
+                Status = 500,
+                Title = "A database error occurred.",
+                Detail = sqlEx.Message,
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            };
+
+            var json = JsonSerializer.Serialize(problem);
+            await context.Response.WriteAsync(json);
+        }
+        catch (SqlException ex)
+        {
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/problem+json";
+
+            var problem = new ProblemDetails
+            {
+                Status = 500,
+                Title = "A database error occurred.",
+                Detail = ex.Message,
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
             };
 
             var json = JsonSerializer.Serialize(problem);

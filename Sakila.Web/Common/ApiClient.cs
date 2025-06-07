@@ -23,6 +23,10 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         {
             return new ApiResponse<TResponse>(exception.Errors);
         }
+        catch (HttpRequestException exception)
+        {
+            return new ApiResponse<TResponse>(exception.Message);
+        }
     }
 
     public async Task<IApiResponse<object>> PostAsync<TRequest>(string url, TRequest request,
@@ -42,6 +46,10 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         catch (ApiValidationException exception)
         {
             return new ApiResponse<object>(exception.Errors);
+        }
+        catch (HttpRequestException exception)
+        {
+            return new ApiResponse<object>(exception.Message);
         }
     }
 
@@ -63,6 +71,10 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         {
             return new ApiResponse<object>(exception.Errors);
         }
+        catch (HttpRequestException exception)
+        {
+            return new ApiResponse<object>(exception.Message);
+        }
     }
 
     public async Task<IApiResponse<object>> DeleteAsync(string url)
@@ -75,6 +87,10 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         catch (ApiValidationException exception)
         {
             return new ApiResponse<object>(exception.Errors);
+        }
+        catch (HttpRequestException exception)
+        {
+            return new ApiResponse<object>(exception.Message);
         }
     }
 
@@ -96,9 +112,21 @@ public class ApiClient(HttpClient httpClient) : IApiClient
 
             if (problem?.Errors is { Count: > 0 })
                 throw new ApiValidationException(problem.Errors);
+            return new ApiResponse<TResponse>(problem?.ToString() ?? "Bad request");
         }
 
-        throw new HttpRequestException(
-            $"Unexpected status: {response.StatusCode}\n\n{await response.Content.ReadAsStringAsync()}");
+        var errorContent = await response.Content.ReadAsStringAsync();
+        try
+        {
+            var document = JsonSerializer.Deserialize<JsonElement>(errorContent, Options);
+            if (document.TryGetProperty("detail", out var detail))
+                return new ApiResponse<TResponse>(detail.GetString() ?? "An error occurred");
+        }
+        catch (JsonException)
+        {
+            // ignore
+        }
+
+        return new ApiResponse<TResponse>($"Unexpected status: {response.StatusCode}");
     }
 }
