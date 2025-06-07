@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;

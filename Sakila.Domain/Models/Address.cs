@@ -1,4 +1,4 @@
-﻿namespace Sakila.Domain.Models;
+namespace Sakila.Domain.Models;
 
 public class Address
 {

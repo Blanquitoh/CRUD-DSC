@@ -1,4 +1,4 @@
-﻿namespace Sakila.Web.Common;
+namespace Sakila.Web.Common;
 
 public class ApiValidationException(Dictionary<string, string[]> errors) : Exception("Validation failed")
 {

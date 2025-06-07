@@ -1,4 +1,4 @@
-﻿namespace Sakila.API.Options;
+namespace Sakila.API.Options;
 
 public class AppWebOptions
 {
