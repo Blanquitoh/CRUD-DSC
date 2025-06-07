@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Infrastructure.Data;

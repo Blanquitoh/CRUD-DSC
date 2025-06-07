@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Common;
 using Sakila.Contracts.Languages.Queries.Responses;
 

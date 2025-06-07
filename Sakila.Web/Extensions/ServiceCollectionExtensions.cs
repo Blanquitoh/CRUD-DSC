@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Commands.Validators;

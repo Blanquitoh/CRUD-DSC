@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Infrastructure.Data;
 

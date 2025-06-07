@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Sakila.Contracts.Common;
 
 namespace Sakila.Web.Common;
