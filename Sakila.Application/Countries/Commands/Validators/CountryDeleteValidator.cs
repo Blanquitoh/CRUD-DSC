@@ -1,17 +1,14 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Contracts.Countries.Validators;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
-public class DeleteValidator : AbstractValidator<CountryDeleteRequest>
+public class CountryDeleteValidator : AbstractValidator<CountryDeleteRequest>
 {
-    public DeleteValidator(SakilaContext context)
+    public CountryDeleteValidator(SakilaContext context)
     {
-        Include(new CountryDeleteValidator());
-
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
             {

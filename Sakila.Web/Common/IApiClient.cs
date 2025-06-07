@@ -1,9 +1,15 @@
-﻿namespace Sakila.Web.Common;
+﻿using FluentValidation;
+using Sakila.Contracts.Common;
+
+namespace Sakila.Web.Common;
 
 public interface IApiClient
 {
-    Task<TResponse> GetAsync<TResponse>(string url);
-    Task PostAsync<TRequest>(string url, TRequest request);
-    Task PutAsync<TRequest>(string url, TRequest request);
-    Task DeleteAsync(string url);
+    Task<IApiResponse<TResponse>> GetAsync<TResponse>(string url);
+
+    Task<IApiResponse<object>>
+        PostAsync<TRequest>(string url, TRequest request, IValidator<TRequest>? validator = null);
+
+    Task<IApiResponse<object>> PutAsync<TRequest>(string url, TRequest request, IValidator<TRequest>? validator = null);
+    Task<IApiResponse<object>> DeleteAsync(string url);
 }

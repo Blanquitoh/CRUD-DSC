@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Queries;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Handlers;

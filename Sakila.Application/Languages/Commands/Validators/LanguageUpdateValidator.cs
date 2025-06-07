@@ -1,19 +1,18 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Contracts.Languages.Validators;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
-public class DeleteValidator : AbstractValidator<LanguageDeleteRequest>
+public class LanguageUpdateValidator : AbstractValidator<LanguageUpdateRequest>
 {
-    public DeleteValidator(SakilaContext context)
+    public LanguageUpdateValidator(SakilaContext context)
     {
-        Include(new LanguageDeleteValidator());
+        Include(new Contracts.Languages.Commands.Validators.LanguageUpdateValidator());
 
         RuleFor(x => x.Id)
-            .MustAsync(async (_, id, ctx, ct) =>
+            .MustAsync(async (cmd, id, ctx, ct) =>
             {
                 var language = await context.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
                 if (language == null) return false;
@@ -21,5 +20,10 @@ public class DeleteValidator : AbstractValidator<LanguageDeleteRequest>
                 return true;
             })
             .WithMessage("Language not found.");
+
+        RuleFor(x => x.Name)
+            .MustAsync(async (cmd, name, _, ct) =>
+                !await context.Languages.AnyAsync(l => l.Name == name && l.LanguageId != cmd.Id, ct))
+            .WithMessage("Another language with this name already exists.");
     }
 }

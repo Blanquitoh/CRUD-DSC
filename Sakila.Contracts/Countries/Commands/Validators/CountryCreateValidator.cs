@@ -1,11 +1,10 @@
 using FluentValidation;
-using Sakila.Contracts.Countries.Commands;
 
-namespace Sakila.Contracts.Countries.Validators;
+namespace Sakila.Contracts.Countries.Commands.Validators;
 
-public class CountryUpdateValidator : AbstractValidator<CountryUpdateRequest>
+public class CountryCreateValidator : AbstractValidator<CountryCreateRequest>
 {
-    public CountryUpdateValidator()
+    public CountryCreateValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Country name is required.")

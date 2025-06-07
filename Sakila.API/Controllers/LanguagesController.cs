@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;
-using Sakila.Contracts.Languages.Responses;
+using Sakila.Contracts.Languages.Queries.Responses;
 
 namespace Sakila.API.Controllers;
 

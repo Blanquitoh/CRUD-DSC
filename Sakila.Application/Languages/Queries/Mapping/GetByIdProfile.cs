@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Sakila.Contracts.Languages.Responses;
+using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Domain.Models;
 
 namespace Sakila.Application.Languages.Queries.Mapping;

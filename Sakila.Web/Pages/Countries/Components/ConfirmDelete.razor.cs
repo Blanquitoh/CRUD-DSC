@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 
 namespace Sakila.Web.Pages.Countries.Components;
 

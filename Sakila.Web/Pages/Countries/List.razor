@@ -5,7 +5,7 @@
 
 <button class="btn btn-primary mb-3" @onclick="() => ShowDialog()">Add Country</button>
 
-@if (_params == null)
+@if (_apiResponse.Data == null)
 {
     <p>
         <em>Loading...</em>
@@ -21,7 +21,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var country in _params.Countries)
+        @foreach (var country in _apiResponse.Data.Countries)
         {
             <tr>
                 <td>@country.Name</td>
@@ -37,12 +37,12 @@ else
 
 <CountryFormDialog Visible="_isDialogOpen"
                    Country="_selectedCountry"
-                   Errors="Errors"
+                   Errors="_apiResponse.Errors"
                    OnCancel="CloseDialog"
                    OnSubmit="SubmitCountry"/>
 
 <ConfirmDelete Visible="_isDeleteDialogOpen"
                Country="_selectedCountry"
-               Errors="Errors"
+               Errors="_apiResponse.Errors"
                OnCancel="CloseDeleteDialog"
                OnConfirm="ConfirmDelete"/>

@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Contracts.Languages.Validators;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
-public class CreateValidator : AbstractValidator<LanguageCreateRequest>
+public class LanguageCreateValidator : AbstractValidator<LanguageCreateRequest>
 {
-    public CreateValidator(SakilaContext context)
+    public LanguageCreateValidator(SakilaContext context)
     {
-        Include(new LanguageCreateValidator());
+        Include(new Contracts.Languages.Commands.Validators.LanguageCreateValidator());
 
         RuleFor(x => x.Name)
             .Must(name => !context.Languages.Any(l => l.Name == name))

@@ -1,6 +1,7 @@
 using FluentValidation;
+using Sakila.Contracts.Common;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Contracts.Services;
 using Sakila.Web.Common;
 
@@ -9,40 +10,32 @@ namespace Sakila.Web.Services;
 public class CountryService(
     IApiClient apiClient,
     IValidator<CountryCreateRequest> createValidator,
-    IValidator<CountryUpdateRequest> updateValidator,
-    IValidator<CountryDeleteRequest> deleteValidator) : ICountryService
+    IValidator<CountryUpdateRequest> updateValidator) : ICountryService
 {
     private readonly string _resource = "countries";
-    private readonly IValidator<CountryCreateRequest> _createValidator = createValidator;
-    private readonly IValidator<CountryUpdateRequest> _updateValidator = updateValidator;
-    private readonly IValidator<CountryDeleteRequest> _deleteValidator = deleteValidator;
 
-    public async Task<CountryGetAllResponse> GetAllAsync()
+    public async Task<IApiResponse<CountryGetAllResponse>> GetAllAsync()
     {
         return await apiClient.GetAsync<CountryGetAllResponse>(_resource);
     }
 
-    public async Task<CountryGetByIdResponse> GetByIdAsync(int id)
+    public async Task<IApiResponse<CountryGetByIdResponse>> GetByIdAsync(int id)
     {
         return await apiClient.GetAsync<CountryGetByIdResponse>($"{_resource}/{id}");
     }
 
-    public async Task CreateAsync(CountryCreateRequest request)
+    public async Task<IApiResponse<object>> CreateAsync(CountryCreateRequest request)
     {
-        await _createValidator.ValidateAndThrowAsync(request);
-        await apiClient.PostAsync(_resource, request);
+        return await apiClient.PostAsync(_resource, request, createValidator);
     }
 
-    public async Task UpdateAsync(CountryUpdateRequest request)
+    public async Task<IApiResponse<object>> UpdateAsync(CountryUpdateRequest request)
     {
-        await _updateValidator.ValidateAndThrowAsync(request);
-        await apiClient.PutAsync($"{_resource}/{request.Id}", request);
+        return await apiClient.PutAsync($"{_resource}/{request.Id}", request, updateValidator);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<IApiResponse<object>> DeleteAsync(int id)
     {
-        var request = new CountryDeleteRequest { Id = id };
-        await _deleteValidator.ValidateAndThrowAsync(request);
-        await apiClient.DeleteAsync($"{_resource}/{id}");
+        return await apiClient.DeleteAsync($"{_resource}/{id}");
     }
 }

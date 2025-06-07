@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sakila.Contracts.Languages.Responses;
+namespace Sakila.Contracts.Languages.Queries.Responses;
 
 public class LanguageGetAllResponse
 {

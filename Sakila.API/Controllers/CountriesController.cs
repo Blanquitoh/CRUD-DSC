@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 
 namespace Sakila.API.Controllers;
 

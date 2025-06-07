@@ -1,5 +1,5 @@
 using MediatR;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 
 namespace Sakila.Contracts.Countries.Queries;
 

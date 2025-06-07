@@ -1,4 +1,4 @@
-namespace Sakila.Contracts.Countries.Responses;
+namespace Sakila.Contracts.Countries.Queries.Responses;
 
 public class CountryGetByIdResponse
 {

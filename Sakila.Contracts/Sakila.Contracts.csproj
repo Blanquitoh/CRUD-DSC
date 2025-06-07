@@ -60,26 +60,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\IApiResponse.cs" />
     <Compile Include="Languages\Commands\LanguageCreateRequest.cs" />
     <Compile Include="Languages\Commands\LanguageDeleteRequest.cs" />
     <Compile Include="Languages\Commands\LanguageUpdateRequest.cs" />
     <Compile Include="Languages\Queries\LanguageGetAllRequest.cs" />
     <Compile Include="Languages\Queries\LanguageGetByIdRequest.cs" />
-    <Compile Include="Languages\Responses\LanguageGetAllResponse.cs" />
-    <Compile Include="Languages\Responses\LanguageGetByIdResponse.cs" />
-    <Compile Include="Languages\Validators\LanguageCreateValidator.cs" />
-    <Compile Include="Languages\Validators\LanguageUpdateValidator.cs" />
-    <Compile Include="Languages\Validators\LanguageDeleteValidator.cs" />
+    <Compile Include="Languages\Queries\Responses\LanguageGetAllResponse.cs" />
+    <Compile Include="Languages\Queries\Responses\LanguageGetByIdResponse.cs" />
+    <Compile Include="Languages\Commands\Validators\LanguageCreateValidator.cs" />
+    <Compile Include="Languages\Commands\Validators\LanguageUpdateValidator.cs" />
     <Compile Include="Countries\Commands\CountryCreateRequest.cs" />
     <Compile Include="Countries\Commands\CountryDeleteRequest.cs" />
     <Compile Include="Countries\Commands\CountryUpdateRequest.cs" />
     <Compile Include="Countries\Queries\CountryGetAllRequest.cs" />
     <Compile Include="Countries\Queries\CountryGetByIdRequest.cs" />
-    <Compile Include="Countries\Responses\CountryGetAllResponse.cs" />
-    <Compile Include="Countries\Responses\CountryGetByIdResponse.cs" />
-    <Compile Include="Countries\Validators\CountryCreateValidator.cs" />
-    <Compile Include="Countries\Validators\CountryUpdateValidator.cs" />
-    <Compile Include="Countries\Validators\CountryDeleteValidator.cs" />
+    <Compile Include="Countries\Queries\Responses\CountryGetAllResponse.cs" />
+    <Compile Include="Countries\Queries\Responses\CountryGetByIdResponse.cs" />
+    <Compile Include="Countries\Commands\Validators\CountryCreateValidator.cs" />
+    <Compile Include="Countries\Commands\Validators\CountryUpdateValidator.cs" />
     <Compile Include="Services\ICountryService.cs" />
     <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

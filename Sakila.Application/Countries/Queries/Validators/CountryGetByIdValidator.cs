@@ -5,9 +5,9 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Validators;
 
-public class GetByIdValidator : AbstractValidator<CountryGetByIdRequest>
+public class CountryGetByIdValidator : AbstractValidator<CountryGetByIdRequest>
 {
-    public GetByIdValidator(SakilaContext context)
+    public CountryGetByIdValidator(SakilaContext context)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>

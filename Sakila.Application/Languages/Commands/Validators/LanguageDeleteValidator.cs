@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Sakila.Contracts.Languages.Queries;
+using Sakila.Contracts.Languages.Commands;
 using Sakila.Infrastructure.Data;
 
-namespace Sakila.Application.Languages.Queries.Validators;
+namespace Sakila.Application.Languages.Commands.Validators;
 
-public class GetByIdValidator : AbstractValidator<LanguageGetByIdRequest>
+public class LanguageDeleteValidator : AbstractValidator<LanguageDeleteRequest>
 {
-    public GetByIdValidator(SakilaContext context)
+    public LanguageDeleteValidator(SakilaContext context)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>

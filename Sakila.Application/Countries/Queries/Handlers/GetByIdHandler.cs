@@ -1,9 +1,9 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Sakila.Domain.Models;
 using Sakila.Contracts.Countries.Queries;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Handlers;
@@ -17,10 +17,12 @@ public class GetByIdHandler(
     public async Task<CountryGetByIdResponse?> Handle(CountryGetByIdRequest request,
         CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        var validationContext = new ValidationContext<CountryGetByIdRequest>(request);
+        var result = await validator.ValidateAsync(validationContext, cancellationToken);
 
-        var ctx = new ValidationContext<CountryGetByIdRequest>(request);
-        var country = (Country)ctx.RootContextData["country"];
+        if (!result.IsValid) throw new ValidationException(result.Errors);
+
+        var country = (Country)validationContext.RootContextData["country"];
         return mapper.Map<CountryGetByIdResponse>(country);
     }
 }

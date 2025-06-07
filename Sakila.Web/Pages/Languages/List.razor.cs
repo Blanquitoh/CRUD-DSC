@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Sakila.Contracts.Common;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Contracts.Languages.Responses;
+using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Contracts.Services;
-using Sakila.Web.Common;
 
 namespace Sakila.Web.Pages.Languages;
 
@@ -10,14 +10,14 @@ public partial class List
 {
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
-    private LanguageGetAllResponse? _params;
+    private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
+    private IApiResponse<object>? _otherResponse;
     private LanguageGetByIdResponse _selectedLanguage = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
-    private Dictionary<string, string[]> Errors { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        _params = await LanguageService.GetAllAsync();
+        await RefreshLanguages();
     }
 
     private void ShowDialog(LanguageGetByIdResponse? language = null)
@@ -31,7 +31,6 @@ public partial class List
                 Name = language.Name
             };
 
-        Errors = new Dictionary<string, string[]>();
         _isDialogOpen = true;
     }
 
@@ -39,62 +38,51 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedLanguage = new LanguageGetByIdResponse();
-        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task SubmitLanguage()
     {
-        try
+        if (_selectedLanguage.Id == 0)
         {
-            if (_selectedLanguage.Id == 0)
-            {
-                var request = new LanguageCreateRequest { Name = _selectedLanguage.Name };
-                await LanguageService.CreateAsync(request);
-            }
-            else
-            {
-                var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
-                await LanguageService.UpdateAsync(request);
-            }
+            var request = new LanguageCreateRequest { Name = _selectedLanguage.Name };
+            _otherResponse = await LanguageService.CreateAsync(request);
+        }
+        else
+        {
+            var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
+            _otherResponse = await LanguageService.UpdateAsync(request);
+        }
 
+        if (_otherResponse.IsSuccess)
+        {
             await RefreshLanguages();
             CloseDialog();
-        }
-        catch (ApiValidationException exception)
-        {
-            Errors = exception.Errors;
         }
     }
 
     private async Task RefreshLanguages()
     {
-        _params = await LanguageService.GetAllAsync();
+        _getAllResponse = await LanguageService.GetAllAsync();
     }
 
     private void ShowDeleteDialog(LanguageGetByIdResponse language)
     {
         _selectedLanguage = language;
-        Errors = new Dictionary<string, string[]>();
         _isDeleteDialogOpen = true;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
-        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task ConfirmDelete()
     {
-        try
+        _otherResponse = await LanguageService.DeleteAsync(_selectedLanguage.Id);
+        if (_otherResponse.IsSuccess)
         {
-            await LanguageService.DeleteAsync(_selectedLanguage.Id);
             await RefreshLanguages();
             CloseDeleteDialog();
-        }
-        catch (ApiValidationException exception)
-        {
-            Errors = exception.Errors;
         }
     }
 }

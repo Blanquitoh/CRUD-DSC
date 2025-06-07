@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using FluentValidation;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Sakila.Contracts.Common;
 
 namespace Sakila.Web.Common;
 
@@ -10,37 +12,79 @@ public class ApiClient(HttpClient httpClient) : IApiClient
 
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public async Task<TResponse> GetAsync<TResponse>(string url)
+    public async Task<IApiResponse<TResponse>> GetAsync<TResponse>(string url)
     {
-        var response = await httpClient.GetAsync($"{Base}{url}");
-        return await HandleResponse<TResponse>(response);
+        try
+        {
+            var response = await httpClient.GetAsync($"{Base}{url}");
+            return await HandleResponse<TResponse>(response);
+        }
+        catch (ApiValidationException exception)
+        {
+            return new ApiResponse<TResponse>(exception.Errors);
+        }
     }
 
-    public async Task PostAsync<TRequest>(string url, TRequest request)
+    public async Task<IApiResponse<object>> PostAsync<TRequest>(string url, TRequest request,
+        IValidator<TRequest>? createValidator = null)
     {
-        var response = await httpClient.PostAsJsonAsync($"{Base}{url}", request);
-        await HandleResponse<object>(response);
+        try
+        {
+            if (createValidator != null)
+                await createValidator.ValidateAndThrowAsync(request);
+            var response = await httpClient.PostAsJsonAsync($"{Base}{url}", request);
+            return await HandleResponse<object>(response);
+        }
+        catch (ValidationException exception)
+        {
+            return new ApiResponse<object>(exception);
+        }
+        catch (ApiValidationException exception)
+        {
+            return new ApiResponse<object>(exception.Errors);
+        }
     }
 
-    public async Task PutAsync<TRequest>(string url, TRequest request)
+    public async Task<IApiResponse<object>> PutAsync<TRequest>(string url, TRequest request,
+        IValidator<TRequest>? updateValidator = null)
     {
-        var response = await httpClient.PutAsJsonAsync($"{Base}{url}", request);
-        await HandleResponse<object>(response);
+        try
+        {
+            if (updateValidator != null)
+                await updateValidator.ValidateAndThrowAsync(request);
+            var response = await httpClient.PutAsJsonAsync($"{Base}{url}", request);
+            return await HandleResponse<object>(response);
+        }
+        catch (ValidationException exception)
+        {
+            return new ApiResponse<object>(exception);
+        }
+        catch (ApiValidationException exception)
+        {
+            return new ApiResponse<object>(exception.Errors);
+        }
     }
 
-    public async Task DeleteAsync(string url)
+    public async Task<IApiResponse<object>> DeleteAsync(string url)
     {
-        var response = await httpClient.DeleteAsync($"{Base}{url}");
-        await HandleResponse<object>(response);
+        try
+        {
+            var response = await httpClient.DeleteAsync($"{Base}{url}");
+            return await HandleResponse<object>(response);
+        }
+        catch (ApiValidationException exception)
+        {
+            return new ApiResponse<object>(exception.Errors);
+        }
     }
 
-    private static async Task<T> HandleResponse<T>(HttpResponseMessage response)
+    private static async Task<IApiResponse<TResponse>> HandleResponse<TResponse>(HttpResponseMessage response)
     {
         if (response.IsSuccessStatusCode)
         {
-            if (typeof(T) == typeof(object)) return default!;
+            if (typeof(TResponse) == typeof(object)) return new ApiResponse<TResponse>();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(content, Options)!;
+            return new ApiResponse<TResponse>(JsonSerializer.Deserialize<TResponse>(content, Options)!);
         }
 
         if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -57,14 +101,4 @@ public class ApiClient(HttpClient httpClient) : IApiClient
         throw new HttpRequestException(
             $"Unexpected status: {response.StatusCode}\n\n{await response.Content.ReadAsStringAsync()}");
     }
-}
-
-public class ValidationErrorResponse
-{
-    public Dictionary<string, string[]> Errors { get; set; } = new();
-}
-
-public class ApiValidationException(Dictionary<string, string[]> errors) : Exception("Validation failed")
-{
-    public Dictionary<string, string[]> Errors { get; } = errors;
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
+using Sakila.Contracts.Common;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Contracts.Languages.Responses;
+using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Contracts.Services;
 using Sakila.Web.Common;
 
@@ -9,40 +10,32 @@ namespace Sakila.Web.Services;
 public class LanguageService(
     IApiClient apiClient,
     IValidator<LanguageCreateRequest> createValidator,
-    IValidator<LanguageUpdateRequest> updateValidator,
-    IValidator<LanguageDeleteRequest> deleteValidator) : ILanguageService
+    IValidator<LanguageUpdateRequest> updateValidator) : ILanguageService
 {
     private readonly string _resource = "languages";
-    private readonly IValidator<LanguageCreateRequest> _createValidator = createValidator;
-    private readonly IValidator<LanguageUpdateRequest> _updateValidator = updateValidator;
-    private readonly IValidator<LanguageDeleteRequest> _deleteValidator = deleteValidator;
 
-    public async Task<LanguageGetAllResponse> GetAllAsync()
+    public async Task<IApiResponse<LanguageGetAllResponse>> GetAllAsync()
     {
         return await apiClient.GetAsync<LanguageGetAllResponse>(_resource);
     }
 
-    public async Task<LanguageGetByIdResponse> GetByIdAsync(int id)
+    public async Task<IApiResponse<LanguageGetByIdResponse>> GetByIdAsync(int id)
     {
         return await apiClient.GetAsync<LanguageGetByIdResponse>($"{_resource}/{id}");
     }
 
-    public async Task CreateAsync(LanguageCreateRequest request)
+    public async Task<IApiResponse<object>> CreateAsync(LanguageCreateRequest request)
     {
-        await _createValidator.ValidateAndThrowAsync(request);
-        await apiClient.PostAsync(_resource, request);
+        return await apiClient.PostAsync(_resource, request, createValidator);
     }
 
-    public async Task UpdateAsync(LanguageUpdateRequest request)
+    public async Task<IApiResponse<object>> UpdateAsync(LanguageUpdateRequest request)
     {
-        await _updateValidator.ValidateAndThrowAsync(request);
-        await apiClient.PutAsync($"{_resource}/{request.Id}", request);
+        return await apiClient.PutAsync($"{_resource}/{request.Id}", request, updateValidator);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<IApiResponse<object>> DeleteAsync(int id)
     {
-        var request = new LanguageDeleteRequest { Id = id };
-        await _deleteValidator.ValidateAndThrowAsync(request);
-        await apiClient.DeleteAsync($"{_resource}/{id}");
+        return await apiClient.DeleteAsync($"{_resource}/{id}");
     }
 }

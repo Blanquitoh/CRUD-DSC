@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
-using Sakila.Domain.Models;
 using Sakila.Contracts.Countries.Commands;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Handlers;

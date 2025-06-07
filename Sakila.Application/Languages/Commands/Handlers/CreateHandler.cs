@@ -8,7 +8,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Languages.Commands.Handlers;
 
 public class CreateHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IMapper mapper,
     IValidator<LanguageCreateRequest> validator)
     : IRequestHandler<LanguageCreateRequest, int>
@@ -19,8 +19,8 @@ public class CreateHandler(
 
         var language = mapper.Map<Language>(request);
 
-        context.Languages.Add(language);
-        await context.SaveChangesAsync(cancellationToken);
+        dbContext.Languages.Add(language);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return language.LanguageId;
     }

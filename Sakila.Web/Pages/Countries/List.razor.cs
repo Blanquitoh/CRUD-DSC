@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
+using Sakila.Contracts.Common;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Contracts.Countries.Responses;
+using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Contracts.Services;
 using Sakila.Web.Common;
 
@@ -10,14 +11,13 @@ public partial class List
 {
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
-    private CountryGetAllResponse? _params;
+    private IApiResponse<CountryGetAllResponse> _apiResponse;
     private CountryGetByIdResponse _selectedCountry = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
-    private Dictionary<string, string[]> Errors { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        _params = await CountryService.GetAllAsync();
+        _apiResponse = await CountryService.GetAllAsync();
     }
 
     private void ShowDialog(CountryGetByIdResponse? country = null)
@@ -31,7 +31,6 @@ public partial class List
                 Name = country.Name
             };
 
-        Errors = new Dictionary<string, string[]>();
         _isDialogOpen = true;
     }
 
@@ -39,62 +38,52 @@ public partial class List
     {
         _isDialogOpen = false;
         _selectedCountry = new CountryGetByIdResponse();
-        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task SubmitCountry()
     {
-        try
+        IApiResponse<object> apiResponse;
+        if (_selectedCountry.Id == 0)
         {
-            if (_selectedCountry.Id == 0)
-            {
-                var request = new CountryCreateRequest { Name = _selectedCountry.Name };
-                await CountryService.CreateAsync(request);
-            }
-            else
-            {
-                var request = new CountryUpdateRequest { Id = _selectedCountry.Id, Name = _selectedCountry.Name };
-                await CountryService.UpdateAsync(request);
-            }
+            var request = new CountryCreateRequest { Name = _selectedCountry.Name };
+            apiResponse = await CountryService.CreateAsync(request);
+        }
+        else
+        {
+            var request = new CountryUpdateRequest { Id = _selectedCountry.Id, Name = _selectedCountry.Name };
+            apiResponse = await CountryService.UpdateAsync(request);
+        }
 
+        if (apiResponse.IsSuccess)
+        {
             await RefreshCountries();
             CloseDialog();
-        }
-        catch (ApiValidationException exception)
-        {
-            Errors = exception.Errors;
         }
     }
 
     private async Task RefreshCountries()
     {
-        _params = await CountryService.GetAllAsync();
+        _apiResponse = await CountryService.GetAllAsync();
     }
 
     private void ShowDeleteDialog(CountryGetByIdResponse country)
     {
         _selectedCountry = country;
-        Errors = new Dictionary<string, string[]>();
         _isDeleteDialogOpen = true;
     }
 
     private void CloseDeleteDialog()
     {
         _isDeleteDialogOpen = false;
-        Errors = new Dictionary<string, string[]>();
     }
 
     private async Task ConfirmDelete()
     {
-        try
+        var apiResponse = await CountryService.DeleteAsync(_selectedCountry.Id);
+        if (apiResponse.IsSuccess)
         {
-            await CountryService.DeleteAsync(_selectedCountry.Id);
             await RefreshCountries();
             CloseDeleteDialog();
-        }
-        catch (ApiValidationException exception)
-        {
-            Errors = exception.Errors;
         }
     }
 }

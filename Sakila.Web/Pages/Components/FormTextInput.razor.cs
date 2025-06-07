@@ -6,11 +6,11 @@ public partial class FormTextInput
 {
     [Parameter] public string Label { get; set; } = string.Empty;
     [Parameter] public string Field { get; set; } = string.Empty;
-    [Parameter] public Dictionary<string, string[]> Errors { get; set; } = new();
+    [Parameter] public Dictionary<string, string[]>? Errors { get; set; }
     [Parameter] public string Value { get; set; } = string.Empty;
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
 
-    private IEnumerable<string> FieldErrors => Errors.TryGetValue(Field, out var messages)
+    private IEnumerable<string> FieldErrors => Errors != null && Errors.TryGetValue(Field, out var messages)
         ? messages
         : Enumerable.Empty<string>();
 

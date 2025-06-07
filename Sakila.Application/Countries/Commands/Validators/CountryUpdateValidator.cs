@@ -1,17 +1,15 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Contracts.Countries.Validators;
-using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
-public class UpdateValidator : AbstractValidator<CountryUpdateRequest>
+public class CountryUpdateValidator : AbstractValidator<CountryUpdateRequest>
 {
-    public UpdateValidator(SakilaContext context)
+    public CountryUpdateValidator(SakilaContext context)
     {
-        Include(new CountryUpdateValidator());
+        Include(new Contracts.Countries.Commands.Validators.CountryUpdateValidator());
 
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
