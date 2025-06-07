@@ -1,4 +1,4 @@
-﻿namespace Sakila.Web.Layout;
+namespace Sakila.Web.Layout;
 
 public partial class NavMenu
 {

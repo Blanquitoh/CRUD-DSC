@@ -1,4 +1,4 @@
-﻿namespace Sakila.Web.Common;
+namespace Sakila.Web.Common;
 
 public class ValidationErrorResponse
 {

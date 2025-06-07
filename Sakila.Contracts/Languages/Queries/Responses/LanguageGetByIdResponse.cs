@@ -1,4 +1,4 @@
-﻿namespace Sakila.Contracts.Languages.Queries.Responses;
+namespace Sakila.Contracts.Languages.Queries.Responses;
 
 public class LanguageGetByIdResponse
 {

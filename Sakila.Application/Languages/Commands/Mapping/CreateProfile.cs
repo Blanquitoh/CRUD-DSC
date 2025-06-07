@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
 
