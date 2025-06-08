@@ -10,30 +10,30 @@ public class CountryService(
     IValidator<CountryCreateRequest> createValidator,
     IValidator<CountryUpdateRequest> updateValidator) : ICountryService
 {
-    private readonly string _resource = "countries";
+    private const string Resource = "countries";
 
     public async Task<IApiResponse<CountryGetAllResponse>> GetAllAsync()
     {
-        return await apiClient.GetAsync<CountryGetAllResponse>(_resource);
+        return await apiClient.GetAsync<CountryGetAllResponse>(Resource);
     }
 
     public async Task<IApiResponse<CountryGetByIdResponse>> GetByIdAsync(int id)
     {
-        return await apiClient.GetAsync<CountryGetByIdResponse>($"{_resource}/{id}");
+        return await apiClient.GetAsync<CountryGetByIdResponse>($"{Resource}/{id}");
     }
 
     public async Task<IApiResponse<object>> CreateAsync(CountryCreateRequest request)
     {
-        return await apiClient.PostAsync(_resource, request, createValidator);
+        return await apiClient.PostAsync(Resource, request, createValidator);
     }
 
     public async Task<IApiResponse<object>> UpdateAsync(CountryUpdateRequest request)
     {
-        return await apiClient.PutAsync($"{_resource}/{request.Id}", request, updateValidator);
+        return await apiClient.PutAsync($"{Resource}/{request.Id}", request, updateValidator);
     }
 
     public async Task<IApiResponse<object>> DeleteAsync(int id)
     {
-        return await apiClient.DeleteAsync($"{_resource}/{id}");
+        return await apiClient.DeleteAsync($"{Resource}/{id}");
     }
 }

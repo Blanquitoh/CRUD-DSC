@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Sakila.Contracts\Sakila.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
 </Project>
