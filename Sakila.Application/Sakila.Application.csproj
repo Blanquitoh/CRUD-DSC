@@ -12,6 +12,12 @@
     <ProjectReference Include="..\Sakila.Infrastructure\Sakila.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Countries\Queries\Validators\Data\" />
+    <Folder Include="Languages\Commands\Validators\Data\" />
+    <Folder Include="Languages\Queries\Validators\Data\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

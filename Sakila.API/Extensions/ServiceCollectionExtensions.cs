@@ -5,6 +5,7 @@ using Sakila.API.Middleware;
 using Sakila.API.Options;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators;
+using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Application.Countries.Queries.Validators;
 using Sakila.Application.Languages.Commands.Handlers;
 using Sakila.Application.Languages.Commands.Validators;
@@ -53,7 +54,8 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
         services.AddTransient<IValidatorWithData<CountryUpdateRequest, Country>, CountryUpdateValidator>();
-        services.AddTransient<IValidatorWithData<CountryDeleteRequest, Country>, CountryDeleteValidator>();
+        services.AddTransient<IValidatorWithData<CountryDeleteRequest, CountryDeleteValidatorData>,
+            CountryDeleteValidator>();
         services.AddTransient<IValidatorWithData<CountryGetByIdRequest, Country>, CountryGetByIdValidator>();
 
         services.AddEndpointsApiExplorer();
