@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
 using Sakila.API.Middleware;
 using Sakila.API.Options;
@@ -29,7 +30,8 @@ public static class ServiceCollectionExtensions
     private const string AppVersion = "v1";
 
     public static void AddApplicationLayer(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IWebHostEnvironment environment)
     {
         var webOptions = configuration.GetSection("App.Web").Get<AppWebOptions>()!;
         services.AddCors(options =>
@@ -41,8 +43,10 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<SakilaContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-                .EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            if (environment.IsDevelopment())
+                options.EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine, LogLevel.Information);
         });
 
         services.AddMediatR(serviceConfiguration =>
