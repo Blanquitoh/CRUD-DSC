@@ -1,9 +1,9 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
-using Sakila.Application.Common.Validation;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
@@ -11,7 +11,7 @@ namespace Sakila.Application.Countries.Commands.Handlers;
 public class UpdateHandler(
     SakilaContext context,
     IMapper mapper,
-    IValidatorFork<CountryUpdateRequest, Country> validator)
+    IValidatorWithData<CountryUpdateRequest, Country> validator)
     : IRequestHandler<CountryUpdateRequest, Unit>
 {
     public async Task<Unit> Handle(CountryUpdateRequest request, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class UpdateHandler(
 
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
-        var country = validator.GetData(validationContext)!;
+        var country = validator.GetData(validationContext);
 
         mapper.Map(request, country);
         await context.SaveChangesAsync(cancellationToken);

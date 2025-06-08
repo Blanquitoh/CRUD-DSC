@@ -1,13 +1,13 @@
 using FluentValidation;
-using Sakila.Application.Common.Validation;
 using Microsoft.EntityFrameworkCore;
+using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
-public class CountryDeleteValidator : ValidatorFork<CountryDeleteRequest, Country>
+public class CountryDeleteValidator : ValidatorWithData<CountryDeleteRequest, Country>
 {
     public CountryDeleteValidator(SakilaContext context)
     {

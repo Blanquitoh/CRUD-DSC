@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
-public class CountryUpdateValidator : ValidatorFork<CountryUpdateRequest, Country>
+public class CountryUpdateValidator : ValidatorWithData<CountryUpdateRequest, Country>
 {
     public CountryUpdateValidator(SakilaContext context)
     {

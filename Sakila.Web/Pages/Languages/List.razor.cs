@@ -8,9 +8,9 @@ namespace Sakila.Web.Pages.Languages;
 
 public partial class List
 {
+    private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
-    private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
     private IApiResponse<object>? _otherResponse;
     private LanguageGetByIdResponse _selectedLanguage = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;

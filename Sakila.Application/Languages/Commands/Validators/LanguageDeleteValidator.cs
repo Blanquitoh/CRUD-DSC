@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
-public class LanguageDeleteValidator : ValidatorFork<LanguageDeleteRequest, Language>
+public class LanguageDeleteValidator : ValidatorWithData<LanguageDeleteRequest, Language>
 {
     public LanguageDeleteValidator(SakilaContext context)
     {

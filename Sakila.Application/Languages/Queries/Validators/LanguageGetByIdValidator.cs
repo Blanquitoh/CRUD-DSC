@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Queries.Validators;
 
-public class LanguageGetByIdValidator : ValidatorFork<LanguageGetByIdRequest, Language>
+public class LanguageGetByIdValidator : ValidatorWithData<LanguageGetByIdRequest, Language>
 {
     public LanguageGetByIdValidator(SakilaContext context)
     {

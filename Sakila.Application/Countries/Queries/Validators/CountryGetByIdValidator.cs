@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Validators;
 
-public class CountryGetByIdValidator : ValidatorFork<CountryGetByIdRequest, Country>
+public class CountryGetByIdValidator : ValidatorWithData<CountryGetByIdRequest, Country>
 {
     public CountryGetByIdValidator(SakilaContext context)
     {

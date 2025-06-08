@@ -9,10 +9,25 @@ public class ApiResponse<TResponse> : IApiResponse<TResponse>
     {
     }
 
-    public ApiResponse(TResponse? data) => Data = data;
-    public ApiResponse(Dictionary<string, string[]> errors) => Errors = errors;
-    public ApiResponse(string error) => GeneralErrors.Add(error);
-    public ApiResponse(IEnumerable<string> errors) => GeneralErrors.AddRange(errors);
+    public ApiResponse(TResponse? data)
+    {
+        Data = data;
+    }
+
+    public ApiResponse(Dictionary<string, string[]> errors)
+    {
+        Errors = errors;
+    }
+
+    public ApiResponse(string error)
+    {
+        GeneralErrors.Add(error);
+    }
+
+    public ApiResponse(IEnumerable<string> errors)
+    {
+        GeneralErrors.AddRange(errors);
+    }
 
     public ApiResponse(ValidationException exception)
     {

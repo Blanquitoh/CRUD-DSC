@@ -1,7 +1,7 @@
-using Sakila.Contracts.Countries.Commands;
-using Sakila.Contracts.Countries.Queries.Responses;
 using System.Threading.Tasks;
 using Sakila.Contracts.Common;
+using Sakila.Contracts.Countries.Commands;
+using Sakila.Contracts.Countries.Queries.Responses;
 
 namespace Sakila.Contracts.Services;
 

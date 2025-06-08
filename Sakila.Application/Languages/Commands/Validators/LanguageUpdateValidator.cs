@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
-public class LanguageUpdateValidator : ValidatorFork<LanguageUpdateRequest, Language>
+public class LanguageUpdateValidator : ValidatorWithData<LanguageUpdateRequest, Language>
 {
     public LanguageUpdateValidator(SakilaContext context)
     {

@@ -8,9 +8,9 @@ namespace Sakila.Web.Pages.Countries;
 
 public partial class List
 {
+    private IApiResponse<CountryGetAllResponse>? _getAllResponse;
     private bool _isDeleteDialogOpen;
     private bool _isDialogOpen;
-    private IApiResponse<CountryGetAllResponse>? _getAllResponse;
     private IApiResponse<object>? _otherResponse;
     private CountryGetByIdResponse _selectedCountry = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;

@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Sakila.API.Middleware;
 using Sakila.API.Options;
+using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators;
 using Sakila.Application.Countries.Queries.Validators;
 using Sakila.Application.Languages.Commands.Handlers;
 using Sakila.Application.Languages.Commands.Validators;
 using Sakila.Application.Languages.Queries.Mapping;
 using Sakila.Application.Languages.Queries.Validators;
-using Sakila.Domain.Models;
-using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.API.Extensions;
@@ -47,14 +47,14 @@ public static class ServiceCollectionExtensions
             .AddAutoMapper(typeof(GetByIdProfile).Assembly);
 
         services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
-        services.AddTransient<IValidatorFork<LanguageUpdateRequest, Language>, LanguageUpdateValidator>();
-        services.AddTransient<IValidatorFork<LanguageDeleteRequest, Language>, LanguageDeleteValidator>();
-        services.AddTransient<IValidatorFork<LanguageGetByIdRequest, Language>, LanguageGetByIdValidator>();
+        services.AddTransient<IValidatorWithData<LanguageUpdateRequest, Language>, LanguageUpdateValidator>();
+        services.AddTransient<IValidatorWithData<LanguageDeleteRequest, Language>, LanguageDeleteValidator>();
+        services.AddTransient<IValidatorWithData<LanguageGetByIdRequest, Language>, LanguageGetByIdValidator>();
 
         services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
-        services.AddTransient<IValidatorFork<CountryUpdateRequest, Country>, CountryUpdateValidator>();
-        services.AddTransient<IValidatorFork<CountryDeleteRequest, Country>, CountryDeleteValidator>();
-        services.AddTransient<IValidatorFork<CountryGetByIdRequest, Country>, CountryGetByIdValidator>();
+        services.AddTransient<IValidatorWithData<CountryUpdateRequest, Country>, CountryUpdateValidator>();
+        services.AddTransient<IValidatorWithData<CountryDeleteRequest, Country>, CountryDeleteValidator>();
+        services.AddTransient<IValidatorWithData<CountryGetByIdRequest, Country>, CountryGetByIdValidator>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
