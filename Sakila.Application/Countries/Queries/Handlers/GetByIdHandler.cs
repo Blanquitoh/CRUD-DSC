@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Queries;
@@ -18,12 +17,7 @@ public class GetByIdHandler(
     public async Task<CountryGetByIdResponse?> Handle(CountryGetByIdRequest request,
         CancellationToken cancellationToken)
     {
-        var validationContext = new ValidationContext<CountryGetByIdRequest>(request);
-        var result = await validator.ValidateAsync(validationContext, cancellationToken);
-
-        if (!result.IsValid) throw new ValidationException(result.Errors);
-
-        var country = validator.GetData(validationContext);
+        var country = await validator.ValidateAndGetDataAsync(request, cancellationToken);
         return mapper.Map<CountryGetByIdResponse>(country);
     }
 }

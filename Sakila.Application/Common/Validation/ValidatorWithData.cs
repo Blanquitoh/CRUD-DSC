@@ -16,4 +16,15 @@ public abstract class ValidatorWithData<TRequest, TData> : AbstractValidator<TRe
     {
         context.RootContextData[_dataKey] = data!;
     }
+
+    public async Task<TData> ValidateAndGetDataAsync(TRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var context = new ValidationContext<TRequest>(request);
+        var result = await ValidateAsync(context, cancellationToken);
+
+        if (!result.IsValid) throw new ValidationException(result.Errors);
+
+        return GetData(context);
+    }
 }

@@ -1,4 +1,3 @@
-using FluentValidation;
 using MediatR;
 using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Commands;
@@ -13,12 +12,7 @@ public class DeleteHandler(
 {
     public async Task<bool> Handle(CountryDeleteRequest request, CancellationToken cancellationToken)
     {
-        var validationContext = new ValidationContext<CountryDeleteRequest>(request);
-        var result = await validator.ValidateAsync(validationContext, cancellationToken);
-
-        if (!result.IsValid) throw new ValidationException(result.Errors);
-
-        var country = validator.GetData(validationContext);
+        var country = await validator.ValidateAndGetDataAsync(request, cancellationToken);
         dbContext.Countries.Remove(country);
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
