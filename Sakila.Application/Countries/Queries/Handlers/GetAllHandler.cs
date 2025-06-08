@@ -7,7 +7,7 @@ using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Handlers;
 
-public class GetAllHandler(SakilaContext context, IMapper mapper)
+public class GetAllHandler(SakilaContext dbContext, IMapper mapper)
     : IRequestHandler<CountryGetAllRequest, CountryGetAllResponse>
 {
     public async Task<CountryGetAllResponse> Handle(CountryGetAllRequest request,
@@ -15,7 +15,7 @@ public class GetAllHandler(SakilaContext context, IMapper mapper)
     {
         return new CountryGetAllResponse
         {
-            Countries = await mapper.ProjectTo<CountryGetByIdResponse>(context.Countries)
+            Countries = await mapper.ProjectTo<CountryGetByIdResponse>(dbContext.Countries)
                 .ToListAsync(cancellationToken)
         };
     }

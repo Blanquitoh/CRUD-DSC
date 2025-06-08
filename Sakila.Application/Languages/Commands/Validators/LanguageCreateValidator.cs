@@ -6,12 +6,12 @@ namespace Sakila.Application.Languages.Commands.Validators;
 
 public class LanguageCreateValidator : AbstractValidator<LanguageCreateRequest>
 {
-    public LanguageCreateValidator(SakilaContext context)
+    public LanguageCreateValidator(SakilaContext dbContext)
     {
         Include(new Contracts.Languages.Commands.Validators.LanguageCreateValidator());
 
         RuleFor(x => x.Name)
-            .Must(name => !context.Languages.Any(l => l.Name == name))
+            .Must(name => !dbContext.Languages.Any(l => l.Name == name))
             .WithMessage("A language with this name already exists.");
     }
 }

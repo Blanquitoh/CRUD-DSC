@@ -9,7 +9,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class UpdateHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<CountryUpdateRequest, Country> validator)
     : IRequestHandler<CountryUpdateRequest, Unit>
@@ -24,7 +24,7 @@ public class UpdateHandler(
         var country = validator.GetData(validationContext);
 
         mapper.Map(request, country);
-        await context.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

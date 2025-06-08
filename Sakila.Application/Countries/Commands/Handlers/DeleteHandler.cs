@@ -8,7 +8,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class DeleteHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IValidatorWithData<CountryDeleteRequest, Country> validator) : IRequestHandler<CountryDeleteRequest, bool>
 {
     public async Task<bool> Handle(CountryDeleteRequest request, CancellationToken cancellationToken)
@@ -19,8 +19,8 @@ public class DeleteHandler(
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
         var country = validator.GetData(validationContext);
-        context.Countries.Remove(country);
-        await context.SaveChangesAsync(cancellationToken);
+        dbContext.Countries.Remove(country);
+        await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
 }

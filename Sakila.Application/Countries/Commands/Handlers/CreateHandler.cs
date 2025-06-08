@@ -8,7 +8,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class CreateHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IMapper mapper,
     IValidator<CountryCreateRequest> validator) : IRequestHandler<CountryCreateRequest, int>
 {
@@ -18,8 +18,8 @@ public class CreateHandler(
 
         var country = mapper.Map<Country>(request);
 
-        context.Countries.Add(country);
-        await context.SaveChangesAsync(cancellationToken);
+        dbContext.Countries.Add(country);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return country.CountryId;
     }
