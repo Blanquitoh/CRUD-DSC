@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using FluentValidation;
-using Sakila.Contracts.Common;
+using Sakila.Web.Abstractions;
 
 namespace Sakila.Web.Common;
 

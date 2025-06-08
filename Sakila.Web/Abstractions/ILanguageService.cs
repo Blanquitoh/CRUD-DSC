@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Sakila.Contracts.Common;
+using Sakila.Web.Abstractions;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries.Responses;
 
-namespace Sakila.Contracts.Services;
+namespace Sakila.Web.Abstractions;
 
 public interface ILanguageService
 {

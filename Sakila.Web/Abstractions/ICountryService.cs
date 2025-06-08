@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Sakila.Contracts.Common;
+using Sakila.Web.Abstractions;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries.Responses;
 
-namespace Sakila.Contracts.Services;
+namespace Sakila.Web.Abstractions;
 
 public interface ICountryService
 {
