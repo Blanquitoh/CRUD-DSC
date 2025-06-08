@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using Sakila.Application.Common.Validation;
-using Sakila.Contracts.Languages.Commands;
 using Sakila.Application.Languages.Commands.Validators.Data;
+using Sakila.Contracts.Languages.Commands;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Handlers;

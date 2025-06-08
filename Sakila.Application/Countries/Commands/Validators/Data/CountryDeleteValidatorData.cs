@@ -1,9 +1,8 @@
 ﻿using Sakila.Domain.Models;
 
-namespace Sakila.Application.Countries.Commands.Validators.Data
+namespace Sakila.Application.Countries.Commands.Validators.Data;
+
+public class CountryDeleteValidatorData(Country country)
 {
-    public class CountryDeleteValidatorData(Country country)
-    {
-        public Country Country { get; set; } = country;
-    }
+    public Country Country { get; set; } = country;
 }

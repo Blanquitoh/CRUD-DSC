@@ -1,9 +1,8 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
-using Sakila.Contracts.Languages.Queries;
-using Sakila.Domain.Models;
 using Sakila.Application.Languages.Queries.Validators.Data;
+using Sakila.Contracts.Languages.Queries;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Queries.Validators;
