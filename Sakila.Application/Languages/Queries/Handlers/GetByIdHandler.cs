@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Languages.Queries;
@@ -16,12 +15,7 @@ public class GetByIdHandler(
     public async Task<LanguageGetByIdResponse?> Handle(LanguageGetByIdRequest request,
         CancellationToken cancellationToken)
     {
-        var validationContext = new ValidationContext<LanguageGetByIdRequest>(request);
-        var result = await validator.ValidateAsync(validationContext, cancellationToken);
-
-        if (!result.IsValid) throw new ValidationException(result.Errors);
-
-        var language = validator.GetData(validationContext);
+        var language = await validator.ValidateAndGetDataAsync(request, cancellationToken);
         return mapper.Map<LanguageGetByIdResponse>(language);
     }
 }

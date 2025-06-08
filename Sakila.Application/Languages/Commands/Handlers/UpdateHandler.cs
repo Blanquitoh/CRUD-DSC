@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Languages.Commands;
@@ -16,12 +15,7 @@ public class UpdateHandler(
 {
     public async Task<Unit> Handle(LanguageUpdateRequest request, CancellationToken cancellationToken)
     {
-        var validationContext = new ValidationContext<LanguageUpdateRequest>(request);
-        var result = await validator.ValidateAsync(validationContext, cancellationToken);
-
-        if (!result.IsValid) throw new ValidationException(result.Errors);
-
-        var language = validator.GetData(validationContext);
+        var language = await validator.ValidateAndGetDataAsync(request, cancellationToken);
         mapper.Map(request, language);
         await dbContext.SaveChangesAsync(cancellationToken);
 
