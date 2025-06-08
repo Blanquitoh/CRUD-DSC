@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Sakila.API/appsettings.json
 /Sakila.Web/wwwroot/appsettings.json
+/Sakila.Web/wwwroot/lib/
