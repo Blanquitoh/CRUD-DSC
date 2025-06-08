@@ -1,11 +1,13 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Commands;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
-public class CountryUpdateValidator : AbstractValidator<CountryUpdateRequest>
+public class CountryUpdateValidator : ValidatorFork<CountryUpdateRequest, Country>
 {
     public CountryUpdateValidator(SakilaContext context)
     {
@@ -16,13 +18,13 @@ public class CountryUpdateValidator : AbstractValidator<CountryUpdateRequest>
             {
                 var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
-                ctx.RootContextData["country"] = country;
+                SetData(ctx, country);
                 return true;
             })
             .WithMessage("Country not found.");
 
         RuleFor(x => x.Name)
-            .MustAsync(async (request, name, _, ct) =>
+            .MustAsync(async (request, name, ctx, ct) =>
                 !await context.Countries.AnyAsync(c => c.Country1 == name && c.CountryId != request.Id, ct))
             .WithMessage("Another country with this name already exists.");
     }
