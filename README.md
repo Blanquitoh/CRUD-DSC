@@ -94,7 +94,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona el repositorio
-2. Ejecutar los scripts del directorio `database/` en orden en SQL Server para la creación de la base de datos Sakila
+2. Ejecutar en orden los scripts `01_sql-server-sakila-schema.sql` y `02_sql-server-sakila-insert-data.sql` del directorio `database/` en SQL Server para la creación de la base de datos Sakila
 3. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
 4. Ejecuta `Sakila.API` (API)
 5. Ejecuta `Sakila.Web` (cliente Razor)
