@@ -1,11 +1,10 @@
 using FluentValidation;
-using Sakila.Contracts.Common;
+using Sakila.Web.Abstractions;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries.Responses;
-using Sakila.Contracts.Services;
 using Sakila.Web.Common;
 
-namespace Sakila.Web.Services;
+namespace Sakila.Web.Services.Implementations;
 
 public class LanguageService(
     IApiClient apiClient,

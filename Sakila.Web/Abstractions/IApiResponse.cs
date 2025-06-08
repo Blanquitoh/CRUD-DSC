@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Sakila.Contracts.Common;
+namespace Sakila.Web.Abstractions;
 
 public interface IApiResponse<TResponse>
 {

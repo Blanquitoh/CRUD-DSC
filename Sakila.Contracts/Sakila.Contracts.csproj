@@ -60,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\IApiResponse.cs" />
     <Compile Include="Languages\Commands\LanguageCreateRequest.cs" />
     <Compile Include="Languages\Commands\LanguageDeleteRequest.cs" />
     <Compile Include="Languages\Commands\LanguageUpdateRequest.cs" />
@@ -79,8 +78,6 @@
     <Compile Include="Countries\Queries\Responses\CountryGetByIdResponse.cs" />
     <Compile Include="Countries\Commands\Validators\CountryCreateValidator.cs" />
     <Compile Include="Countries\Commands\Validators\CountryUpdateValidator.cs" />
-    <Compile Include="Services\ICountryService.cs" />
-    <Compile Include="Services\ILanguageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

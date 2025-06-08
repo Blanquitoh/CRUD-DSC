@@ -1,5 +1,5 @@
 using FluentValidation;
-using Sakila.Contracts.Common;
+using Sakila.Web.Abstractions;
 
 namespace Sakila.Web.Common;
 
