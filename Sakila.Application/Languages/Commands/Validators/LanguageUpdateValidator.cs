@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
+using Sakila.Application.Languages.Commands.Validators.Data;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
-public class LanguageUpdateValidator : ValidatorWithData<LanguageUpdateRequest, Language>
+public class LanguageUpdateValidator : ValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData>
 {
     public LanguageUpdateValidator(SakilaContext dbContext)
     {
@@ -18,7 +19,7 @@ public class LanguageUpdateValidator : ValidatorWithData<LanguageUpdateRequest, 
             {
                 var language = await dbContext.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
                 if (language == null) return false;
-                SetData(ctx, language);
+                SetData(ctx, new LanguageUpdateValidatorData(language));
                 return true;
             })
             .WithMessage("Language not found.");
