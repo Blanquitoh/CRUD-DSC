@@ -7,11 +7,6 @@ public abstract class ValidatorWithData<TRequest, TData> : AbstractValidator<TRe
 {
     private readonly string _dataKey = $"{typeof(TRequest).FullName}:{typeof(TData).FullName}";
 
-    public TData GetData(ValidationContext<TRequest> context)
-    {
-        return (context.RootContextData.TryGetValue(_dataKey, out var value) ? (TData)value : default)!;
-    }
-
     protected void SetData(ValidationContext<TRequest> context, TData data)
     {
         context.RootContextData[_dataKey] = data!;
@@ -25,6 +20,6 @@ public abstract class ValidatorWithData<TRequest, TData> : AbstractValidator<TRe
 
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
-        return GetData(context);
+        return (context.RootContextData.TryGetValue(_dataKey, out var value) ? (TData)value : default)!;
     }
 }

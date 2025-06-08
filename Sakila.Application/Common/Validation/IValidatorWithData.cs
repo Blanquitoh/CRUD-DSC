@@ -2,10 +2,8 @@ using FluentValidation;
 
 namespace Sakila.Application.Common.Validation;
 
-public interface IValidatorWithData<TRequest, out TData> : IValidator<TRequest>
-{ 
-    TData GetData(ValidationContext<TRequest> context);
-
+public interface IValidatorWithData<in TRequest, TData> : IValidator<TRequest>
+{
     Task<TData> ValidateAndGetDataAsync(TRequest request,
         CancellationToken cancellationToken = default);
 }
