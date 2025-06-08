@@ -4,6 +4,7 @@ using MediatR;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Domain.Models;
+using Sakila.Application.Common.Validation;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Handlers;
@@ -11,7 +12,7 @@ namespace Sakila.Application.Countries.Queries.Handlers;
 public class GetByIdHandler(
     SakilaContext context,
     IMapper mapper,
-    IValidator<CountryGetByIdRequest> validator)
+    IValidatorFork<CountryGetByIdRequest, Country> validator)
     : IRequestHandler<CountryGetByIdRequest, CountryGetByIdResponse?>
 {
     public async Task<CountryGetByIdResponse?> Handle(CountryGetByIdRequest request,
@@ -22,7 +23,7 @@ public class GetByIdHandler(
 
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
-        var country = (Country)validationContext.RootContextData["country"];
+        var country = validator.GetData(validationContext)!;
         return mapper.Map<CountryGetByIdResponse>(country);
     }
 }

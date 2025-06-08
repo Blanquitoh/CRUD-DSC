@@ -4,12 +4,13 @@ using MediatR;
 using Sakila.Contracts.Languages.Queries;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Domain.Models;
+using Sakila.Application.Common.Validation;
 
 namespace Sakila.Application.Languages.Queries.Handlers;
 
 public class GetByIdHandler(
     IMapper mapper,
-    IValidator<LanguageGetByIdRequest> validator)
+    IValidatorFork<LanguageGetByIdRequest, Language> validator)
     : IRequestHandler<LanguageGetByIdRequest, LanguageGetByIdResponse?>
 {
     public async Task<LanguageGetByIdResponse?> Handle(LanguageGetByIdRequest request,
@@ -20,7 +21,7 @@ public class GetByIdHandler(
 
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
-        var language = (Language)validationContext.RootContextData["language"];
+        var language = validator.GetData(validationContext)!;
         return mapper.Map<LanguageGetByIdResponse>(language);
     }
 }

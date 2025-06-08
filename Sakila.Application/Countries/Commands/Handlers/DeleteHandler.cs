@@ -2,13 +2,14 @@ using FluentValidation;
 using MediatR;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
+using Sakila.Application.Common.Validation;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class DeleteHandler(
     SakilaContext context,
-    IValidator<CountryDeleteRequest> validator) : IRequestHandler<CountryDeleteRequest, bool>
+    IValidatorFork<CountryDeleteRequest, Country> validator) : IRequestHandler<CountryDeleteRequest, bool>
 {
     public async Task<bool> Handle(CountryDeleteRequest request, CancellationToken cancellationToken)
     {
@@ -17,7 +18,7 @@ public class DeleteHandler(
 
         if (!result.IsValid) throw new ValidationException(result.Errors);
 
-        var country = (Country)validationContext.RootContextData["country"];
+        var country = validator.GetData(validationContext)!;
         context.Countries.Remove(country);
         await context.SaveChangesAsync(cancellationToken);
         return true;

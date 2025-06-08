@@ -1,11 +1,13 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Sakila.Application.Common.Validation;
 using Sakila.Contracts.Countries.Queries;
+using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Validators;
 
-public class CountryGetByIdValidator : AbstractValidator<CountryGetByIdRequest>
+public class CountryGetByIdValidator : ValidatorFork<CountryGetByIdRequest, Country>
 {
     public CountryGetByIdValidator(SakilaContext context)
     {
@@ -14,7 +16,7 @@ public class CountryGetByIdValidator : AbstractValidator<CountryGetByIdRequest>
             {
                 var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
-                ctx.RootContextData["country"] = country;
+                SetData(ctx, country);
                 return true;
             })
             .WithMessage("Country not found.");
