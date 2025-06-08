@@ -9,7 +9,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Languages.Commands.Handlers;
 
 public class UpdateHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<LanguageUpdateRequest, Language> validator)
     : IRequestHandler<LanguageUpdateRequest, Unit>
@@ -23,7 +23,7 @@ public class UpdateHandler(
 
         var language = validator.GetData(validationContext);
         mapper.Map(request, language);
-        await context.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

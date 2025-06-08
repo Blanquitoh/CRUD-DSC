@@ -10,7 +10,7 @@ using Sakila.Infrastructure.Data;
 namespace Sakila.Application.Countries.Queries.Handlers;
 
 public class GetByIdHandler(
-    SakilaContext context,
+    SakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<CountryGetByIdRequest, Country> validator)
     : IRequestHandler<CountryGetByIdRequest, CountryGetByIdResponse?>

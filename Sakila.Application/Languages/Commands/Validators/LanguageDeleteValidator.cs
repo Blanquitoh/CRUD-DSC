@@ -9,12 +9,12 @@ namespace Sakila.Application.Languages.Commands.Validators;
 
 public class LanguageDeleteValidator : ValidatorWithData<LanguageDeleteRequest, Language>
 {
-    public LanguageDeleteValidator(SakilaContext context)
+    public LanguageDeleteValidator(SakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
             {
-                var language = await context.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
+                var language = await dbContext.Languages.FirstOrDefaultAsync(l => l.LanguageId == id, ct);
                 if (language == null) return false;
                 SetData(ctx, language);
                 return true;

@@ -9,12 +9,12 @@ namespace Sakila.Application.Countries.Queries.Validators;
 
 public class CountryGetByIdValidator : ValidatorWithData<CountryGetByIdRequest, Country>
 {
-    public CountryGetByIdValidator(SakilaContext context)
+    public CountryGetByIdValidator(SakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
             {
-                var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
+                var country = await dbContext.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
                 SetData(ctx, country);
                 return true;

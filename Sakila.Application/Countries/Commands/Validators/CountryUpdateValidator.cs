@@ -9,14 +9,14 @@ namespace Sakila.Application.Countries.Commands.Validators;
 
 public class CountryUpdateValidator : ValidatorWithData<CountryUpdateRequest, Country>
 {
-    public CountryUpdateValidator(SakilaContext context)
+    public CountryUpdateValidator(SakilaContext dbContext)
     {
         Include(new Contracts.Countries.Commands.Validators.CountryUpdateValidator());
 
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
             {
-                var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
+                var country = await dbContext.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
                 SetData(ctx, country);
                 return true;
@@ -25,7 +25,7 @@ public class CountryUpdateValidator : ValidatorWithData<CountryUpdateRequest, Co
 
         RuleFor(x => x.Name)
             .MustAsync(async (request, name, ctx, ct) =>
-                !await context.Countries.AnyAsync(c => c.Country1 == name && c.CountryId != request.Id, ct))
+                !await dbContext.Countries.AnyAsync(c => c.Country1 == name && c.CountryId != request.Id, ct))
             .WithMessage("Another country with this name already exists.");
     }
 }

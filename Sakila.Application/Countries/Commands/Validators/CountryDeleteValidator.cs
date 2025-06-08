@@ -9,12 +9,12 @@ namespace Sakila.Application.Countries.Commands.Validators;
 
 public class CountryDeleteValidator : ValidatorWithData<CountryDeleteRequest, Country>
 {
-    public CountryDeleteValidator(SakilaContext context)
+    public CountryDeleteValidator(SakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
             {
-                var country = await context.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
+                var country = await dbContext.Countries.FirstOrDefaultAsync(c => c.CountryId == id, ct);
                 if (country == null) return false;
                 SetData(ctx, country);
                 return true;
