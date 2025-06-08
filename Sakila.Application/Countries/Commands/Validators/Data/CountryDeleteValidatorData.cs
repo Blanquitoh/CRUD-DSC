@@ -4,5 +4,5 @@ namespace Sakila.Application.Countries.Commands.Validators.Data;
 
 public class CountryDeleteValidatorData(Country country)
 {
-    public Country Country { get; set; } = country;
+    public Country Country { get; } = country;
 }

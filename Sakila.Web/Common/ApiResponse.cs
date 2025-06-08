@@ -24,11 +24,6 @@ public class ApiResponse<TResponse> : IApiResponse<TResponse>
         GeneralErrors.Add(error);
     }
 
-    public ApiResponse(IEnumerable<string> errors)
-    {
-        GeneralErrors.AddRange(errors);
-    }
-
     public ApiResponse(ValidationException exception)
     {
         Errors = exception.Errors

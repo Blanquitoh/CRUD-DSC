@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Sakila.Web.Abstractions;
 
 public interface IApiResponse<TResponse>

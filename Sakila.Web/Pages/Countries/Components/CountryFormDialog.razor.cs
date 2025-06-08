@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
-using Sakila.Web.Abstractions;
 using Sakila.Contracts.Countries.Queries.Responses;
+using Sakila.Web.Abstractions;
 
 namespace Sakila.Web.Pages.Countries.Components;
 

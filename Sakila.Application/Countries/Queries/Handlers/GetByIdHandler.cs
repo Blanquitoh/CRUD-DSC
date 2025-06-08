@@ -4,12 +4,10 @@ using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Queries.Validators.Data;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Countries.Queries.Responses;
-using Sakila.Infrastructure.Data;
 
 namespace Sakila.Application.Countries.Queries.Handlers;
 
 public class GetByIdHandler(
-    SakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<CountryGetByIdRequest, CountryGetByIdValidatorData> validator)
     : IRequestHandler<CountryGetByIdRequest, CountryGetByIdResponse?>
