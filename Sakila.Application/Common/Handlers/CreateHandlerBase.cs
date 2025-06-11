@@ -11,8 +11,6 @@ public abstract class CreateHandlerBase<TRequest, TEntity, TResponse>(
     IValidator<TRequest> validator) : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse> where TEntity : class
 {
-    protected abstract TResponse GetResponse(TEntity entity);
-
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(request, cancellationToken);
@@ -23,4 +21,6 @@ public abstract class CreateHandlerBase<TRequest, TEntity, TResponse>(
 
         return GetResponse(entity);
     }
+
+    protected abstract TResponse GetResponse(TEntity entity);
 }

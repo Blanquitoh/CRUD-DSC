@@ -9,8 +9,6 @@ public abstract class DeleteHandlerBase<TRequest, TEntity, TData>(
     IValidatorWithData<TRequest, TData> validator) : IRequestHandler<TRequest, bool>
     where TRequest : IRequest<bool> where TEntity : class
 {
-    protected abstract TEntity GetData(TData data);
-
     public async Task<bool> Handle(TRequest request, CancellationToken cancellationToken)
     {
         var data = await validator.ValidateAndGetDataAsync(request, cancellationToken);
@@ -19,4 +17,6 @@ public abstract class DeleteHandlerBase<TRequest, TEntity, TData>(
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
+
+    protected abstract TEntity GetData(TData data);
 }

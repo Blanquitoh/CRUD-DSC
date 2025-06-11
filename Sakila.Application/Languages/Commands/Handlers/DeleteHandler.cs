@@ -1,4 +1,3 @@
-using MediatR;
 using Sakila.Application.Common.Handlers;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Commands.Validators.Data;
@@ -13,5 +12,8 @@ public class DeleteHandler(
     IValidatorWithData<LanguageDeleteRequest, LanguageDeleteValidatorData> validator)
     : DeleteHandlerBase<LanguageDeleteRequest, Language, LanguageDeleteValidatorData>(dbContext, validator)
 {
-    protected override Language GetData(LanguageDeleteValidatorData data) => data.Language;
+    protected override Language GetData(LanguageDeleteValidatorData data)
+    {
+        return data.Language;
+    }
 }

@@ -109,10 +109,12 @@ public class ApiClient(HttpClient httpClient) : IApiClient
 
             var document = JsonSerializer.Deserialize<JsonElement>(content, Options);
 
-            if (response.StatusCode == HttpStatusCode.BadRequest && document.TryGetProperty("errors", out var errorsElement))
+            if (response.StatusCode == HttpStatusCode.BadRequest &&
+                document.TryGetProperty("errors", out var errorsElement))
             {
-                var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), Options)
-                             ?? new Dictionary<string, string[]>();
+                var errors =
+                    JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), Options)
+                    ?? new Dictionary<string, string[]>();
                 throw new ApiValidationException(errors);
             }
 

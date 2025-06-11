@@ -1,5 +1,4 @@
 using AutoMapper;
-using MediatR;
 using Sakila.Application.Common.Handlers;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Commands.Validators.Data;
@@ -15,5 +14,8 @@ public class UpdateHandler(
     IValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData> validator)
     : UpdateHandlerBase<LanguageUpdateRequest, Language, LanguageUpdateValidatorData>(dbContext, mapper, validator)
 {
-    protected override Language GetData(LanguageUpdateValidatorData data) => data.Language;
+    protected override Language GetData(LanguageUpdateValidatorData data)
+    {
+        return data.Language;
+    }
 }

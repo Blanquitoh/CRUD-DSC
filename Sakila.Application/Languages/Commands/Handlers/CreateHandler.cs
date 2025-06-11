@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentValidation;
-using MediatR;
 using Sakila.Application.Common.Handlers;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
@@ -14,5 +13,8 @@ public class CreateHandler(
     IValidator<LanguageCreateRequest> validator)
     : CreateHandlerBase<LanguageCreateRequest, Language, int>(dbContext, mapper, validator)
 {
-    protected override int GetResponse(Language entity) => entity.LanguageId;
+    protected override int GetResponse(Language entity)
+    {
+        return entity.LanguageId;
+    }
 }

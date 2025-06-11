@@ -9,10 +9,10 @@
                         <h5 class="modal-title">@Title Language</h5>
                     </div>
                     <div class="modal-body">
-                        <DataAnnotationsValidator />
-                        <InputText class="form-control" @bind-Value="Language.Name" placeholder="Language Name" />
-                        <ValidationMessage For="@(() => Language.Name)" />
-                        <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
+                        <DataAnnotationsValidator/>
+                        <InputText class="form-control" @bind-Value="Language.Name" placeholder="Language Name"/>
+                        <ValidationMessage For="@(() => Language.Name)"/>
+                        <GeneralErrors Messages="ApiResponse?.GeneralErrors"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>

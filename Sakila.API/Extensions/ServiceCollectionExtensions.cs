@@ -1,16 +1,14 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.OpenApi.Models;
 using Sakila.API.Middleware;
 using Sakila.API.Options;
-using Sakila.Application.Common.Validation;
 using Sakila.Application.Common.Handlers;
+using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators;
 using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Application.Countries.Queries.Validators;
 using Sakila.Application.Countries.Queries.Validators.Data;
-using Sakila.Application.Languages.Commands.Handlers;
 using Sakila.Application.Languages.Commands.Validators;
 using Sakila.Application.Languages.Commands.Validators.Data;
 using Sakila.Application.Languages.Queries.Mapping;

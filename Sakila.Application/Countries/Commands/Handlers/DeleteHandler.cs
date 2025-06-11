@@ -1,4 +1,3 @@
-using MediatR;
 using Sakila.Application.Common.Handlers;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators.Data;
@@ -13,5 +12,8 @@ public class DeleteHandler(
     IValidatorWithData<CountryDeleteRequest, CountryDeleteValidatorData> validator)
     : DeleteHandlerBase<CountryDeleteRequest, Country, CountryDeleteValidatorData>(dbContext, validator)
 {
-    protected override Country GetData(CountryDeleteValidatorData data) => data.Country;
+    protected override Country GetData(CountryDeleteValidatorData data)
+    {
+        return data.Country;
+    }
 }

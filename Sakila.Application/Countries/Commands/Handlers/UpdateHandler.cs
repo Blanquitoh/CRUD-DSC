@@ -1,5 +1,4 @@
 using AutoMapper;
-using MediatR;
 using Sakila.Application.Common.Handlers;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators.Data;
@@ -15,5 +14,8 @@ public class UpdateHandler(
     IValidatorWithData<CountryUpdateRequest, CountryUpdateValidatorData> validator)
     : UpdateHandlerBase<CountryUpdateRequest, Country, CountryUpdateValidatorData>(dbContext, mapper, validator)
 {
-    protected override Country GetData(CountryUpdateValidatorData data) => data.Country;
+    protected override Country GetData(CountryUpdateValidatorData data)
+    {
+        return data.Country;
+    }
 }
