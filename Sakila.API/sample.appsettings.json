@@ -9,7 +9,7 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "Sakila.Web": {
+  "App.Web": {
     "Endpoint": "https://localhost:7188"
   }
 }

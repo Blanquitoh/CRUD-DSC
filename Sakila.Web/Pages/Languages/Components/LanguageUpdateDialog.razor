@@ -9,10 +9,10 @@
                         <h5 class="modal-title">Edit Language</h5>
                     </div>
                     <div class="modal-body">
-                        <DataAnnotationsValidator />
-                        <InputText class="form-control" @bind-Value="Model.Name" placeholder="Language Name" />
-                        <ValidationMessage For="@(() => Model.Name)" />
-                        <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
+                        <DataAnnotationsValidator/>
+                        <InputText class="form-control" @bind-Value="Model.Name" placeholder="Language Name"/>
+                        <ValidationMessage For="@(() => Model.Name)"/>
+                        <GeneralErrors Messages="ApiResponse?.GeneralErrors"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
@@ -23,4 +23,3 @@
         </div>
     </div>
 }
-
