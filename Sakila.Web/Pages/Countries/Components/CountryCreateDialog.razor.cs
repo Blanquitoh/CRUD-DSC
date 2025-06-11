@@ -7,9 +7,20 @@ namespace Sakila.Web.Pages.Countries.Components;
 public partial class CountryCreateDialog
 {
     [Parameter] public bool Visible { get; set; }
-    [Parameter] public CountryCreateRequest Country { get; set; } = new();
-    [Parameter] public IApiResponse<object>? ApiResponse { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnSubmit { get; set; }
+    [Parameter] public EventCallback OnSuccess { get; set; }
+    [Inject] public ICountryService CountryService { get; set; } = null!;
+
+    public IApiResponse<object>? ApiResponse { get; set; }
+    private CountryCreateRequest Country { get; set; } = new();
+
+    private async Task SubmitAsync()
+    {
+        ApiResponse = await CountryService.CreateAsync(Country);
+        if (ApiResponse.IsSuccess)
+        {
+            await OnSuccess.InvokeAsync();
+        }
+    }
 }
 

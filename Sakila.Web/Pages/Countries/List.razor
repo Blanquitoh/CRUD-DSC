@@ -35,20 +35,25 @@ else
     </table>
 }
 
-<CountryCreateDialog Visible="_isCreateDialogOpen"
-                     Country="_createCountry"
-                     ApiResponse="_otherResponse"
-                     OnCancel="CloseCreateDialog"
-                     OnSubmit="() => SubmitCreateRequest(_createCountry)"/>
+@if (_isCreateDialogOpen)
+{
+    <CountryCreateDialog Visible="true"
+                         OnCancel="CloseCreateDialog"
+                         OnSuccess="OnCreateSuccess"/>
+}
 
-<CountryUpdateDialog Visible="_isUpdateDialogOpen"
-                     Country="_updateCountry"
-                     ApiResponse="_otherResponse"
-                     OnCancel="CloseUpdateDialog"
-                     OnSubmit="() => SubmitUpdateRequest(_updateCountry)"/>
+@if (_isUpdateDialogOpen)
+{
+    <CountryUpdateDialog Visible="true"
+                         Country="_selectedCountry"
+                         OnCancel="CloseUpdateDialog"
+                         OnSuccess="OnUpdateSuccess"/>
+}
 
-<ConfirmDelete Visible="_isDeleteDialogOpen"
-               Country="_selectedCountry"
-               ApiResponse="_otherResponse"
-               OnCancel="CloseDeleteDialog"
-               OnConfirm="ConfirmDelete"/>
+@if (_isDeleteDialogOpen)
+{
+    <ConfirmDelete Visible="true"
+                  Country="_selectedCountry"
+                  OnCancel="CloseDeleteDialog"
+                  OnSuccess="OnDeleteSuccess"/>
+}

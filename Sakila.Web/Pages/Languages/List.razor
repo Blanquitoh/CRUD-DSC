@@ -35,20 +35,25 @@ else
     </table>
 }
 
-<LanguageCreateDialog Visible="_isCreateDialogOpen"
-                      Language="_createLanguage"
-                      ApiResponse="_otherResponse"
-                      OnCancel="CloseCreateDialog"
-                      OnSubmit="() => SubmitCreateRequest(_createLanguage)"/>
+@if (_isCreateDialogOpen)
+{
+    <LanguageCreateDialog Visible="true"
+                          OnCancel="CloseCreateDialog"
+                          OnSuccess="OnCreateSuccess"/>
+}
 
-<LanguageUpdateDialog Visible="_isUpdateDialogOpen"
-                      Language="_updateLanguage"
-                      ApiResponse="_otherResponse"
-                      OnCancel="CloseUpdateDialog"
-                      OnSubmit="() => SubmitUpdateRequest(_updateLanguage)"/>
+@if (_isUpdateDialogOpen)
+{
+    <LanguageUpdateDialog Visible="true"
+                          Language="_selectedLanguage"
+                          OnCancel="CloseUpdateDialog"
+                          OnSuccess="OnUpdateSuccess"/>
+}
 
-<ConfirmDelete Visible="_isDeleteDialogOpen"
-               Language="_selectedLanguage"
-               ApiResponse="_otherResponse"
-               OnCancel="CloseDeleteDialog"
-               OnConfirm="ConfirmDelete"/>
+@if (_isDeleteDialogOpen)
+{
+    <ConfirmDelete Visible="true"
+                  Language="_selectedLanguage"
+                  OnCancel="CloseDeleteDialog"
+                  OnSuccess="OnDeleteSuccess"/>
+}
