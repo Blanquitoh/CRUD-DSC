@@ -3,7 +3,7 @@
 
 <h3>Countries</h3>
 
-<button class="btn btn-primary mb-3" @onclick="() => ShowDialog()">Add Country</button>
+<button class="btn btn-primary mb-3" @onclick="ShowCreateDialog">Add Country</button>
 
 @if (_getAllResponse?.Data?.Countries == null)
 {
@@ -26,7 +26,7 @@ else
             <tr>
                 <td>@country.Name</td>
                 <td>
-                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowDialog(country)">Edit</button>
+                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowUpdateDialog(country)">Edit</button>
                     <button class="btn btn-sm btn-danger" @onclick="() => ShowDeleteDialog(country)">Delete</button>
                 </td>
             </tr>
@@ -35,11 +35,17 @@ else
     </table>
 }
 
-<CountryFormDialog Visible="_isDialogOpen"
-                   Country="_selectedCountry"
-                   ApiResponse="_otherResponse"
-                   OnCancel="CloseDialog"
-                   OnSubmit="SubmitCountry"/>
+<CountryCreateDialog Visible="_isCreateDialogOpen"
+                     Country="_createCountry"
+                     ApiResponse="_otherResponse"
+                     OnCancel="CloseCreateDialog"
+                     OnSubmit="() => SubmitCreateRequest(_createCountry)"/>
+
+<CountryUpdateDialog Visible="_isUpdateDialogOpen"
+                     Country="_updateCountry"
+                     ApiResponse="_otherResponse"
+                     OnCancel="CloseUpdateDialog"
+                     OnSubmit="() => SubmitUpdateRequest(_updateCountry)"/>
 
 <ConfirmDelete Visible="_isDeleteDialogOpen"
                Country="_selectedCountry"

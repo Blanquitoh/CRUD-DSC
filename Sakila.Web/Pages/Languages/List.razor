@@ -3,7 +3,7 @@
 
 <h3>Languages</h3>
 
-<button class="btn btn-primary mb-3" @onclick="() => ShowDialog()">Add Language</button>
+<button class="btn btn-primary mb-3" @onclick="ShowCreateDialog">Add Language</button>
 
 @if (_getAllResponse?.Data?.Languages == null)
 {
@@ -26,7 +26,7 @@ else
             <tr>
                 <td>@language.Name</td>
                 <td>
-                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowDialog(language)">Edit</button>
+                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowUpdateDialog(language)">Edit</button>
                     <button class="btn btn-sm btn-danger" @onclick="() => ShowDeleteDialog(language)">Delete</button>
                 </td>
             </tr>
@@ -35,11 +35,17 @@ else
     </table>
 }
 
-<LanguageFormDialog Visible="_isDialogOpen"
-                    Language="_selectedLanguage"
-                    ApiResponse="_otherResponse"
-                    OnCancel="CloseDialog"
-                    OnSubmit="SubmitLanguage"/>
+<LanguageCreateDialog Visible="_isCreateDialogOpen"
+                      Language="_createLanguage"
+                      ApiResponse="_otherResponse"
+                      OnCancel="CloseCreateDialog"
+                      OnSubmit="() => SubmitCreateRequest(_createLanguage)"/>
+
+<LanguageUpdateDialog Visible="_isUpdateDialogOpen"
+                      Language="_updateLanguage"
+                      ApiResponse="_otherResponse"
+                      OnCancel="CloseUpdateDialog"
+                      OnSubmit="() => SubmitUpdateRequest(_updateLanguage)"/>
 
 <ConfirmDelete Visible="_isDeleteDialogOpen"
                Language="_selectedLanguage"

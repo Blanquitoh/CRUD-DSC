@@ -9,9 +9,12 @@ public partial class List
 {
     private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
     private bool _isDeleteDialogOpen;
-    private bool _isDialogOpen;
+    private bool _isCreateDialogOpen;
+    private bool _isUpdateDialogOpen;
     private IApiResponse<object>? _otherResponse;
     private LanguageGetByIdResponse _selectedLanguage = new();
+    private LanguageCreateRequest _createLanguage = new();
+    private LanguageUpdateRequest _updateLanguage = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
@@ -19,46 +22,55 @@ public partial class List
         await RefreshLanguages();
     }
 
-    private void ShowDialog(LanguageGetByIdResponse? language = null)
+    private void ShowCreateDialog()
     {
-        if (language is null)
-            _selectedLanguage = new LanguageGetByIdResponse();
-        else
-            _selectedLanguage = new LanguageGetByIdResponse
-            {
-                Id = language.Id,
-                Name = language.Name
-            };
-
+        _createLanguage = new LanguageCreateRequest();
         _otherResponse = null;
-        _isDialogOpen = true;
+        _isCreateDialogOpen = true;
     }
 
-    private void CloseDialog()
+    private void ShowUpdateDialog(LanguageGetByIdResponse language)
     {
-        _isDialogOpen = false;
-        _selectedLanguage = new LanguageGetByIdResponse();
+        _updateLanguage = new LanguageUpdateRequest
+        {
+            Id = language.Id,
+            Name = language.Name
+        };
+        _otherResponse = null;
+        _isUpdateDialogOpen = true;
+    }
+
+    private void CloseCreateDialog()
+    {
+        _isCreateDialogOpen = false;
+        _createLanguage = new LanguageCreateRequest();
         _otherResponse = null;
     }
 
-    private async Task SubmitLanguage()
+    private void CloseUpdateDialog()
     {
+        _isUpdateDialogOpen = false;
+        _updateLanguage = new LanguageUpdateRequest();
         _otherResponse = null;
-        if (_selectedLanguage.Id == 0)
-        {
-            var request = new LanguageCreateRequest { Name = _selectedLanguage.Name };
-            _otherResponse = await LanguageService.CreateAsync(request);
-        }
-        else
-        {
-            var request = new LanguageUpdateRequest { Id = _selectedLanguage.Id, Name = _selectedLanguage.Name };
-            _otherResponse = await LanguageService.UpdateAsync(request);
-        }
+    }
 
+    private async Task SubmitCreateRequest(LanguageCreateRequest request)
+    {
+        _otherResponse = await LanguageService.CreateAsync(request);
         if (_otherResponse.IsSuccess)
         {
             await RefreshLanguages();
-            CloseDialog();
+            CloseCreateDialog();
+        }
+    }
+
+    private async Task SubmitUpdateRequest(LanguageUpdateRequest request)
+    {
+        _otherResponse = await LanguageService.UpdateAsync(request);
+        if (_otherResponse.IsSuccess)
+        {
+            await RefreshLanguages();
+            CloseUpdateDialog();
         }
     }
 
