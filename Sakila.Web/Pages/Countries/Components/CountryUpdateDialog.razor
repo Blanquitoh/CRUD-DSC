@@ -3,8 +3,8 @@
         <DialogContent>
             <MudText Typo="Typo.h6">Edit Country</MudText>
             <MudTextField @bind-Value="Model.Name" Label="Country Name" For="@(() => Model.Name)" Required="true"/>
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
         </DialogContent>
         <DialogActions>
             <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
