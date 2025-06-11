@@ -1,14 +1,10 @@
-<EditForm EditContext="LanguageService.EditContext" OnValidSubmit="ConfirmAsync">
-    <MudDialog>
-        <DialogContent>
-            <MudText Typo="Typo.h6">Confirm Deletion</MudText>
-            <MudText>Are you sure you want to delete <strong>@Language.Name</strong>?</MudText>
-            <DataAnnotationsValidator/>
-            <ValidationSummary />
-        </DialogContent>
-        <DialogActions>
-            <MudButton Color="Color.Secondary" OnClick="Cancel">No</MudButton>
-            <MudButton Color="Color.Error" ButtonType="ButtonType.Submit">Yes</MudButton>
-        </DialogActions>
-    </MudDialog>
-</EditForm>
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6">Confirm Deletion</MudText>
+        <MudText>Are you sure you want to delete <strong>@Language.Name</strong>?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">No</MudButton>
+        <MudButton Color="Color.Error" OnClick="ConfirmAsync">Yes</MudButton>
+    </DialogActions>
+</MudDialog>
