@@ -12,7 +12,6 @@ public partial class CountryUpdateDialog
     [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
-    public IApiResponse<object>? ApiResponse { get; set; }
     private CountryUpdateRequest Model { get; set; } = new();
 
     protected override void OnParametersSet()
@@ -23,13 +22,16 @@ public partial class CountryUpdateDialog
 
     private async Task SubmitAsync()
     {
+        var success = false;
         await CountryService.UpdateAsync(Model,
-            response =>
+            _ =>
             {
-                ApiResponse = response;
+                success = true;
                 return Task.CompletedTask;
             });
-        MudDialog.Close(DialogResult.Ok(true));
+
+        if (success)
+            MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()

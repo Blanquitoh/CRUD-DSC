@@ -11,17 +11,18 @@ public partial class ConfirmDelete
     [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
-    public IApiResponse<object>? ApiResponse { get; set; }
-
     private async Task ConfirmAsync()
     {
+        var success = false;
         await CountryService.DeleteAsync(Country.Id,
-            response =>
+            _ =>
             {
-                ApiResponse = response;
+                success = true;
                 return Task.CompletedTask;
             });
-        MudDialog.Close(DialogResult.Ok(true));
+
+        if (success)
+            MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()

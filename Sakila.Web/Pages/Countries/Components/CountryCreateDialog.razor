@@ -1,13 +1,13 @@
-<MudDialog MaxWidth="MaxWidth.Small" FullWidth="true">
-    <MudForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
+<EditForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
+    <MudDialog>
         <DialogContent>
-            <MudDialogTitle>Add Country</MudDialogTitle>
-            <DataAnnotationsValidator/>
-            <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true"/>
+            <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true" />
+            <DataAnnotationsValidator />
         </DialogContent>
         <DialogActions>
             <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
             <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
         </DialogActions>
-    </MudForm>
-</MudDialog>
+    </MudDialog>
+</EditForm>
+
