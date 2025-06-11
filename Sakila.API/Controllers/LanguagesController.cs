@@ -17,7 +17,7 @@ public class LanguagesController(IMediator mediator) : ControllerBase
         return Ok(languages);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetLanguageById")]
     public async Task<ActionResult<LanguageGetByIdResponse>> GetByIdAsync(int id)
     {
         var language = await mediator.Send(new LanguageGetByIdRequest { Id = id });
@@ -37,7 +37,7 @@ public class LanguagesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> PostLanguageAsync(LanguageCreateRequest command)
     {
         var id = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetByIdAsync), new { id }, command);
+        return CreatedAtRoute("GetLanguageById", new { id }, command);
     }
 
 

@@ -17,7 +17,7 @@ public class CountriesController(IMediator mediator) : ControllerBase
         return Ok(countries);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetCountryById")]
     public async Task<ActionResult<CountryGetByIdResponse>> GetByIdAsync(int id)
     {
         var country = await mediator.Send(new CountryGetByIdRequest { Id = id });
@@ -37,7 +37,7 @@ public class CountriesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> PostCountryAsync(CountryCreateRequest command)
     {
         var id = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetByIdAsync), new { id }, command);
+        return CreatedAtRoute("GetCountryById", new { id }, command);
     }
 
     [HttpDelete("{id}")]
