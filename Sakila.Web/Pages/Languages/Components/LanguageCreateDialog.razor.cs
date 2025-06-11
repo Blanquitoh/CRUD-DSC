@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Web.Abstractions;
 
@@ -6,9 +7,7 @@ namespace Sakila.Web.Pages.Languages.Components;
 
 public partial class LanguageCreateDialog
 {
-    [Parameter] public bool Visible { get; set; }
-    [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnSuccess { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     public IApiResponse<object>? ApiResponse { get; set; }
@@ -22,10 +21,16 @@ public partial class LanguageCreateDialog
     private async Task SubmitAsync()
     {
         await LanguageService.CreateAsync(Language,
-            async response =>
+            response =>
             {
                 ApiResponse = response;
-                await OnSuccess.InvokeAsync();
+                return Task.CompletedTask;
             });
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
     }
 }

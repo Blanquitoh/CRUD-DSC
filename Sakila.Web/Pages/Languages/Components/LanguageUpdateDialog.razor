@@ -1,16 +1,13 @@
-@if (Visible)
-{
-    <MudDialog MaxWidth="MaxWidth.Small" FullWidth="true">
-        <MudForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
-            <DialogContent>
-                <MudDialogTitle>Edit Language</MudDialogTitle>
-                <DataAnnotationsValidator/>
-                <MudTextField @bind-Value="Model.Name" Label="Language Name" For="@(() => Model.Name)" Required="true"/>
-            </DialogContent>
-            <DialogActions>
-                <MudButton Color="Color.Secondary" OnClick="OnCancel">Cancel</MudButton>
-                <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Edit</MudButton>
-            </DialogActions>
-        </MudForm>
-    </MudDialog>
-}
+<MudDialog MaxWidth="MaxWidth.Small" FullWidth="true">
+    <MudForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
+        <DialogContent>
+            <MudDialogTitle>Edit Language</MudDialogTitle>
+            <DataAnnotationsValidator/>
+            <MudTextField @bind-Value="Model.Name" Label="Language Name" For="@(() => Model.Name)" Required="true"/>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Edit</MudButton>
+        </DialogActions>
+    </MudForm>
+</MudDialog>

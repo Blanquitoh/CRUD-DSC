@@ -1,5 +1,4 @@
 using FluentValidation;
-using Fluxor;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
 using Sakila.Contracts.Countries.Commands;
@@ -31,9 +30,6 @@ public static class ServiceCollectionExtensions
         builder.Services.AddScoped<ICountryService, CountryService>();
         builder.Services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
         builder.Services.AddTransient<IValidator<CountryUpdateRequest>, CountryUpdateValidator>();
-
-        builder.Services.AddFluxor(options =>
-            options.ScanAssemblies(typeof(ServiceCollectionExtensions).Assembly));
 
         return builder;
     }

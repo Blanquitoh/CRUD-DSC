@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
 
@@ -6,10 +7,8 @@ namespace Sakila.Web.Pages.Languages.Components;
 
 public partial class ConfirmDelete
 {
-    [Parameter] public bool Visible { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [Parameter] public LanguageGetByIdResponse Language { get; set; } = new();
-    [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnSuccess { get; set; }
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     public IApiResponse<object>? ApiResponse { get; set; }
@@ -17,10 +16,16 @@ public partial class ConfirmDelete
     private async Task ConfirmAsync()
     {
         await LanguageService.DeleteAsync(Language.Id,
-            async response =>
+            response =>
             {
                 ApiResponse = response;
-                await OnSuccess.InvokeAsync();
+                return Task.CompletedTask;
             });
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
     }
 }

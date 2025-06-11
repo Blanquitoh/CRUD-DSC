@@ -1,6 +1,5 @@
 @page "/languages"
 @using Sakila.Web.Pages.Languages.Components
-@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <MudText Typo="Typo.h3">Languages</MudText>
 
@@ -27,43 +26,51 @@ else
     </MudTable>
 }
 
-@if (LanguageState.Value.IsCreateDialogOpen)
-{
-    <LanguageCreateDialog Visible="true"
-                          OnCancel="CloseCreateDialog"
-                          OnSuccess="OnCreateSuccess"/>
-}
-
-@if (LanguageState.Value.IsUpdateDialogOpen)
-{
-    <LanguageUpdateDialog Visible="true"
-                          Language="LanguageState.Value.SelectedLanguage"
-                          OnCancel="CloseUpdateDialog"
-                          OnSuccess="OnUpdateSuccess"/>
-}
-
-@if (LanguageState.Value.IsDeleteDialogOpen)
-{
-    <ConfirmDelete Visible="true"
-                   Language="LanguageState.Value.SelectedLanguage"
-                   OnCancel="CloseDeleteDialog"
-                   OnSuccess="OnDeleteSuccess"/>
-}
-
-
-@inject IDialogService DialogService
-
-<MudButton @onclick="OpenDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
-    Open simple dialog
-</MudButton>
-
 @code {
-    //SAMPLE DIALOG TEST TO BE REMOVED LATER AFTER FIXING DIALOGS NOT OPENING
-    private Task OpenDialogAsync()
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+    private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
 
-        return DialogService.ShowAsync<DialogComponent>("Simple Dialog", options);
+    [Inject] public ILanguageService LanguageService { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshLanguages();
     }
 
+    private async Task RefreshLanguages()
+    {
+        await LanguageService.GetAllAsync(r => Task.FromResult(_getAllResponse = r));
+    }
+
+    private async Task ShowCreateDialog()
+    {
+        var dialog = DialogService.Show<LanguageCreateDialog>("Add Language");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshLanguages();
+        }
+    }
+
+    private async Task ShowUpdateDialog(LanguageGetByIdResponse language)
+    {
+        var parameters = new DialogParameters { [nameof(LanguageUpdateDialog.Language)] = language };
+        var dialog = DialogService.Show<LanguageUpdateDialog>("Edit Language", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshLanguages();
+        }
+    }
+
+    private async Task ShowDeleteDialog(LanguageGetByIdResponse language)
+    {
+        var parameters = new DialogParameters { [nameof(ConfirmDelete.Language)] = language };
+        var dialog = DialogService.Show<ConfirmDelete>("Delete Language", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshLanguages();
+        }
+    }
 }
