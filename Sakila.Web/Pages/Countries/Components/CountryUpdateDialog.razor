@@ -1,24 +1,17 @@
 @if (Visible)
 {
-    <div class="modal show d-block" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <EditForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Country</h5>
-                    </div>
-                    <div class="modal-body">
-                        <DataAnnotationsValidator />
-                        <InputText class="form-control" @bind-Value="Model.Name" placeholder="Country Name" />
-                        <ValidationMessage For="@(() => Model.Name)" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Edit</button>
-                    </div>
-                </EditForm>
-            </div>
-        </div>
-    </div>
+    <MudDialog MaxWidth="MaxWidth.Small" FullWidth="true">
+        <MudForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
+            <DialogContent>
+                <MudDialogTitle>Edit Country</MudDialogTitle>
+                <DataAnnotationsValidator />
+                <MudTextField @bind-Value="Model.Name" Label="Country Name" For="@(() => Model.Name)" Required="true" />
+            </DialogContent>
+            <DialogActions>
+                <MudButton Color="Color.Secondary" OnClick="OnCancel">Cancel</MudButton>
+                <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Edit</MudButton>
+            </DialogActions>
+        </MudForm>
+    </MudDialog>
 }
 

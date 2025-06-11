@@ -2,38 +2,29 @@
 @using Sakila.Web.Pages.Languages.Components
 @using Sakila.Web.Store.Languages
 
-<h3>Languages</h3>
+<MudText Typo="Typo.h3">Languages</MudText>
 
-<button class="btn btn-primary mb-3" @onclick="ShowCreateDialog">Add Language</button>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Class="mb-3" OnClick="ShowCreateDialog">Add Language</MudButton>
 
 @if (_getAllResponse?.Data?.Languages == null)
 {
-    <p>
-        <em>Loading...</em>
-    </p>
+    <MudProgressCircular Indeterminate="true" />
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var language in _getAllResponse.Data!.Languages)
-        {
-            <tr>
-                <td>@language.Name</td>
-                <td>
-                    <button class="btn btn-sm btn-warning me-1" @onclick="() => ShowUpdateDialog(language)">Edit</button>
-                    <button class="btn btn-sm btn-danger" @onclick="() => ShowDeleteDialog(language)">Delete</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <MudTable Items="_getAllResponse.Data!.Languages">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd>
+                <MudButton Size="Size.Small" Color="Color.Warning" Variant="Variant.Text" OnClick="() => ShowUpdateDialog(context)" Class="me-1">Edit</MudButton>
+                <MudButton Size="Size.Small" Color="Color.Error" Variant="Variant.Text" OnClick="() => ShowDeleteDialog(context)">Delete</MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 
 @if (LanguageState.Value.IsCreateDialogOpen)
