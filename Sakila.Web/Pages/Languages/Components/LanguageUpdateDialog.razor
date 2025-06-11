@@ -4,14 +4,14 @@
     <div class="modal show d-block" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <EditForm Model="Language" OnValidSubmit="OnSubmit">
+                <EditForm Model="Model" OnValidSubmit="SubmitAsync">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Language</h5>
                     </div>
                     <div class="modal-body">
                         <DataAnnotationsValidator />
-                        <InputText class="form-control" @bind-Value="Language.Name" placeholder="Language Name" />
-                        <ValidationMessage For="@(() => Language.Name)" />
+                        <InputText class="form-control" @bind-Value="Model.Name" placeholder="Language Name" />
+                        <ValidationMessage For="@(() => Model.Name)" />
                         <GeneralErrors Messages="ApiResponse?.GeneralErrors" />
                     </div>
                     <div class="modal-footer">

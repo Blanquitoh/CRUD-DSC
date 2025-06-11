@@ -7,9 +7,20 @@ namespace Sakila.Web.Pages.Languages.Components;
 public partial class LanguageCreateDialog
 {
     [Parameter] public bool Visible { get; set; }
-    [Parameter] public LanguageCreateRequest Language { get; set; } = new();
-    [Parameter] public IApiResponse<object>? ApiResponse { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnSubmit { get; set; }
+    [Parameter] public EventCallback OnSuccess { get; set; }
+    [Inject] public ILanguageService LanguageService { get; set; } = null!;
+
+    public IApiResponse<object>? ApiResponse { get; set; }
+    private LanguageCreateRequest Language { get; set; } = new();
+
+    private async Task SubmitAsync()
+    {
+        ApiResponse = await LanguageService.CreateAsync(Language);
+        if (ApiResponse.IsSuccess)
+        {
+            await OnSuccess.InvokeAsync();
+        }
+    }
 }
 
