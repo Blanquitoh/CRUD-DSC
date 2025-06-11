@@ -1,4 +1,5 @@
 using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
@@ -6,7 +7,7 @@ using Sakila.Web.Store.Countries;
 
 namespace Sakila.Web.Pages.Countries;
 
-public partial class List
+public partial class List : FluxorComponent
 {
     private IApiResponse<CountryGetAllResponse>? _getAllResponse;
     [Inject] public IState<CountryState> CountryState { get; set; } = null!;
@@ -15,6 +16,7 @@ public partial class List
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         await RefreshCountries();
     }
 
