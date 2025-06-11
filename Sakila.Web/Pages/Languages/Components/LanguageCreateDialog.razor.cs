@@ -19,13 +19,16 @@ public partial class LanguageCreateDialog
 
     private async Task SubmitAsync()
     {
+        var success = false;
         await LanguageService.CreateAsync(Language,
             _ =>
             {
-                MudDialog.Close(DialogResult.Ok(true));
+                success = true;
                 return Task.CompletedTask;
-            }
-        );
+            });
+
+        if (success)
+            MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()

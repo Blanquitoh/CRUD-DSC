@@ -13,12 +13,16 @@ public partial class ConfirmDelete
 
     private async Task ConfirmAsync()
     {
+        var success = false;
         await LanguageService.DeleteAsync(Language.Id,
             _ =>
             {
-                MudDialog.Close(DialogResult.Ok(true));
+                success = true;
                 return Task.CompletedTask;
             });
+
+        if (success)
+            MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()

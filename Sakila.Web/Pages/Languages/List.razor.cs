@@ -25,8 +25,9 @@ namespace Sakila.Web.Pages.Languages
 
         private async Task ShowCreateDialog()
         {
-            var dialog = await DialogService.ShowAsync<LanguageCreateDialog>("Add Language");
-            if (!dialog.Result.IsCompleted)
+            var dialog = DialogService.Show<LanguageCreateDialog>("Add Language");
+            var result = await dialog.Result;
+            if (!result.Cancelled)
             {
                 await RefreshLanguages();
             }
@@ -35,8 +36,9 @@ namespace Sakila.Web.Pages.Languages
         private async Task ShowUpdateDialog(LanguageGetByIdResponse language)
         {
             var parameters = new DialogParameters { [nameof(LanguageUpdateDialog.Language)] = language };
-            var dialog = DialogService.ShowAsync<LanguageUpdateDialog>("Edit Language", parameters);
-            if (!dialog.IsCompleted)
+            var dialog = DialogService.Show<LanguageUpdateDialog>("Edit Language", parameters);
+            var result = await dialog.Result;
+            if (!result.Cancelled)
             {
                 await RefreshLanguages();
             }
@@ -45,8 +47,9 @@ namespace Sakila.Web.Pages.Languages
         private async Task ShowDeleteDialog(LanguageGetByIdResponse language)
         {
             var parameters = new DialogParameters { [nameof(ConfirmDelete.Language)] = language };
-            var dialog = DialogService.ShowAsync<ConfirmDelete>("Delete Language", parameters);
-            if (!dialog.IsCompleted)
+            var dialog = DialogService.Show<ConfirmDelete>("Delete Language", parameters);
+            var result = await dialog.Result;
+            if (!result.Cancelled)
             {
                 await RefreshLanguages();
             }
