@@ -11,6 +11,11 @@ public partial class ConfirmDelete
     [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
+    protected override void OnInitialized()
+    {
+        CountryService.Initialize(Country);
+    }
+
     private async Task ConfirmAsync()
     {
         var success = false;
