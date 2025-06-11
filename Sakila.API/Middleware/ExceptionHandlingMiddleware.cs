@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,15 +19,17 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ProblemDetailsFac
         }
         catch (ValidationException ex)
         {
-            var errors = ex.Errors
-                .GroupBy(e => e.PropertyName)
-                .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+            var modelState = new ModelStateDictionary();
+            foreach (var error in ex.Errors)
+            {
+                modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
 
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
             var problem = _problemDetailsFactory.CreateValidationProblemDetails(
                 context,
-                errors,
+                modelState,
                 statusCode: StatusCodes.Status400BadRequest,
                 title: "Validation failed",
                 type: "https://tools.ietf.org/html/rfc7231#section-6.5.1");
