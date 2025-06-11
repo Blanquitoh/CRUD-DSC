@@ -12,86 +12,126 @@ public class ApiClient(HttpClient httpClient) : IApiClient
 
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public async Task<IApiResponse<TResponse>> GetAsync<TResponse>(string url)
+    public async Task<IApiResponse<TResponse>> GetAsync<TResponse>(string url,
+        Func<IApiResponse<TResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<TResponse>, Task>? onFailure = null)
     {
+        IApiResponse<TResponse> apiResponse;
         try
         {
             var response = await httpClient.GetAsync($"{Base}{url}");
-            return await HandleResponse<TResponse>(response);
+            apiResponse = await HandleResponse<TResponse>(response);
         }
         catch (ApiValidationException exception)
         {
-            return new ApiResponse<TResponse>(exception.Errors);
+            apiResponse = new ApiResponse<TResponse>(exception.Errors);
         }
         catch (HttpRequestException exception)
         {
-            return new ApiResponse<TResponse>(exception.Message);
+            apiResponse = new ApiResponse<TResponse>(exception.Message);
         }
+
+        if (apiResponse.IsSuccess)
+            if (onSuccess != null) await onSuccess(apiResponse);
+        if (!apiResponse.IsSuccess)
+            if (onFailure != null) await onFailure(apiResponse);
+
+        return apiResponse;
     }
 
     public async Task<IApiResponse<object>> PostAsync<TRequest>(string url, TRequest request,
-        IValidator<TRequest>? createValidator = null)
+        IValidator<TRequest>? createValidator = null,
+        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<IApiResponse<object>, Task>? onFailure = null)
     {
+        IApiResponse<object> apiResponse;
         try
         {
             if (createValidator != null)
                 await createValidator.ValidateAndThrowAsync(request);
             var response = await httpClient.PostAsJsonAsync($"{Base}{url}", request);
-            return await HandleResponse<object>(response);
+            apiResponse = await HandleResponse<object>(response);
         }
         catch (ValidationException exception)
         {
-            return new ApiResponse<object>(exception);
+            apiResponse = new ApiResponse<object>(exception);
         }
         catch (ApiValidationException exception)
         {
-            return new ApiResponse<object>(exception.Errors);
+            apiResponse = new ApiResponse<object>(exception.Errors);
         }
         catch (HttpRequestException exception)
         {
-            return new ApiResponse<object>(exception.Message);
+            apiResponse = new ApiResponse<object>(exception.Message);
         }
+
+        if (apiResponse.IsSuccess)
+            if (onSuccess != null) await onSuccess(apiResponse);
+        if (!apiResponse.IsSuccess)
+            if (onFailure != null) await onFailure(apiResponse);
+
+        return apiResponse;
     }
 
     public async Task<IApiResponse<object>> PutAsync<TRequest>(string url, TRequest request,
-        IValidator<TRequest>? updateValidator = null)
+        IValidator<TRequest>? updateValidator = null,
+        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<IApiResponse<object>, Task>? onFailure = null)
     {
+        IApiResponse<object> apiResponse;
         try
         {
             if (updateValidator != null)
                 await updateValidator.ValidateAndThrowAsync(request);
             var response = await httpClient.PutAsJsonAsync($"{Base}{url}", request);
-            return await HandleResponse<object>(response);
+            apiResponse = await HandleResponse<object>(response);
         }
         catch (ValidationException exception)
         {
-            return new ApiResponse<object>(exception);
+            apiResponse = new ApiResponse<object>(exception);
         }
         catch (ApiValidationException exception)
         {
-            return new ApiResponse<object>(exception.Errors);
+            apiResponse = new ApiResponse<object>(exception.Errors);
         }
         catch (HttpRequestException exception)
         {
-            return new ApiResponse<object>(exception.Message);
+            apiResponse = new ApiResponse<object>(exception.Message);
         }
+
+        if (apiResponse.IsSuccess)
+            if (onSuccess != null) await onSuccess(apiResponse);
+        if (!apiResponse.IsSuccess)
+            if (onFailure != null) await onFailure(apiResponse);
+
+        return apiResponse;
     }
 
-    public async Task<IApiResponse<object>> DeleteAsync(string url)
+    public async Task<IApiResponse<object>> DeleteAsync(string url,
+        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<IApiResponse<object>, Task>? onFailure = null)
     {
+        IApiResponse<object> apiResponse;
         try
         {
             var response = await httpClient.DeleteAsync($"{Base}{url}");
-            return await HandleResponse<object>(response);
+            apiResponse = await HandleResponse<object>(response);
         }
         catch (ApiValidationException exception)
         {
-            return new ApiResponse<object>(exception.Errors);
+            apiResponse = new ApiResponse<object>(exception.Errors);
         }
         catch (HttpRequestException exception)
         {
-            return new ApiResponse<object>(exception.Message);
+            apiResponse = new ApiResponse<object>(exception.Message);
         }
+
+        if (apiResponse.IsSuccess)
+            if (onSuccess != null) await onSuccess(apiResponse);
+        if (!apiResponse.IsSuccess)
+            if (onFailure != null) await onFailure(apiResponse);
+
+        return apiResponse;
     }
 
     private static async Task<IApiResponse<TResponse>> HandleResponse<TResponse>(HttpResponseMessage response)
