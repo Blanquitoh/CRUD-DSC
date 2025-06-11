@@ -1,4 +1,4 @@
-﻿using Sakila.Domain.Models;
+using Sakila.Domain.Models;
 
 namespace Sakila.Application.Countries.Commands.Validators.Data;
 
