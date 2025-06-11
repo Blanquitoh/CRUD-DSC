@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Components;
-using Sakila.Contracts.Countries.Queries.Responses;
+using Sakila.Contracts.Languages.Commands;
 using Sakila.Web.Abstractions;
 
-namespace Sakila.Web.Pages.Countries.Components;
+namespace Sakila.Web.Pages.Languages.Components;
 
-public partial class CountryFormDialog
+public partial class LanguageUpdateDialog
 {
     [Parameter] public bool Visible { get; set; }
-    [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
+    [Parameter] public LanguageUpdateRequest Language { get; set; } = new();
     [Parameter] public IApiResponse<object>? ApiResponse { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnSubmit { get; set; }
-    private string Title => Country.Id != 0 ? "Edit" : "Add";
 }
+

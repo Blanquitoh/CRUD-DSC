@@ -9,9 +9,12 @@ public partial class List
 {
     private IApiResponse<CountryGetAllResponse>? _getAllResponse;
     private bool _isDeleteDialogOpen;
-    private bool _isDialogOpen;
+    private bool _isCreateDialogOpen;
+    private bool _isUpdateDialogOpen;
     private IApiResponse<object>? _otherResponse;
     private CountryGetByIdResponse _selectedCountry = new();
+    private CountryCreateRequest _createCountry = new();
+    private CountryUpdateRequest _updateCountry = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
@@ -19,46 +22,55 @@ public partial class List
         await RefreshCountries();
     }
 
-    private void ShowDialog(CountryGetByIdResponse? country = null)
+    private void ShowCreateDialog()
     {
-        if (country is null)
-            _selectedCountry = new CountryGetByIdResponse();
-        else
-            _selectedCountry = new CountryGetByIdResponse
-            {
-                Id = country.Id,
-                Name = country.Name
-            };
-
+        _createCountry = new CountryCreateRequest();
         _otherResponse = null;
-        _isDialogOpen = true;
+        _isCreateDialogOpen = true;
     }
 
-    private void CloseDialog()
+    private void ShowUpdateDialog(CountryGetByIdResponse country)
     {
-        _isDialogOpen = false;
-        _selectedCountry = new CountryGetByIdResponse();
+        _updateCountry = new CountryUpdateRequest
+        {
+            Id = country.Id,
+            Name = country.Name
+        };
+        _otherResponse = null;
+        _isUpdateDialogOpen = true;
+    }
+
+    private void CloseCreateDialog()
+    {
+        _isCreateDialogOpen = false;
+        _createCountry = new CountryCreateRequest();
         _otherResponse = null;
     }
 
-    private async Task SubmitCountry()
+    private void CloseUpdateDialog()
     {
+        _isUpdateDialogOpen = false;
+        _updateCountry = new CountryUpdateRequest();
         _otherResponse = null;
-        if (_selectedCountry.Id == 0)
-        {
-            var request = new CountryCreateRequest { Name = _selectedCountry.Name };
-            _otherResponse = await CountryService.CreateAsync(request);
-        }
-        else
-        {
-            var request = new CountryUpdateRequest { Id = _selectedCountry.Id, Name = _selectedCountry.Name };
-            _otherResponse = await CountryService.UpdateAsync(request);
-        }
+    }
 
+    private async Task SubmitCreateRequest(CountryCreateRequest request)
+    {
+        _otherResponse = await CountryService.CreateAsync(request);
         if (_otherResponse.IsSuccess)
         {
             await RefreshCountries();
-            CloseDialog();
+            CloseCreateDialog();
+        }
+    }
+
+    private async Task SubmitUpdateRequest(CountryUpdateRequest request)
+    {
+        _otherResponse = await CountryService.UpdateAsync(request);
+        if (_otherResponse.IsSuccess)
+        {
+            await RefreshCountries();
+            CloseUpdateDialog();
         }
     }
 
