@@ -43,8 +43,8 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 - Conexión a SQL Server
 - Configuración de EF Core
 
-### 🔹 `Sakila.Web` – Razor Pages UI
-- UI web desarrollada con Razor Pages (ASP.NET Core)
+### 🔹 `Sakila.Web` – Blazor WebAssembly UI
+- UI web desarrollada con Blazor WebAssembly (ASP.NET Core)
 - Consumo de la API mediante `HttpClient`
 - Separación de responsabilidades: sin lógica de negocio en la vista
 - CRUD visual de entidades como películas, países, ciudades
@@ -57,7 +57,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 |--------------|-------------------------------|
 | Backend      | ASP.NET Core 9.0 Web API      |
 | ORM          | Entity Framework Core         |
-| Frontend     | Razor Pages (ASP.NET Core)    |
+| Frontend     | Blazor WebAssembly (ASP.NET Core) |
 | Base de Datos| SQL Server + Sakila           |
 | IDE          | Visual Studio 2022 Community  |
 
@@ -69,7 +69,7 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 |---------------------------------------|----------------|
 | `DbContext` y ORM Framework           | ✅ EF Core      |
 | `Entity object`                       | ✅ Modelos C#   |
-| `Model (List<entity>)`               | ✅ Razor Pages  |
+| `Model (List<entity>)`               | ✅ Blazor WebAssembly  |
 | Arquitectura (REST, MVC, Razor, etc) | ✅ Separado en API y Web |
 | Video explicativo (opcional)         | 🚧 Por definir  |
 
@@ -106,6 +106,6 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 ## 📚 Referencias
 
 - [Entity Framework Core Docs](https://learn.microsoft.com/en-us/ef/core/)
-- [ASP.NET Core Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/)
+- [ASP.NET Core Blazor WebAssembly](https://learn.microsoft.com/en-us/aspnet/core/blazor/)
 - [SQL Server Documentation](https://learn.microsoft.com/en-us/sql/)
 - [SQL Server Sakila Sample DB](https://github.com/jOOQ/sakila/tree/main)
