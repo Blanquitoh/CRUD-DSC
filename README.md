@@ -108,6 +108,15 @@ Las interfaces `ILanguagesApi` e `ICountriesApi` definen los endpoints y Refit
 genera el código en tiempo de compilación. No es necesario ejecutar comandos
 adicionales: al compilar el proyecto los clientes se crean automáticamente.
 
+### Estado centralizado con Fluxor
+
+Para manejar la visibilidad de los diálogos y la entidad seleccionada se emplea
+el patrón **state store** mediante la librería [Fluxor](https://github.com/mrpm/Fluxor).
+Cada sección (`Countries`, `Languages`) dispone de un `*State` que expone las
+propiedades `IsCreateDialogOpen`, `IsUpdateDialogOpen`, `IsDeleteDialogOpen` y
+el modelo seleccionado. Las páginas despachan acciones para modificar el estado
+en lugar de mantener campos locales, logrando una UI más predecible.
+
 ---
 
 ## 📚 Referencias

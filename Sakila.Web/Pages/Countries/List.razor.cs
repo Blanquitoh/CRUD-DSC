@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
+using Fluxor;
+using Sakila.Web.Store.Countries;
 
 namespace Sakila.Web.Pages.Countries;
 
 public partial class List
 {
     private IApiResponse<CountryGetAllResponse>? _getAllResponse;
-    private bool _isDeleteDialogOpen;
-    private bool _isCreateDialogOpen;
-    private bool _isUpdateDialogOpen;
-    private CountryGetByIdResponse _selectedCountry = new();
+    [Inject] public IState<CountryState> CountryState { get; set; } = null!;
+    [Inject] public IDispatcher Dispatcher { get; set; } = null!;
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
@@ -20,35 +20,34 @@ public partial class List
 
     private void ShowCreateDialog()
     {
-        _isCreateDialogOpen = true;
+        Dispatcher.Dispatch(new ShowCreateDialogAction());
     }
 
     private void ShowUpdateDialog(CountryGetByIdResponse country)
     {
-        _selectedCountry = country;
-        _isUpdateDialogOpen = true;
+        Dispatcher.Dispatch(new ShowUpdateDialogAction(country));
     }
 
     private void CloseCreateDialog()
     {
-        _isCreateDialogOpen = false;
+        Dispatcher.Dispatch(new CloseCreateDialogAction());
     }
 
     private void CloseUpdateDialog()
     {
-        _isUpdateDialogOpen = false;
+        Dispatcher.Dispatch(new CloseUpdateDialogAction());
     }
 
     private async Task OnCreateSuccess()
     {
         await RefreshCountries();
-        CloseCreateDialog();
+        Dispatcher.Dispatch(new CloseCreateDialogAction());
     }
 
     private async Task OnUpdateSuccess()
     {
         await RefreshCountries();
-        CloseUpdateDialog();
+        Dispatcher.Dispatch(new CloseUpdateDialogAction());
     }
 
     private async Task RefreshCountries()
@@ -58,18 +57,17 @@ public partial class List
 
     private void ShowDeleteDialog(CountryGetByIdResponse country)
     {
-        _selectedCountry = country;
-        _isDeleteDialogOpen = true;
+        Dispatcher.Dispatch(new ShowDeleteDialogAction(country));
     }
 
     private void CloseDeleteDialog()
     {
-        _isDeleteDialogOpen = false;
+        Dispatcher.Dispatch(new CloseDeleteDialogAction());
     }
 
     private async Task OnDeleteSuccess()
     {
         await RefreshCountries();
-        CloseDeleteDialog();
+        Dispatcher.Dispatch(new CloseDeleteDialogAction());
     }
 }

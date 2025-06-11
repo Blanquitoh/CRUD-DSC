@@ -1,5 +1,6 @@
 @page "/languages"
 @using Sakila.Web.Pages.Languages.Components
+@inject IState<LanguageState> LanguageState
 
 <h3>Languages</h3>
 
@@ -35,25 +36,25 @@ else
     </table>
 }
 
-@if (_isCreateDialogOpen)
+@if (LanguageState.Value.IsCreateDialogOpen)
 {
     <LanguageCreateDialog Visible="true"
                           OnCancel="CloseCreateDialog"
                           OnSuccess="OnCreateSuccess"/>
 }
 
-@if (_isUpdateDialogOpen)
+@if (LanguageState.Value.IsUpdateDialogOpen)
 {
     <LanguageUpdateDialog Visible="true"
-                          Language="_selectedLanguage"
-                          OnCancel="CloseUpdateDialog"
-                          OnSuccess="OnUpdateSuccess"/>
+                         Language="LanguageState.Value.SelectedLanguage"
+                         OnCancel="CloseUpdateDialog"
+                         OnSuccess="OnUpdateSuccess"/>
 }
 
-@if (_isDeleteDialogOpen)
+@if (LanguageState.Value.IsDeleteDialogOpen)
 {
     <ConfirmDelete Visible="true"
-                  Language="_selectedLanguage"
+                  Language="LanguageState.Value.SelectedLanguage"
                   OnCancel="CloseDeleteDialog"
                   OnSuccess="OnDeleteSuccess"/>
 }
