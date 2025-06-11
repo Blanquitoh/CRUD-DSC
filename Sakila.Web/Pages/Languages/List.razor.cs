@@ -1,4 +1,5 @@
 using Fluxor;
+using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
@@ -6,7 +7,7 @@ using Sakila.Web.Store.Languages;
 
 namespace Sakila.Web.Pages.Languages;
 
-public partial class List
+public partial class List : FluxorComponent
 {
     private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
     [Inject] public IState<LanguageState> LanguageState { get; set; } = null!;
@@ -15,6 +16,7 @@ public partial class List
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         await RefreshLanguages();
     }
 
