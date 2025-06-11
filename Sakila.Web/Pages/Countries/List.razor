@@ -1,6 +1,5 @@
 @page "/countries"
 @using Sakila.Web.Pages.Countries.Components
-@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <MudText Typo="Typo.h3">Countries</MudText>
 
@@ -8,7 +7,7 @@
 
 @if (_getAllResponse?.Data?.Countries == null)
 {
-    <MudProgressCircular Indeterminate="true"/>
+    <MudProgressCircular Indeterminate="true" />
 }
 else
 {
@@ -27,25 +26,51 @@ else
     </MudTable>
 }
 
-@if (CountryState.Value.IsCreateDialogOpen)
-{
-    <CountryCreateDialog Visible="true"
-                         OnCancel="CloseCreateDialog"
-                         OnSuccess="OnCreateSuccess"/>
-}
+@code {
+    private IApiResponse<CountryGetAllResponse>? _getAllResponse;
 
-@if (CountryState.Value.IsUpdateDialogOpen)
-{
-    <CountryUpdateDialog Visible="true"
-                         Country="CountryState.Value.SelectedCountry"
-                         OnCancel="CloseUpdateDialog"
-                         OnSuccess="OnUpdateSuccess"/>
-}
+    [Inject] public ICountryService CountryService { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; set; } = null!;
 
-@if (CountryState.Value.IsDeleteDialogOpen)
-{
-    <ConfirmDelete Visible="true"
-                   Country="CountryState.Value.SelectedCountry"
-                   OnCancel="CloseDeleteDialog"
-                   OnSuccess="OnDeleteSuccess"/>
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshCountries();
+    }
+
+    private async Task RefreshCountries()
+    {
+        await CountryService.GetAllAsync(r => Task.FromResult(_getAllResponse = r));
+    }
+
+    private async Task ShowCreateDialog()
+    {
+        var dialog = DialogService.Show<CountryCreateDialog>("Add Country");
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshCountries();
+        }
+    }
+
+    private async Task ShowUpdateDialog(CountryGetByIdResponse country)
+    {
+        var parameters = new DialogParameters { [nameof(CountryUpdateDialog.Country)] = country };
+        var dialog = DialogService.Show<CountryUpdateDialog>("Edit Country", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshCountries();
+        }
+    }
+
+    private async Task ShowDeleteDialog(CountryGetByIdResponse country)
+    {
+        var parameters = new DialogParameters { [nameof(ConfirmDelete.Country)] = country };
+        var dialog = DialogService.Show<ConfirmDelete>("Delete Country", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshCountries();
+        }
+    }
 }

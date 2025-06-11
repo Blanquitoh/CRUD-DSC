@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
 
@@ -6,10 +7,8 @@ namespace Sakila.Web.Pages.Countries.Components;
 
 public partial class ConfirmDelete
 {
-    [Parameter] public bool Visible { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
-    [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnSuccess { get; set; }
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
     public IApiResponse<object>? ApiResponse { get; set; }
@@ -17,10 +16,16 @@ public partial class ConfirmDelete
     private async Task ConfirmAsync()
     {
         await CountryService.DeleteAsync(Country.Id,
-            async response =>
+            response =>
             {
                 ApiResponse = response;
-                await OnSuccess.InvokeAsync();
+                return Task.CompletedTask;
             });
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
     }
 }
