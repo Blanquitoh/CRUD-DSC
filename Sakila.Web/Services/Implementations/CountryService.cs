@@ -23,69 +23,55 @@ public class CountryService(
         MessageStore = new ValidationMessageStore(EditContext);
     }
 
-    public async Task<IApiResponse<CountryGetAllResponse>> GetAllAsync()
+    public async Task GetAllAsync(
+        Func<IApiResponse<CountryGetAllResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<CountryGetAllResponse>, Task>? onFailure = null)
     {
-        return await apiClient.GetAsync<CountryGetAllResponse>(Resource);
+        await apiClient.GetAsync(Resource, onSuccess, onFailure);
     }
 
-    public async Task<IApiResponse<CountryGetByIdResponse>> GetByIdAsync(int id)
+    public async Task GetByIdAsync(int id,
+        Func<IApiResponse<CountryGetByIdResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<CountryGetByIdResponse>, Task>? onFailure = null)
     {
-        return await apiClient.GetAsync<CountryGetByIdResponse>($"{Resource}/{id}");
+        await apiClient.GetAsync($"{Resource}/{id}", onSuccess, onFailure);
     }
 
-    public async Task<IApiResponse<object>> CreateAsync(CountryCreateRequest request,
+    public async Task CreateAsync(CountryCreateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        var response = await apiClient.PostAsync(Resource, request, createValidator);
-
-        if (response.IsSuccess)
-        {
-            if (onSuccess != null) await onSuccess(response);
-        }
-        else
-        {
-            EditContext.ApplyErrors(MessageStore, response);
-            if (onFailure != null) await onFailure(response.Errors);
-        }
-
-        return response;
+        await apiClient.PostAsync(Resource, request, createValidator,
+            onSuccess,
+            async response =>
+            {
+                EditContext.ApplyErrors(MessageStore, response);
+                if (onFailure != null) await onFailure(response.Errors);
+            });
     }
 
-    public async Task<IApiResponse<object>> UpdateAsync(CountryUpdateRequest request,
+    public async Task UpdateAsync(CountryUpdateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        var response = await apiClient.PutAsync($"{Resource}/{request.Id}", request, updateValidator);
-
-        if (response.IsSuccess)
-        {
-            if (onSuccess != null) await onSuccess(response);
-        }
-        else
-        {
-            EditContext.ApplyErrors(MessageStore, response);
-            if (onFailure != null) await onFailure(response.Errors);
-        }
-
-        return response;
+        await apiClient.PutAsync($"{Resource}/{request.Id}", request, updateValidator,
+            onSuccess,
+            async response =>
+            {
+                EditContext.ApplyErrors(MessageStore, response);
+                if (onFailure != null) await onFailure(response.Errors);
+            });
     }
 
-    public async Task<IApiResponse<object>> DeleteAsync(int id,
+    public async Task DeleteAsync(int id,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        var response = await apiClient.DeleteAsync($"{Resource}/{id}");
-
-        if (response.IsSuccess)
-        {
-            if (onSuccess != null) await onSuccess(response);
-        }
-        else
-        {
-            if (onFailure != null) await onFailure(response.Errors);
-        }
-
-        return response;
+        await apiClient.DeleteAsync($"{Resource}/{id}",
+            onSuccess,
+            async response =>
+            {
+                if (onFailure != null) await onFailure(response.Errors);
+            });
     }
 }

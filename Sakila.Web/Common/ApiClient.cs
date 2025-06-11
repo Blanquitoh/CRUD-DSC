@@ -12,7 +12,7 @@ public class ApiClient(HttpClient httpClient) : IApiClient
 
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
-    public async Task<IApiResponse<TResponse>> GetAsync<TResponse>(string url,
+    public async Task GetAsync<TResponse>(string url,
         Func<IApiResponse<TResponse>, Task>? onSuccess = null,
         Func<IApiResponse<TResponse>, Task>? onFailure = null)
     {
@@ -35,11 +35,9 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             if (onSuccess != null) await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
             if (onFailure != null) await onFailure(apiResponse);
-
-        return apiResponse;
     }
 
-    public async Task<IApiResponse<object>> PostAsync<TRequest>(string url, TRequest request,
+    public async Task PostAsync<TRequest>(string url, TRequest request,
         IValidator<TRequest>? createValidator = null,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<IApiResponse<object>, Task>? onFailure = null)
@@ -69,11 +67,9 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             if (onSuccess != null) await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
             if (onFailure != null) await onFailure(apiResponse);
-
-        return apiResponse;
     }
 
-    public async Task<IApiResponse<object>> PutAsync<TRequest>(string url, TRequest request,
+    public async Task PutAsync<TRequest>(string url, TRequest request,
         IValidator<TRequest>? updateValidator = null,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<IApiResponse<object>, Task>? onFailure = null)
@@ -103,11 +99,9 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             if (onSuccess != null) await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
             if (onFailure != null) await onFailure(apiResponse);
-
-        return apiResponse;
     }
 
-    public async Task<IApiResponse<object>> DeleteAsync(string url,
+    public async Task DeleteAsync(string url,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<IApiResponse<object>, Task>? onFailure = null)
     {
@@ -130,8 +124,6 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             if (onSuccess != null) await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
             if (onFailure != null) await onFailure(apiResponse);
-
-        return apiResponse;
     }
 
     private static async Task<IApiResponse<TResponse>> HandleResponse<TResponse>(HttpResponseMessage response)

@@ -9,15 +9,19 @@ public interface ICountryService
     EditContext EditContext { get; }
     ValidationMessageStore MessageStore { get; }
     void Initialize(object model);
-    Task<IApiResponse<CountryGetAllResponse>> GetAllAsync();
-    Task<IApiResponse<CountryGetByIdResponse>> GetByIdAsync(int id);
-    Task<IApiResponse<object>> CreateAsync(CountryCreateRequest request,
+    Task GetAllAsync(
+        Func<IApiResponse<CountryGetAllResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<CountryGetAllResponse>, Task>? onFailure = null);
+    Task GetByIdAsync(int id,
+        Func<IApiResponse<CountryGetByIdResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<CountryGetByIdResponse>, Task>? onFailure = null);
+    Task CreateAsync(CountryCreateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
-    Task<IApiResponse<object>> UpdateAsync(CountryUpdateRequest request,
+    Task UpdateAsync(CountryUpdateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
-    Task<IApiResponse<object>> DeleteAsync(int id,
+    Task DeleteAsync(int id,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
 }

@@ -9,15 +9,19 @@ public interface ILanguageService
     EditContext EditContext { get; }
     ValidationMessageStore MessageStore { get; }
     void Initialize(object model);
-    Task<IApiResponse<LanguageGetAllResponse>> GetAllAsync();
-    Task<IApiResponse<LanguageGetByIdResponse>> GetByIdAsync(int id);
-    Task<IApiResponse<object>> CreateAsync(LanguageCreateRequest request,
+    Task GetAllAsync(
+        Func<IApiResponse<LanguageGetAllResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<LanguageGetAllResponse>, Task>? onFailure = null);
+    Task GetByIdAsync(int id,
+        Func<IApiResponse<LanguageGetByIdResponse>, Task>? onSuccess = null,
+        Func<IApiResponse<LanguageGetByIdResponse>, Task>? onFailure = null);
+    Task CreateAsync(LanguageCreateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
-    Task<IApiResponse<object>> UpdateAsync(LanguageUpdateRequest request,
+    Task UpdateAsync(LanguageUpdateRequest request,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
-    Task<IApiResponse<object>> DeleteAsync(int id,
+    Task DeleteAsync(int id,
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
 }
