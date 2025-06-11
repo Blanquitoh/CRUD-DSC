@@ -24,8 +24,12 @@ public partial class CountryUpdateDialog
 
     private async Task SubmitAsync()
     {
-        ApiResponse = await CountryService.UpdateAsync(Model,
-            async _ => await OnSuccess.InvokeAsync());
+        await CountryService.UpdateAsync(Model,
+            async response =>
+            {
+                ApiResponse = response;
+                await OnSuccess.InvokeAsync();
+            });
     }
 }
 

@@ -21,8 +21,12 @@ public partial class CountryCreateDialog
 
     private async Task SubmitAsync()
     {
-        ApiResponse = await CountryService.CreateAsync(Country,
-            async _ => await OnSuccess.InvokeAsync());
+        await CountryService.CreateAsync(Country,
+            async response =>
+            {
+                ApiResponse = response;
+                await OnSuccess.InvokeAsync();
+            });
     }
 }
 

@@ -24,8 +24,12 @@ public partial class LanguageUpdateDialog
 
     private async Task SubmitAsync()
     {
-        ApiResponse = await LanguageService.UpdateAsync(Model,
-            async _ => await OnSuccess.InvokeAsync());
+        await LanguageService.UpdateAsync(Model,
+            async response =>
+            {
+                ApiResponse = response;
+                await OnSuccess.InvokeAsync();
+            });
     }
 }
 

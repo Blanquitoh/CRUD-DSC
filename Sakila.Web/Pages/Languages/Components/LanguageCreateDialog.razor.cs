@@ -21,8 +21,12 @@ public partial class LanguageCreateDialog
 
     private async Task SubmitAsync()
     {
-        ApiResponse = await LanguageService.CreateAsync(Language,
-            async _ => await OnSuccess.InvokeAsync());
+        await LanguageService.CreateAsync(Language,
+            async response =>
+            {
+                ApiResponse = response;
+                await OnSuccess.InvokeAsync();
+            });
     }
 }
 
