@@ -3,28 +3,28 @@ using Sakila.Web.Abstractions;
 
 namespace Sakila.Web.Common;
 
-public class ApiResponse<TResponse> : IApiResponse<TResponse>
+public class SakilaApiResponse<TResponse> : IApiResponse<TResponse>
 {
-    public ApiResponse()
+    public SakilaApiResponse()
     {
     }
 
-    public ApiResponse(TResponse? data)
+    public SakilaApiResponse(TResponse? data)
     {
         Data = data;
     }
 
-    public ApiResponse(Dictionary<string, string[]> errors)
+    public SakilaApiResponse(Dictionary<string, string[]> errors)
     {
         Errors = errors;
     }
 
-    public ApiResponse(string error)
+    public SakilaApiResponse(string error)
     {
         GeneralErrors.Add(error);
     }
 
-    public ApiResponse(ValidationException exception)
+    public SakilaApiResponse(ValidationException exception)
     {
         Errors = exception.Errors
             .GroupBy(e => e.PropertyName)

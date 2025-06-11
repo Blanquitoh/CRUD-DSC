@@ -6,18 +6,13 @@ using Sakila.Web.Api;
 
 namespace Sakila.Web.Services.Implementations;
 
-public class CountryService : BaseCrudService<CountryCreateRequest, CountryUpdateRequest, CountryGetAllResponse, CountryGetByIdResponse>, ICountryService
+public class CountryService(
+    ICountriesApi api,
+    IValidator<CountryCreateRequest> createValidator,
+    IValidator<CountryUpdateRequest> updateValidator)
+    : BaseCrudService<CountryCreateRequest, CountryUpdateRequest, CountryGetAllResponse, CountryGetByIdResponse>(
+        createValidator, updateValidator), ICountryService
 {
-    private readonly ICountriesApi api;
-
-    public CountryService(ICountriesApi api,
-        IValidator<CountryCreateRequest> createValidator,
-        IValidator<CountryUpdateRequest> updateValidator)
-        : base(createValidator, updateValidator)
-    {
-        this.api = api;
-    }
-
     protected override int GetUpdateId(CountryUpdateRequest request) => request.Id;
 
     protected override Task<CountryGetAllResponse> GetAllApiAsync() => api.GetAllAsync();

@@ -53,8 +53,7 @@ public partial class List
 
     private async Task RefreshLanguages()
     {
-        await LanguageService.GetAllAsync(
-            async response => _getAllResponse = response);
+        await LanguageService.GetAllAsync(response => Task.FromResult(_getAllResponse = response));
     }
 
     private void ShowDeleteDialog(LanguageGetByIdResponse language)

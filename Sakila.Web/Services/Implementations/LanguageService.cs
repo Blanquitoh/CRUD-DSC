@@ -6,18 +6,13 @@ using Sakila.Web.Api;
 
 namespace Sakila.Web.Services.Implementations;
 
-public class LanguageService : BaseCrudService<LanguageCreateRequest, LanguageUpdateRequest, LanguageGetAllResponse, LanguageGetByIdResponse>, ILanguageService
+public class LanguageService(
+    ILanguagesApi api,
+    IValidator<LanguageCreateRequest> createValidator,
+    IValidator<LanguageUpdateRequest> updateValidator)
+    : BaseCrudService<LanguageCreateRequest, LanguageUpdateRequest, LanguageGetAllResponse, LanguageGetByIdResponse>(
+        createValidator, updateValidator), ILanguageService
 {
-    private readonly ILanguagesApi api;
-
-    public LanguageService(ILanguagesApi api,
-        IValidator<LanguageCreateRequest> createValidator,
-        IValidator<LanguageUpdateRequest> updateValidator)
-        : base(createValidator, updateValidator)
-    {
-        this.api = api;
-    }
-
     protected override int GetUpdateId(LanguageUpdateRequest request) => request.Id;
 
     protected override Task<LanguageGetAllResponse> GetAllApiAsync() => api.GetAllAsync();

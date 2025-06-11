@@ -53,8 +53,7 @@ public partial class List
 
     private async Task RefreshCountries()
     {
-        await CountryService.GetAllAsync(
-            async response => _getAllResponse = response);
+        await CountryService.GetAllAsync(response => Task.FromResult(_getAllResponse = response));
     }
 
     private void ShowDeleteDialog(CountryGetByIdResponse country)
