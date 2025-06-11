@@ -15,7 +15,7 @@ public class GetAllHandler(SakilaContext dbContext, IMapper mapper)
     {
         return new CountryGetAllResponse
         {
-            Countries = await mapper.ProjectTo<CountryGetByIdResponse>(dbContext.Countries)
+            Countries = await mapper.ProjectTo<CountryGetByIdResponse>(dbContext.Countries.AsNoTracking())
                 .ToListAsync(cancellationToken)
         };
     }

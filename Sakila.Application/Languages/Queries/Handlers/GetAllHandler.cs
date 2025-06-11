@@ -15,7 +15,7 @@ public class GetAllHandler(SakilaContext dbContext, IMapper mapper)
     {
         return new LanguageGetAllResponse
         {
-            Languages = await mapper.ProjectTo<LanguageGetByIdResponse>(dbContext.Languages)
+            Languages = await mapper.ProjectTo<LanguageGetByIdResponse>(dbContext.Languages.AsNoTracking())
                 .ToListAsync(cancellationToken)
         };
     }
