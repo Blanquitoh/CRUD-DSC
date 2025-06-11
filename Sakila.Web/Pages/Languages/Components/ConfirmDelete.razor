@@ -1,19 +1,13 @@
 @if (Visible)
 {
-    <div class="modal show d-block" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirm Deletion</h5>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>@Language.Name</strong>?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="OnCancel">No</button>
-                    <button class="btn btn-danger" @onclick="ConfirmAsync">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <MudDialog MaxWidth="MaxWidth.ExtraSmall" FullWidth="true">
+        <DialogContent>
+            <MudText Typo="Typo.h6">Confirm Deletion</MudText>
+            <MudText>Are you sure you want to delete <strong>@Language.Name</strong>?</MudText>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Color="Color.Secondary" OnClick="OnCancel">No</MudButton>
+            <MudButton Color="Color.Error" OnClick="ConfirmAsync">Yes</MudButton>
+        </DialogActions>
+    </MudDialog>
 }
