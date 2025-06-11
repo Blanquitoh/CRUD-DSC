@@ -48,3 +48,21 @@ else
                    OnCancel="CloseDeleteDialog"
                    OnSuccess="OnDeleteSuccess"/>
 }
+
+
+@inject IDialogService DialogService
+
+<MudButton @onclick="OpenDialogAsync" Variant="Variant.Filled" Color="Color.Primary">
+    Open simple dialog
+</MudButton>
+
+@code {
+    //SAMPLE DIALOG TEST TO BE REMOVED LATER AFTER FIXING DIALOGS NOT OPENING
+    private Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<DialogComponent>("Simple Dialog", options);
+    }
+
+}
