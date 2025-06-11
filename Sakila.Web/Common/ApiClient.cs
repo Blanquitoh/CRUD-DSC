@@ -103,10 +103,10 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             return new ApiResponse<TResponse>(JsonSerializer.Deserialize<TResponse>(content, Options)!);
         }
 
-        var content = await response.Content.ReadAsStringAsync();
-
         try
         {
+            var content = await response.Content.ReadAsStringAsync();
+
             var document = JsonSerializer.Deserialize<JsonElement>(content, Options);
 
             if (response.StatusCode == HttpStatusCode.BadRequest && document.TryGetProperty("errors", out var errorsElement))

@@ -9,7 +9,7 @@ public abstract class CreateHandlerBase<TRequest, TEntity, TResponse>(
     SakilaContext dbContext,
     IMapper mapper,
     IValidator<TRequest> validator) : IRequestHandler<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : IRequest<TResponse> where TEntity : class
 {
     protected abstract TResponse GetResponse(TEntity entity);
 

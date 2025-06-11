@@ -7,7 +7,7 @@ namespace Sakila.Application.Common.Handlers;
 public abstract class DeleteHandlerBase<TRequest, TEntity, TData>(
     SakilaContext dbContext,
     IValidatorWithData<TRequest, TData> validator) : IRequestHandler<TRequest, bool>
-    where TRequest : IRequest<bool>
+    where TRequest : IRequest<bool> where TEntity : class
 {
     protected abstract TEntity GetData(TData data);
 
