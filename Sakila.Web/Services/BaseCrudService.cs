@@ -2,7 +2,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Net;
 using System.Text.Json;
-using Refit;
 using Sakila.Web.Abstractions;
 using Sakila.Web.Extensions;
 
@@ -50,7 +49,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
             var result = await GetAllApiAsync();
             apiResponse = new ApiResponse<TGetAll>(result);
         }
-        catch (ApiException exception)
+        catch (Refit.ApiException exception)
         {
             apiResponse = await HandleApiException<TGetAll>(exception);
         }
@@ -78,7 +77,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
             else
                 apiResponse = new ApiResponse<TGetById>(result);
         }
-        catch (ApiException exception)
+        catch (Refit.ApiException exception)
         {
             apiResponse = await HandleApiException<TGetById>(exception);
         }
@@ -108,7 +107,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
         {
             apiResponse = new ApiResponse<object>(exception);
         }
-        catch (ApiException exception)
+        catch (Refit.ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -141,7 +140,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
         {
             apiResponse = new ApiResponse<object>(exception);
         }
-        catch (ApiException exception)
+        catch (Refit.ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -169,7 +168,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
             await DeleteApiAsync(id);
             apiResponse = new ApiResponse<object>();
         }
-        catch (ApiException exception)
+        catch (Refit.ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -186,7 +185,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
         }
     }
 
-    private static async Task<ApiResponse<T>> HandleApiException<T>(ApiException exception)
+    private static async Task<ApiResponse<T>> HandleApiException<T>(Refit.ApiException exception)
     {
         try
         {
