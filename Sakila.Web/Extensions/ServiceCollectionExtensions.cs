@@ -14,7 +14,10 @@ public static class ServiceCollectionExtensions
 {
     public static WebAssemblyHostBuilder AddSakilaServices(this WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddScoped<IApiClient, ApiClient>();
+        builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
+        {
+            client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!);
+        });
 
         builder.Services.AddScoped<ILanguageService, LanguageService>();
         builder.Services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
@@ -24,8 +27,6 @@ public static class ServiceCollectionExtensions
         builder.Services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
         builder.Services.AddTransient<IValidator<CountryUpdateRequest>, CountryUpdateValidator>();
 
-        builder.Services.AddScoped(sp => new HttpClient
-            { BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!) });
         return builder;
     }
 }
