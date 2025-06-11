@@ -1,7 +1,9 @@
 @inherits LayoutComponentBase
 
 <MudThemeProvider/>
+<MudPopoverProvider/>
 <MudDialogProvider/>
+<MudSnackbarProvider/>
 <MudLayout>
     <MudAppBar Color="Color.Primary">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer"/>
@@ -20,13 +22,3 @@
         </div>
     </MudMainContent>
 </MudLayout>
-
-@code {
-    private bool _drawerOpen = true;
-
-    private void ToggleDrawer()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-}

@@ -11,17 +11,14 @@ public partial class ConfirmDelete
     [Parameter] public LanguageGetByIdResponse Language { get; set; } = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
-    public IApiResponse<object>? ApiResponse { get; set; }
-
     private async Task ConfirmAsync()
     {
         await LanguageService.DeleteAsync(Language.Id,
-            response =>
+            _ =>
             {
-                ApiResponse = response;
+                MudDialog.Close(DialogResult.Ok(true));
                 return Task.CompletedTask;
             });
-        MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()

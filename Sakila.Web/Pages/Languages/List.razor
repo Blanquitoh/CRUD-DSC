@@ -1,5 +1,4 @@
 @page "/languages"
-@using Sakila.Web.Pages.Languages.Components
 
 <MudText Typo="Typo.h3">Languages</MudText>
 
@@ -24,53 +23,4 @@ else
             </MudTd>
         </RowTemplate>
     </MudTable>
-}
-
-@code {
-    private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
-
-    [Inject] public ILanguageService LanguageService { get; set; } = null!;
-    [Inject] public IDialogService DialogService { get; set; } = null!;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await RefreshLanguages();
-    }
-
-    private async Task RefreshLanguages()
-    {
-        await LanguageService.GetAllAsync(r => Task.FromResult(_getAllResponse = r));
-    }
-
-    private async Task ShowCreateDialog()
-    {
-        var dialog = DialogService.Show<LanguageCreateDialog>("Add Language");
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            await RefreshLanguages();
-        }
-    }
-
-    private async Task ShowUpdateDialog(LanguageGetByIdResponse language)
-    {
-        var parameters = new DialogParameters { [nameof(LanguageUpdateDialog.Language)] = language };
-        var dialog = DialogService.Show<LanguageUpdateDialog>("Edit Language", parameters);
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            await RefreshLanguages();
-        }
-    }
-
-    private async Task ShowDeleteDialog(LanguageGetByIdResponse language)
-    {
-        var parameters = new DialogParameters { [nameof(ConfirmDelete.Language)] = language };
-        var dialog = DialogService.Show<ConfirmDelete>("Delete Language", parameters);
-        var result = await dialog.Result;
-        if (!result.Cancelled)
-        {
-            await RefreshLanguages();
-        }
-    }
 }

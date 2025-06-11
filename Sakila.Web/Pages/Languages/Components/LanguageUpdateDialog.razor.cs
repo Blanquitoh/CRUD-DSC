@@ -12,7 +12,6 @@ public partial class LanguageUpdateDialog
     [Parameter] public LanguageGetByIdResponse Language { get; set; } = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
-    public IApiResponse<object>? ApiResponse { get; set; }
     private LanguageUpdateRequest Model { get; set; } = new();
 
     protected override void OnParametersSet()
@@ -24,12 +23,11 @@ public partial class LanguageUpdateDialog
     private async Task SubmitAsync()
     {
         await LanguageService.UpdateAsync(Model,
-            response =>
+            _ =>
             {
-                ApiResponse = response;
+                MudDialog.Close(DialogResult.Ok(true));
                 return Task.CompletedTask;
             });
-        MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()
