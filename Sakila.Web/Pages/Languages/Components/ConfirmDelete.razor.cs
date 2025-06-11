@@ -11,6 +11,11 @@ public partial class ConfirmDelete
     [Parameter] public LanguageGetByIdResponse Language { get; set; } = new();
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
+    protected override void OnInitialized()
+    {
+        LanguageService.Initialize(Language);
+    }
+
     private async Task ConfirmAsync()
     {
         var success = false;
