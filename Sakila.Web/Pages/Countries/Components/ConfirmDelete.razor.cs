@@ -16,10 +16,7 @@ public partial class ConfirmDelete
 
     private async Task ConfirmAsync()
     {
-        ApiResponse = await CountryService.DeleteAsync(Country.Id);
-        if (ApiResponse.IsSuccess)
-        {
-            await OnSuccess.InvokeAsync();
-        }
+        ApiResponse = await CountryService.DeleteAsync(Country.Id,
+            async _ => await OnSuccess.InvokeAsync());
     }
 }
