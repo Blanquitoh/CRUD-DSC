@@ -1,18 +1,20 @@
-using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Sakila.API.Middleware;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next)
+public class ExceptionHandlingMiddleware(RequestDelegate next, ProblemDetailsFactory problemDetailsFactory)
 {
+    private readonly RequestDelegate _next = next;
+    private readonly ProblemDetailsFactory _problemDetailsFactory = problemDetailsFactory;
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await next(context);
+            await _next(context);
         }
         catch (ValidationException ex)
         {
@@ -20,66 +22,55 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
                 .GroupBy(e => e.PropertyName)
                 .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
 
-            context.Response.StatusCode = 400;
-            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
-            var problem = new ValidationProblemDetails(errors)
-            {
-                Status = 400,
-                Title = "Validation failed",
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-            };
+            var problem = _problemDetailsFactory.CreateValidationProblemDetails(
+                context,
+                errors,
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Validation failed",
+                type: "https://tools.ietf.org/html/rfc7231#section-6.5.1");
 
-            var json = JsonSerializer.Serialize(problem);
-            await context.Response.WriteAsync(json);
+            await context.Response.WriteAsJsonAsync(problem);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var problem = new ProblemDetails
-            {
-                Status = 500,
-                Title = "A database error occurred.",
-                Detail = sqlEx.Message,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
-            };
+            var problem = _problemDetailsFactory.CreateProblemDetails(
+                context,
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "A database error occurred.",
+                detail: sqlEx.Message,
+                type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
-            var json = JsonSerializer.Serialize(problem);
-            await context.Response.WriteAsync(json);
+            await context.Response.WriteAsJsonAsync(problem);
         }
         catch (SqlException ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var problem = new ProblemDetails
-            {
-                Status = 500,
-                Title = "A database error occurred.",
-                Detail = ex.Message,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
-            };
+            var problem = _problemDetailsFactory.CreateProblemDetails(
+                context,
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "A database error occurred.",
+                detail: ex.Message,
+                type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
-            var json = JsonSerializer.Serialize(problem);
-            await context.Response.WriteAsync(json);
+            await context.Response.WriteAsJsonAsync(problem);
         }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var problem = new ProblemDetails
-            {
-                Status = 500,
-                Title = "An internal server error occurred.",
-                Detail = ex.Message,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
-            };
+            var problem = _problemDetailsFactory.CreateProblemDetails(
+                context,
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "An internal server error occurred.",
+                detail: ex.Message,
+                type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
-            var json = JsonSerializer.Serialize(problem);
-            await context.Response.WriteAsync(json);
+            await context.Response.WriteAsJsonAsync(problem);
         }
     }
 }

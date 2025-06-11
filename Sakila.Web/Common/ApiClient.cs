@@ -103,24 +103,21 @@ public class ApiClient(HttpClient httpClient) : IApiClient
             return new ApiResponse<TResponse>(JsonSerializer.Deserialize<TResponse>(content, Options)!);
         }
 
-        if (response.StatusCode == HttpStatusCode.BadRequest)
-        {
-            var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync();
 
-            // Try to parse validation error structure
-            var problem = JsonSerializer.Deserialize<ValidationErrorResponse>(content, Options);
-
-            if (problem?.Errors is { Count: > 0 })
-                throw new ApiValidationException(problem.Errors);
-            return new ApiResponse<TResponse>(problem?.ToString() ?? "Bad request");
-        }
-
-        var errorContent = await response.Content.ReadAsStringAsync();
         try
         {
-            var document = JsonSerializer.Deserialize<JsonElement>(errorContent, Options);
+            var document = JsonSerializer.Deserialize<JsonElement>(content, Options);
+
+            if (response.StatusCode == HttpStatusCode.BadRequest && document.TryGetProperty("errors", out var errorsElement))
+            {
+                var errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), Options)
+                             ?? new Dictionary<string, string[]>();
+                throw new ApiValidationException(errors);
+            }
+
             if (document.TryGetProperty("detail", out var detail))
-                return new ApiResponse<TResponse>(detail.GetString() ?? "An error occurred");
+                return new ApiResponse<TResponse>(detail.GetString() ?? $"Unexpected status: {response.StatusCode}");
         }
         catch (JsonException)
         {
