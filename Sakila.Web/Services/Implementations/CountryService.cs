@@ -2,7 +2,6 @@ using FluentValidation;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
-using Sakila.Web.Services;
 
 namespace Sakila.Web.Services.Implementations;
 
@@ -13,5 +12,5 @@ public class CountryService(
     : BaseCrudService<CountryCreateRequest, CountryUpdateRequest, CountryGetAllResponse, CountryGetByIdResponse>(
         "countries", apiClient, createValidator, updateValidator), ICountryService
 {
-    protected override int GetUpdateId(CountryUpdateRequest request) => request.Id;
+    protected override int GetUpdateRequestId(CountryUpdateRequest request) => request.Id;
 }

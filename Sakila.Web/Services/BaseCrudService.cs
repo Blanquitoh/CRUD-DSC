@@ -5,26 +5,13 @@ using Sakila.Web.Extensions;
 
 namespace Sakila.Web.Services;
 
-public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
+public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
+    string resource,
+    IApiClient apiClient,
+    IValidator<TCreate> createValidator,
+    IValidator<TUpdate> updateValidator)
 {
-    private readonly IApiClient apiClient;
-    private readonly IValidator<TCreate> createValidator;
-    private readonly IValidator<TUpdate> updateValidator;
-    private readonly string resource;
-
-    protected BaseCrudService(
-        string resource,
-        IApiClient apiClient,
-        IValidator<TCreate> createValidator,
-        IValidator<TUpdate> updateValidator)
-    {
-        this.resource = resource;
-        this.apiClient = apiClient;
-        this.createValidator = createValidator;
-        this.updateValidator = updateValidator;
-    }
-
-    protected abstract int GetUpdateId(TUpdate request);
+    protected abstract int GetUpdateRequestId(TUpdate request);
 
     public EditContext EditContext { get; private set; } = null!;
     public ValidationMessageStore MessageStore { get; private set; } = null!;
@@ -66,7 +53,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>
         Func<IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        await apiClient.PutAsync($"{resource}/{GetUpdateId(request)}", request, updateValidator,
+        await apiClient.PutAsync($"{resource}/{GetUpdateRequestId(request)}", request, updateValidator,
             onSuccess,
             async response =>
             {
