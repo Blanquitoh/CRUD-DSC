@@ -1,7 +1,7 @@
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
-using Fluxor;
 using Sakila.Web.Store.Countries;
 
 namespace Sakila.Web.Pages.Countries;

@@ -1,6 +1,5 @@
 @page "/languages"
 @using Sakila.Web.Pages.Languages.Components
-@using Sakila.Web.Store.Languages
 
 <MudText Typo="Typo.h3">Languages</MudText>
 
@@ -8,7 +7,7 @@
 
 @if (_getAllResponse?.Data?.Languages == null)
 {
-    <MudProgressCircular Indeterminate="true" />
+    <MudProgressCircular Indeterminate="true"/>
 }
 else
 {
@@ -37,15 +36,15 @@ else
 @if (LanguageState.Value.IsUpdateDialogOpen)
 {
     <LanguageUpdateDialog Visible="true"
-                         Language="LanguageState.Value.SelectedLanguage"
-                         OnCancel="CloseUpdateDialog"
-                         OnSuccess="OnUpdateSuccess"/>
+                          Language="LanguageState.Value.SelectedLanguage"
+                          OnCancel="CloseUpdateDialog"
+                          OnSuccess="OnUpdateSuccess"/>
 }
 
 @if (LanguageState.Value.IsDeleteDialogOpen)
 {
     <ConfirmDelete Visible="true"
-                  Language="LanguageState.Value.SelectedLanguage"
-                  OnCancel="CloseDeleteDialog"
-                  OnSuccess="OnDeleteSuccess"/>
+                   Language="LanguageState.Value.SelectedLanguage"
+                   OnCancel="CloseDeleteDialog"
+                   OnSuccess="OnDeleteSuccess"/>
 }

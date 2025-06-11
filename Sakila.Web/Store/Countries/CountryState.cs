@@ -11,42 +11,64 @@ public record CountryState(
 
 public class CountryFeature : Feature<CountryState>
 {
-    public override string GetName() => "Country";
+    public override string GetName()
+    {
+        return "Country";
+    }
 
-    protected override CountryState GetInitialState() =>
-        new(false, false, false, new());
+    protected override CountryState GetInitialState()
+    {
+        return new CountryState(false, false, false, new CountryGetByIdResponse());
+    }
 }
 
 public record ShowCreateDialogAction;
+
 public record CloseCreateDialogAction;
+
 public record ShowUpdateDialogAction(CountryGetByIdResponse Country);
+
 public record CloseUpdateDialogAction;
+
 public record ShowDeleteDialogAction(CountryGetByIdResponse Country);
+
 public record CloseDeleteDialogAction;
 
 public static class CountryReducers
 {
     [ReducerMethod]
-    public static CountryState ReduceShowCreateDialog(CountryState state, ShowCreateDialogAction action) =>
-        state with { IsCreateDialogOpen = true };
+    public static CountryState ReduceShowCreateDialog(CountryState state, ShowCreateDialogAction action)
+    {
+        return state with { IsCreateDialogOpen = true };
+    }
 
     [ReducerMethod]
-    public static CountryState ReduceCloseCreateDialog(CountryState state, CloseCreateDialogAction action) =>
-        state with { IsCreateDialogOpen = false };
+    public static CountryState ReduceCloseCreateDialog(CountryState state, CloseCreateDialogAction action)
+    {
+        return state with { IsCreateDialogOpen = false };
+    }
 
     [ReducerMethod]
-    public static CountryState ReduceShowUpdateDialog(CountryState state, ShowUpdateDialogAction action) =>
-        state with { IsUpdateDialogOpen = true, SelectedCountry = action.Country };
+    public static CountryState ReduceShowUpdateDialog(CountryState state, ShowUpdateDialogAction action)
+    {
+        return state with { IsUpdateDialogOpen = true, SelectedCountry = action.Country };
+    }
 
     [ReducerMethod]
-    public static CountryState ReduceCloseUpdateDialog(CountryState state, CloseUpdateDialogAction action) =>
-        state with { IsUpdateDialogOpen = false };
+    public static CountryState ReduceCloseUpdateDialog(CountryState state, CloseUpdateDialogAction action)
+    {
+        return state with { IsUpdateDialogOpen = false };
+    }
 
     [ReducerMethod]
-    public static CountryState ReduceShowDeleteDialog(CountryState state, ShowDeleteDialogAction action) =>
-        state with { IsDeleteDialogOpen = true, SelectedCountry = action.Country };
+    public static CountryState ReduceShowDeleteDialog(CountryState state, ShowDeleteDialogAction action)
+    {
+        return state with { IsDeleteDialogOpen = true, SelectedCountry = action.Country };
+    }
 
     [ReducerMethod]
-    public static CountryState ReduceCloseDeleteDialog(CountryState state, CloseDeleteDialogAction action) =>
-        state with { IsDeleteDialogOpen = false };
+    public static CountryState ReduceCloseDeleteDialog(CountryState state, CloseDeleteDialogAction action)
+    {
+        return state with { IsDeleteDialogOpen = false };
+    }
 }

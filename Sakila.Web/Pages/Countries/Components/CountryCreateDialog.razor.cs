@@ -12,7 +12,7 @@ public partial class CountryCreateDialog
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
     public IApiResponse<object>? ApiResponse { get; set; }
-    private CountryCreateRequest Country { get; set; } = new();
+    private CountryCreateRequest Country { get; } = new();
 
     protected override void OnInitialized()
     {
@@ -29,4 +29,3 @@ public partial class CountryCreateDialog
             });
     }
 }
-

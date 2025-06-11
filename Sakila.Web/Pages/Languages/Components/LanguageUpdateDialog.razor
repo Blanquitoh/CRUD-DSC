@@ -4,8 +4,8 @@
         <MudForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
             <DialogContent>
                 <MudDialogTitle>Edit Language</MudDialogTitle>
-                <DataAnnotationsValidator />
-                <MudTextField @bind-Value="Model.Name" Label="Language Name" For="@(() => Model.Name)" Required="true" />
+                <DataAnnotationsValidator/>
+                <MudTextField @bind-Value="Model.Name" Label="Language Name" For="@(() => Model.Name)" Required="true"/>
             </DialogContent>
             <DialogActions>
                 <MudButton Color="Color.Secondary" OnClick="OnCancel">Cancel</MudButton>

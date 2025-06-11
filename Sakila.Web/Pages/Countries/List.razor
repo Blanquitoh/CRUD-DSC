@@ -1,6 +1,5 @@
 @page "/countries"
 @using Sakila.Web.Pages.Countries.Components
-@using Sakila.Web.Store.Countries
 
 <MudText Typo="Typo.h3">Countries</MudText>
 
@@ -8,7 +7,7 @@
 
 @if (_getAllResponse?.Data?.Countries == null)
 {
-    <MudProgressCircular Indeterminate="true" />
+    <MudProgressCircular Indeterminate="true"/>
 }
 else
 {
@@ -45,7 +44,7 @@ else
 @if (CountryState.Value.IsDeleteDialogOpen)
 {
     <ConfirmDelete Visible="true"
-                  Country="CountryState.Value.SelectedCountry"
-                  OnCancel="CloseDeleteDialog"
-                  OnSuccess="OnDeleteSuccess"/>
+                   Country="CountryState.Value.SelectedCountry"
+                   OnCancel="CloseDeleteDialog"
+                   OnSuccess="OnDeleteSuccess"/>
 }

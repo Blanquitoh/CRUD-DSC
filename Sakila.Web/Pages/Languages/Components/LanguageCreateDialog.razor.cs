@@ -12,7 +12,7 @@ public partial class LanguageCreateDialog
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     public IApiResponse<object>? ApiResponse { get; set; }
-    private LanguageCreateRequest Language { get; set; } = new();
+    private LanguageCreateRequest Language { get; } = new();
 
     protected override void OnInitialized()
     {
@@ -29,4 +29,3 @@ public partial class LanguageCreateDialog
             });
     }
 }
-

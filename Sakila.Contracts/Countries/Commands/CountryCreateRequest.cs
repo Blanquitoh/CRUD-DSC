@@ -1,5 +1,5 @@
-using MediatR;
 using System.ComponentModel.DataAnnotations;
+using MediatR;
 
 namespace Sakila.Contracts.Countries.Commands;
 

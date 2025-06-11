@@ -13,15 +13,33 @@ public class LanguageService(
     : BaseCrudService<LanguageCreateRequest, LanguageUpdateRequest, LanguageGetAllResponse, LanguageGetByIdResponse>(
         createValidator, updateValidator), ILanguageService
 {
-    protected override int GetUpdateId(LanguageUpdateRequest request) => request.Id;
+    protected override int GetUpdateId(LanguageUpdateRequest request)
+    {
+        return request.Id;
+    }
 
-    protected override Task<LanguageGetAllResponse> GetAllApiAsync() => api.GetAllAsync();
+    protected override Task<LanguageGetAllResponse> GetAllApiAsync()
+    {
+        return api.GetAllAsync();
+    }
 
-    protected override Task<LanguageGetByIdResponse?> GetByIdApiAsync(int id) => api.GetByIdAsync(id);
+    protected override Task<LanguageGetByIdResponse?> GetByIdApiAsync(int id)
+    {
+        return api.GetByIdAsync(id);
+    }
 
-    protected override Task CreateApiAsync(LanguageCreateRequest request) => api.PostAsync(request);
+    protected override Task CreateApiAsync(LanguageCreateRequest request)
+    {
+        return api.PostAsync(request);
+    }
 
-    protected override Task UpdateApiAsync(int id, LanguageUpdateRequest request) => api.PutAsync(id, request);
+    protected override Task UpdateApiAsync(int id, LanguageUpdateRequest request)
+    {
+        return api.PutAsync(id, request);
+    }
 
-    protected override Task DeleteApiAsync(int id) => api.DeleteAsync(id);
+    protected override Task DeleteApiAsync(int id)
+    {
+        return api.DeleteAsync(id);
+    }
 }

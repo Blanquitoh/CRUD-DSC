@@ -1,7 +1,7 @@
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
-using Fluxor;
 using Sakila.Web.Store.Languages;
 
 namespace Sakila.Web.Pages.Languages;

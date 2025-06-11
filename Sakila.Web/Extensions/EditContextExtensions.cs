@@ -5,7 +5,8 @@ namespace Sakila.Web.Extensions;
 
 public static class EditContextExtensions
 {
-    public static bool ApplyErrors(this EditContext editContext, ValidationMessageStore messageStore, IApiResponse<object>? response)
+    public static bool ApplyErrors(this EditContext editContext, ValidationMessageStore messageStore,
+        IApiResponse<object>? response)
     {
         if (response == null)
             return true;
@@ -15,13 +16,9 @@ public static class EditContextExtensions
         if (response.IsSuccess)
             return true;
 
-        foreach (var (field, messages) in response.Errors)
-        {
-            messageStore.Add(editContext.Field(field), messages);
-        }
+        foreach (var (field, messages) in response.Errors) messageStore.Add(editContext.Field(field), messages);
 
         editContext.NotifyValidationStateChanged();
         return false;
     }
 }
-

@@ -1,8 +1,8 @@
-using FluentValidation;
-using Microsoft.AspNetCore.Components.Forms;
 using System.Net;
 using System.Text.Json;
-using Sakila.Web.Abstractions;
+using FluentValidation;
+using Microsoft.AspNetCore.Components.Forms;
+using Refit;
 using Sakila.Web.Common;
 using Sakila.Web.Extensions;
 
@@ -14,6 +14,9 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
 {
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
+    public EditContext EditContext { get; private set; } = null!;
+    public ValidationMessageStore MessageStore { get; private set; } = null!;
+
     protected abstract int GetUpdateId(TUpdate request);
 
     protected abstract Task<TGetAll> GetAllApiAsync();
@@ -22,9 +25,6 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     protected abstract Task UpdateApiAsync(int id, TUpdate request);
     protected abstract Task DeleteApiAsync(int id);
 
-    public EditContext EditContext { get; private set; } = null!;
-    public ValidationMessageStore MessageStore { get; private set; } = null!;
-
     public void Initialize(object model)
     {
         EditContext = new EditContext(model);
@@ -32,16 +32,16 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     }
 
     public async Task GetAllAsync(
-        Func<IApiResponse<TGetAll>, Task>? onSuccess = null,
-        Func<IApiResponse<TGetAll>, Task>? onFailure = null)
+        Func<Abstractions.IApiResponse<TGetAll>, Task>? onSuccess = null,
+        Func<Abstractions.IApiResponse<TGetAll>, Task>? onFailure = null)
     {
-        IApiResponse<TGetAll> apiResponse;
+        Abstractions.IApiResponse<TGetAll> apiResponse;
         try
         {
             var result = await GetAllApiAsync();
             apiResponse = new SakilaApiResponse<TGetAll>(result);
         }
-        catch (Refit.ApiException exception)
+        catch (ApiException exception)
         {
             apiResponse = await HandleApiException<TGetAll>(exception);
         }
@@ -51,16 +51,18 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
 
         if (apiResponse.IsSuccess)
-            if (onSuccess != null) await onSuccess(apiResponse);
+            if (onSuccess != null)
+                await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
-            if (onFailure != null) await onFailure(apiResponse);
+            if (onFailure != null)
+                await onFailure(apiResponse);
     }
 
     public async Task GetByIdAsync(int id,
-        Func<IApiResponse<TGetById>, Task>? onSuccess = null,
-        Func<IApiResponse<TGetById>, Task>? onFailure = null)
+        Func<Abstractions.IApiResponse<TGetById>, Task>? onSuccess = null,
+        Func<Abstractions.IApiResponse<TGetById>, Task>? onFailure = null)
     {
-        IApiResponse<TGetById> apiResponse;
+        Abstractions.IApiResponse<TGetById> apiResponse;
         try
         {
             var result = await GetByIdApiAsync(id);
@@ -69,7 +71,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
             else
                 apiResponse = new SakilaApiResponse<TGetById>(result);
         }
-        catch (Refit.ApiException exception)
+        catch (ApiException exception)
         {
             apiResponse = await HandleApiException<TGetById>(exception);
         }
@@ -79,16 +81,18 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
 
         if (apiResponse.IsSuccess)
-            if (onSuccess != null) await onSuccess(apiResponse);
+            if (onSuccess != null)
+                await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
-            if (onFailure != null) await onFailure(apiResponse);
+            if (onFailure != null)
+                await onFailure(apiResponse);
     }
 
     public async Task CreateAsync(TCreate request,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        IApiResponse<object> apiResponse;
+        Abstractions.IApiResponse<object> apiResponse;
         try
         {
             await createValidator.ValidateAndThrowAsync(request);
@@ -99,7 +103,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         {
             apiResponse = new SakilaApiResponse<object>(exception);
         }
-        catch (Refit.ApiException exception)
+        catch (ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -109,7 +113,8 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
 
         if (apiResponse.IsSuccess)
-            if (onSuccess != null) await onSuccess(apiResponse);
+            if (onSuccess != null)
+                await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
         {
             EditContext.ApplyErrors(MessageStore, apiResponse);
@@ -118,10 +123,10 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     }
 
     public async Task UpdateAsync(TUpdate request,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        IApiResponse<object> apiResponse;
+        Abstractions.IApiResponse<object> apiResponse;
         try
         {
             await updateValidator.ValidateAndThrowAsync(request);
@@ -132,7 +137,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         {
             apiResponse = new SakilaApiResponse<object>(exception);
         }
-        catch (Refit.ApiException exception)
+        catch (ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -142,7 +147,8 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
 
         if (apiResponse.IsSuccess)
-            if (onSuccess != null) await onSuccess(apiResponse);
+            if (onSuccess != null)
+                await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
         {
             EditContext.ApplyErrors(MessageStore, apiResponse);
@@ -151,16 +157,16 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     }
 
     public async Task DeleteAsync(int id,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        IApiResponse<object> apiResponse;
+        Abstractions.IApiResponse<object> apiResponse;
         try
         {
             await DeleteApiAsync(id);
             apiResponse = new SakilaApiResponse<object>();
         }
-        catch (Refit.ApiException exception)
+        catch (ApiException exception)
         {
             apiResponse = await HandleApiException<object>(exception);
         }
@@ -170,14 +176,14 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
 
         if (apiResponse.IsSuccess)
-            if (onSuccess != null) await onSuccess(apiResponse);
+            if (onSuccess != null)
+                await onSuccess(apiResponse);
         if (!apiResponse.IsSuccess)
-        {
-            if (onFailure != null) await onFailure(apiResponse.Errors);
-        }
+            if (onFailure != null)
+                await onFailure(apiResponse.Errors);
     }
 
-    private static Task<SakilaApiResponse<T>> HandleApiException<T>(Refit.ApiException exception)
+    private static Task<SakilaApiResponse<T>> HandleApiException<T>(ApiException exception)
     {
         try
         {
@@ -192,7 +198,8 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
             }
 
             if (document.TryGetProperty("detail", out var detail))
-                return Task.FromResult(new SakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
+                return Task.FromResult(
+                    new SakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
         }
         catch (JsonException)
         {

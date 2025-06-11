@@ -4,8 +4,8 @@
         <MudForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
             <DialogContent>
                 <MudDialogTitle>Edit Country</MudDialogTitle>
-                <DataAnnotationsValidator />
-                <MudTextField @bind-Value="Model.Name" Label="Country Name" For="@(() => Model.Name)" Required="true" />
+                <DataAnnotationsValidator/>
+                <MudTextField @bind-Value="Model.Name" Label="Country Name" For="@(() => Model.Name)" Required="true"/>
             </DialogContent>
             <DialogActions>
                 <MudButton Color="Color.Secondary" OnClick="OnCancel">Cancel</MudButton>
@@ -14,4 +14,3 @@
         </MudForm>
     </MudDialog>
 }
-
