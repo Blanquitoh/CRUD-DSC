@@ -11,21 +11,21 @@ namespace Sakila.API.Controllers;
 public class CountriesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<CountryGetAllResponse>> GetAll()
+    public async Task<ActionResult<CountryGetAllResponse>> GetAllAsync()
     {
         var countries = await mediator.Send(new CountryGetAllRequest());
         return Ok(countries);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<CountryGetByIdResponse>> GetById(int id)
+    public async Task<ActionResult<CountryGetByIdResponse>> GetByIdAsync(int id)
     {
         var country = await mediator.Send(new CountryGetByIdRequest { Id = id });
         return country == null ? NotFound() : Ok(country);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCountry(int id, CountryUpdateRequest command)
+    public async Task<IActionResult> PutCountryAsync(int id, CountryUpdateRequest command)
     {
         if (id != command.Id) return BadRequest();
 
@@ -34,14 +34,14 @@ public class CountriesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostCountry(CountryCreateRequest command)
+    public async Task<IActionResult> PostCountryAsync(CountryCreateRequest command)
     {
         var id = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetById), new { id }, command);
+        return CreatedAtAction(nameof(GetByIdAsync), new { id }, command);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCountry(int id)
+    public async Task<IActionResult> DeleteCountryAsync(int id)
     {
         var result = await mediator.Send(new CountryDeleteRequest { Id = id });
         return result ? NoContent() : NotFound();
