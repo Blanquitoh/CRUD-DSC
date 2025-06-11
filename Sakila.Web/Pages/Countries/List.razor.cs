@@ -25,8 +25,9 @@ namespace Sakila.Web.Pages.Countries
 
         private async Task ShowCreateDialog()
         {
-            var dialog = DialogService.ShowAsync<CountryCreateDialog>("Add Country");
-            if (!dialog.IsCompletedSuccessfully)
+            var dialog = await DialogService.ShowAsync<CountryCreateDialog>("Add Country");
+            var result = (await dialog.Result)!;
+            if (!result.Canceled)
             {
                 await RefreshCountries();
             }
@@ -35,8 +36,9 @@ namespace Sakila.Web.Pages.Countries
         private async Task ShowUpdateDialog(CountryGetByIdResponse country)
         {
             var parameters = new DialogParameters { [nameof(CountryUpdateDialog.Country)] = country };
-            var dialog = DialogService.ShowAsync<CountryUpdateDialog>("Edit Country", parameters);
-            if (!dialog.IsCompletedSuccessfully)
+            var dialog = await DialogService.ShowAsync<CountryUpdateDialog>("Edit Country", parameters);
+            var result = (await dialog.Result)!;
+            if (!result.Canceled)
             {
                 await RefreshCountries();
             }
@@ -45,8 +47,9 @@ namespace Sakila.Web.Pages.Countries
         private async Task ShowDeleteDialog(CountryGetByIdResponse country)
         {
             var parameters = new DialogParameters { [nameof(ConfirmDelete.Country)] = country };
-            var dialog = DialogService.ShowAsync<ConfirmDelete>("Delete Country", parameters);
-            if (!dialog.IsCompletedSuccessfully)
+            var dialog = await DialogService.ShowAsync<ConfirmDelete>("Delete Country", parameters);
+            var result = (await dialog.Result)!;
+            if (!result.Canceled)
             {
                 await RefreshCountries();
             }

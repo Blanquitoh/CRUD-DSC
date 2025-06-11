@@ -10,7 +10,6 @@ public partial class CountryCreateDialog
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
-    public IApiResponse<object>? ApiResponse { get; set; }
     private CountryCreateRequest Country { get; } = new();
 
     protected override void OnInitialized()
@@ -20,13 +19,16 @@ public partial class CountryCreateDialog
 
     private async Task SubmitAsync()
     {
+        var success = false;
         await CountryService.CreateAsync(Country,
-            response =>
+            _ =>
             {
-                ApiResponse = response;
+                success = true;
                 return Task.CompletedTask;
             });
-        MudDialog.Close(DialogResult.Ok(true));
+
+        if (success)
+            MudDialog.Close(DialogResult.Ok(true));
     }
 
     private void Cancel()
