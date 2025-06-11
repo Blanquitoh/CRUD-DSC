@@ -1,5 +1,6 @@
 @page "/countries"
 @using Sakila.Web.Pages.Countries.Components
+@inject IState<CountryState> CountryState
 
 <h3>Countries</h3>
 
@@ -35,25 +36,25 @@ else
     </table>
 }
 
-@if (_isCreateDialogOpen)
+@if (CountryState.Value.IsCreateDialogOpen)
 {
     <CountryCreateDialog Visible="true"
                          OnCancel="CloseCreateDialog"
                          OnSuccess="OnCreateSuccess"/>
 }
 
-@if (_isUpdateDialogOpen)
+@if (CountryState.Value.IsUpdateDialogOpen)
 {
     <CountryUpdateDialog Visible="true"
-                         Country="_selectedCountry"
+                         Country="CountryState.Value.SelectedCountry"
                          OnCancel="CloseUpdateDialog"
                          OnSuccess="OnUpdateSuccess"/>
 }
 
-@if (_isDeleteDialogOpen)
+@if (CountryState.Value.IsDeleteDialogOpen)
 {
     <ConfirmDelete Visible="true"
-                  Country="_selectedCountry"
+                  Country="CountryState.Value.SelectedCountry"
                   OnCancel="CloseDeleteDialog"
                   OnSuccess="OnDeleteSuccess"/>
 }

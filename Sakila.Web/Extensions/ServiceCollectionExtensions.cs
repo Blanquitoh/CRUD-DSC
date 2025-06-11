@@ -8,6 +8,7 @@ using Refit;
 using Sakila.Web.Abstractions;
 using Sakila.Web.Api;
 using Sakila.Web.Services.Implementations;
+using Fluxor;
 
 namespace Sakila.Web.Extensions;
 
@@ -30,6 +31,9 @@ public static class ServiceCollectionExtensions
         builder.Services.AddScoped<ICountryService, CountryService>();
         builder.Services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
         builder.Services.AddTransient<IValidator<CountryUpdateRequest>, CountryUpdateValidator>();
+
+        builder.Services.AddFluxor(options =>
+            options.ScanAssemblies(typeof(ServiceCollectionExtensions).Assembly));
 
         return builder;
     }

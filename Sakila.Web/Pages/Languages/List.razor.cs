@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
+using Fluxor;
+using Sakila.Web.Store.Languages;
 
 namespace Sakila.Web.Pages.Languages;
 
 public partial class List
 {
     private IApiResponse<LanguageGetAllResponse>? _getAllResponse;
-    private bool _isDeleteDialogOpen;
-    private bool _isCreateDialogOpen;
-    private bool _isUpdateDialogOpen;
-    private LanguageGetByIdResponse _selectedLanguage = new();
+    [Inject] public IState<LanguageState> LanguageState { get; set; } = null!;
+    [Inject] public IDispatcher Dispatcher { get; set; } = null!;
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
@@ -20,35 +20,34 @@ public partial class List
 
     private void ShowCreateDialog()
     {
-        _isCreateDialogOpen = true;
+        Dispatcher.Dispatch(new ShowCreateDialogAction());
     }
 
     private void ShowUpdateDialog(LanguageGetByIdResponse language)
     {
-        _selectedLanguage = language;
-        _isUpdateDialogOpen = true;
+        Dispatcher.Dispatch(new ShowUpdateDialogAction(language));
     }
 
     private void CloseCreateDialog()
     {
-        _isCreateDialogOpen = false;
+        Dispatcher.Dispatch(new CloseCreateDialogAction());
     }
 
     private void CloseUpdateDialog()
     {
-        _isUpdateDialogOpen = false;
+        Dispatcher.Dispatch(new CloseUpdateDialogAction());
     }
 
     private async Task OnCreateSuccess()
     {
         await RefreshLanguages();
-        CloseCreateDialog();
+        Dispatcher.Dispatch(new CloseCreateDialogAction());
     }
 
     private async Task OnUpdateSuccess()
     {
         await RefreshLanguages();
-        CloseUpdateDialog();
+        Dispatcher.Dispatch(new CloseUpdateDialogAction());
     }
 
     private async Task RefreshLanguages()
@@ -59,18 +58,17 @@ public partial class List
 
     private void ShowDeleteDialog(LanguageGetByIdResponse language)
     {
-        _selectedLanguage = language;
-        _isDeleteDialogOpen = true;
+        Dispatcher.Dispatch(new ShowDeleteDialogAction(language));
     }
 
     private void CloseDeleteDialog()
     {
-        _isDeleteDialogOpen = false;
+        Dispatcher.Dispatch(new CloseDeleteDialogAction());
     }
 
     private async Task OnDeleteSuccess()
     {
         await RefreshLanguages();
-        CloseDeleteDialog();
+        Dispatcher.Dispatch(new CloseDeleteDialogAction());
     }
 }
