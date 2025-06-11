@@ -7,7 +7,7 @@ namespace Sakila.Web.Pages.Languages.Components;
 
 public partial class LanguageCreateDialog
 {
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Inject] public ILanguageService LanguageService { get; set; } = null!;
 
     private LanguageCreateRequest Language { get; } = new();

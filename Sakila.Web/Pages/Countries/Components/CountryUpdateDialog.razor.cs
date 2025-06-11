@@ -8,7 +8,7 @@ namespace Sakila.Web.Pages.Countries.Components;
 
 public partial class CountryUpdateDialog
 {
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Parameter] public CountryGetByIdResponse Country { get; set; } = new();
     [Inject] public ICountryService CountryService { get; set; } = null!;
 
