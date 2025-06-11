@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Sakila.API.Middleware;
 using Sakila.API.Options;
 using Sakila.Application.Common.Validation;
+using Sakila.Application.Common.Handlers;
 using Sakila.Application.Countries.Commands.Validators;
 using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Application.Countries.Queries.Validators;
@@ -50,7 +51,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddMediatR(serviceConfiguration =>
-                serviceConfiguration.RegisterServicesFromAssembly(typeof(CreateHandler).Assembly))
+                serviceConfiguration.RegisterServicesFromAssembly(typeof(CreateHandlerBase<,,>).Assembly))
             .AddAutoMapper(typeof(GetByIdProfile).Assembly);
 
         services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
