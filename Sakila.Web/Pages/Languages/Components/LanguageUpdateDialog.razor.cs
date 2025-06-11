@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
+using Sakila.Web.Extensions;
 
 namespace Sakila.Web.Pages.Languages.Components;
 
@@ -30,20 +31,8 @@ public partial class LanguageUpdateDialog
     {
         ApiResponse = await LanguageService.UpdateAsync(Model);
 
-        _messageStore.Clear();
-
-        if (ApiResponse.IsSuccess)
-        {
+        if (_editContext.ApplyErrors(_messageStore, ApiResponse))
             await OnSuccess.InvokeAsync();
-        }
-        else
-        {
-            foreach (var (field, messages) in ApiResponse.Errors)
-            {
-                _messageStore.Add(_editContext.Field(field), messages);
-            }
-            _editContext.NotifyValidationStateChanged();
-        }
     }
 }
 
