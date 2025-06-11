@@ -48,30 +48,26 @@ public static class ServiceCollectionExtensions
                     .LogTo(Console.WriteLine, LogLevel.Information);
         });
 
-        services.AddMediatR(serviceConfiguration =>
+        services
+            .AddMediatR(serviceConfiguration =>
                 serviceConfiguration.RegisterServicesFromAssembly(typeof(CreateHandlerBase<,,>).Assembly))
             .AddAutoMapper(typeof(GetByIdProfile).Assembly);
 
         services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
-        services
-            .AddTransient<IValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData>,
-                LanguageUpdateValidator>();
-        services
-            .AddTransient<IValidatorWithData<LanguageDeleteRequest, LanguageDeleteValidatorData>,
-                LanguageDeleteValidator>();
-        services
-            .AddTransient<IValidatorWithData<LanguageGetByIdRequest, LanguageGetByIdValidatorData>,
-                LanguageGetByIdValidator>();
+        services.AddTransient<IValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData>,
+            LanguageUpdateValidator>();
+        services.AddTransient<IValidatorWithData<LanguageDeleteRequest, LanguageDeleteValidatorData>,
+            LanguageDeleteValidator>();
+        services.AddTransient<IValidatorWithData<LanguageGetByIdRequest, LanguageGetByIdValidatorData>,
+            LanguageGetByIdValidator>();
 
         services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
-        services
-            .AddTransient<IValidatorWithData<CountryUpdateRequest, CountryUpdateValidatorData>,
-                CountryUpdateValidator>();
+        services.AddTransient<IValidatorWithData<CountryUpdateRequest, CountryUpdateValidatorData>,
+            CountryUpdateValidator>();
         services.AddTransient<IValidatorWithData<CountryDeleteRequest, CountryDeleteValidatorData>,
             CountryDeleteValidator>();
-        services
-            .AddTransient<IValidatorWithData<CountryGetByIdRequest, CountryGetByIdValidatorData>,
-                CountryGetByIdValidator>();
+        services.AddTransient<IValidatorWithData<CountryGetByIdRequest, CountryGetByIdValidatorData>,
+            CountryGetByIdValidator>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

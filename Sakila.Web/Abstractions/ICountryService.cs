@@ -11,22 +11,22 @@ public interface ICountryService
     void Initialize(object model);
 
     Task GetAllAsync(
-        Func<IApiResponse<CountryGetAllResponse>, Task>? onSuccess = null,
-        Func<IApiResponse<CountryGetAllResponse>, Task>? onFailure = null);
+        Func<ISakilaApiResponse<CountryGetAllResponse>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<CountryGetAllResponse>, Task>? onFailure = null);
 
     Task GetByIdAsync(int id,
-        Func<IApiResponse<CountryGetByIdResponse>, Task>? onSuccess = null,
-        Func<IApiResponse<CountryGetByIdResponse>, Task>? onFailure = null);
+        Func<ISakilaApiResponse<CountryGetByIdResponse>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<CountryGetByIdResponse>, Task>? onFailure = null);
 
     Task CreateAsync(CountryCreateRequest request,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
 
     Task UpdateAsync(CountryUpdateRequest request,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
 
     Task DeleteAsync(int id,
-        Func<IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null);
 }

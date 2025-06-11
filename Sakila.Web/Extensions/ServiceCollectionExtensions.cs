@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 using Refit;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Commands.Validators;
@@ -13,24 +14,20 @@ namespace Sakila.Web.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static WebAssemblyHostBuilder AddSakilaServices(this WebAssemblyHostBuilder builder)
+    public static void AddSakilaServices(this WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddRefitClient<ICountriesApi>()
-            .ConfigureHttpClient(client =>
-                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!));
+        var apiBaseUrl = new Uri(builder.Configuration["ApiBaseUrl"]!);
 
-        builder.Services.AddRefitClient<ILanguagesApi>()
-            .ConfigureHttpClient(client =>
-                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!));
-
+        builder.Services.AddRefitClient<ILanguagesApi>().ConfigureHttpClient(client => client.BaseAddress = apiBaseUrl);
         builder.Services.AddScoped<ILanguageService, LanguageService>();
         builder.Services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
         builder.Services.AddTransient<IValidator<LanguageUpdateRequest>, LanguageUpdateValidator>();
 
+        builder.Services.AddRefitClient<ICountriesApi>().ConfigureHttpClient(client => client.BaseAddress = apiBaseUrl);
         builder.Services.AddScoped<ICountryService, CountryService>();
         builder.Services.AddTransient<IValidator<CountryCreateRequest>, CountryCreateValidator>();
         builder.Services.AddTransient<IValidator<CountryUpdateRequest>, CountryUpdateValidator>();
 
-        return builder;
+        builder.Services.AddMudServices();
     }
 }

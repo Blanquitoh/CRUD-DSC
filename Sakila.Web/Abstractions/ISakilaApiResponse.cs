@@ -1,6 +1,6 @@
 namespace Sakila.Web.Abstractions;
 
-public interface IApiResponse<TResponse>
+public interface ISakilaApiResponse<TResponse>
 {
     Dictionary<string, string[]> Errors { get; set; }
     List<string> GeneralErrors { get; set; }

@@ -3,6 +3,7 @@ using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Components.Forms;
 using Refit;
+using Sakila.Web.Abstractions;
 using Sakila.Web.Common;
 using Sakila.Web.Extensions;
 
@@ -12,8 +13,6 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     IValidator<TCreate> createValidator,
     IValidator<TUpdate> updateValidator)
 {
-    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
-
     public EditContext EditContext { get; private set; } = null!;
     public ValidationMessageStore MessageStore { get; private set; } = null!;
 
@@ -32,180 +31,188 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     }
 
     public async Task GetAllAsync(
-        Func<Abstractions.IApiResponse<TGetAll>, Task>? onSuccess = null,
-        Func<Abstractions.IApiResponse<TGetAll>, Task>? onFailure = null)
+        Func<ISakilaApiResponse<TGetAll>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<TGetAll>, Task>? onFailure = null)
     {
-        Abstractions.IApiResponse<TGetAll> apiResponse;
+        ISakilaApiResponse<TGetAll> sakilaApiResponse;
         try
         {
             var result = await GetAllApiAsync();
-            apiResponse = new SakilaApiResponse<TGetAll>(result);
+            sakilaApiResponse = new SakilaSakilaApiResponse<TGetAll>(result);
         }
         catch (ApiException exception)
         {
-            apiResponse = await HandleApiException<TGetAll>(exception);
+            sakilaApiResponse = await HandleApiException<TGetAll>(exception);
         }
         catch (HttpRequestException exception)
         {
-            apiResponse = new SakilaApiResponse<TGetAll>(exception.Message);
+            sakilaApiResponse = new SakilaSakilaApiResponse<TGetAll>(exception.Message);
         }
 
-        if (apiResponse.IsSuccess)
+        if (sakilaApiResponse.IsSuccess)
             if (onSuccess != null)
-                await onSuccess(apiResponse);
-        if (!apiResponse.IsSuccess)
+                await onSuccess(sakilaApiResponse);
+        if (!sakilaApiResponse.IsSuccess)
             if (onFailure != null)
-                await onFailure(apiResponse);
+                await onFailure(sakilaApiResponse);
     }
 
     public async Task GetByIdAsync(int id,
-        Func<Abstractions.IApiResponse<TGetById>, Task>? onSuccess = null,
-        Func<Abstractions.IApiResponse<TGetById>, Task>? onFailure = null)
+        Func<ISakilaApiResponse<TGetById>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<TGetById>, Task>? onFailure = null)
     {
-        Abstractions.IApiResponse<TGetById> apiResponse;
+        ISakilaApiResponse<TGetById> sakilaApiResponse;
         try
         {
             var result = await GetByIdApiAsync(id);
             if (result == null)
-                apiResponse = new SakilaApiResponse<TGetById>("Not found");
+                sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>("Not found");
             else
-                apiResponse = new SakilaApiResponse<TGetById>(result);
+                sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>(result);
         }
         catch (ApiException exception)
         {
-            apiResponse = await HandleApiException<TGetById>(exception);
+            sakilaApiResponse = await HandleApiException<TGetById>(exception);
         }
         catch (HttpRequestException exception)
         {
-            apiResponse = new SakilaApiResponse<TGetById>(exception.Message);
+            sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>(exception.Message);
         }
 
-        if (apiResponse.IsSuccess)
+        if (sakilaApiResponse.IsSuccess)
             if (onSuccess != null)
-                await onSuccess(apiResponse);
-        if (!apiResponse.IsSuccess)
+                await onSuccess(sakilaApiResponse);
+        if (!sakilaApiResponse.IsSuccess)
+        {
+            EditContext.ApplyErrors(MessageStore, sakilaApiResponse);
             if (onFailure != null)
-                await onFailure(apiResponse);
+                await onFailure(sakilaApiResponse);
+        }
     }
 
     public async Task CreateAsync(TCreate request,
-        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        Abstractions.IApiResponse<object> apiResponse;
+        ISakilaApiResponse<object> sakilaApiResponse;
         try
         {
             await createValidator.ValidateAndThrowAsync(request);
             await CreateApiAsync(request);
-            apiResponse = new SakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
         }
         catch (ValidationException exception)
         {
-            apiResponse = new SakilaApiResponse<object>(exception);
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception);
         }
         catch (ApiException exception)
         {
-            apiResponse = await HandleApiException<object>(exception);
+            sakilaApiResponse = await HandleApiException<object>(exception);
         }
         catch (HttpRequestException exception)
         {
-            apiResponse = new SakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
         }
 
-        if (apiResponse.IsSuccess)
+        if (sakilaApiResponse.IsSuccess)
             if (onSuccess != null)
-                await onSuccess(apiResponse);
-        if (!apiResponse.IsSuccess)
+                await onSuccess(sakilaApiResponse);
+        if (!sakilaApiResponse.IsSuccess)
         {
-            EditContext.ApplyErrors(MessageStore, apiResponse);
-            if (onFailure != null) await onFailure(apiResponse.Errors);
+            EditContext.ApplyErrors(MessageStore, sakilaApiResponse);
+            if (onFailure != null) await onFailure(sakilaApiResponse.Errors);
         }
     }
 
     public async Task UpdateAsync(TUpdate request,
-        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        Abstractions.IApiResponse<object> apiResponse;
+        ISakilaApiResponse<object> sakilaApiResponse;
         try
         {
             await updateValidator.ValidateAndThrowAsync(request);
             await UpdateApiAsync(GetUpdateId(request), request);
-            apiResponse = new SakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
         }
         catch (ValidationException exception)
         {
-            apiResponse = new SakilaApiResponse<object>(exception);
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception);
         }
         catch (ApiException exception)
         {
-            apiResponse = await HandleApiException<object>(exception);
+            sakilaApiResponse = await HandleApiException<object>(exception);
         }
         catch (HttpRequestException exception)
         {
-            apiResponse = new SakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
         }
 
-        if (apiResponse.IsSuccess)
+        if (sakilaApiResponse.IsSuccess)
             if (onSuccess != null)
-                await onSuccess(apiResponse);
-        if (!apiResponse.IsSuccess)
+                await onSuccess(sakilaApiResponse);
+        if (!sakilaApiResponse.IsSuccess)
         {
-            EditContext.ApplyErrors(MessageStore, apiResponse);
-            if (onFailure != null) await onFailure(apiResponse.Errors);
+            EditContext.ApplyErrors(MessageStore, sakilaApiResponse);
+            if (onFailure != null) await onFailure(sakilaApiResponse.Errors);
         }
     }
 
     public async Task DeleteAsync(int id,
-        Func<Abstractions.IApiResponse<object>, Task>? onSuccess = null,
+        Func<ISakilaApiResponse<object>, Task>? onSuccess = null,
         Func<Dictionary<string, string[]>, Task>? onFailure = null)
     {
-        Abstractions.IApiResponse<object> apiResponse;
+        ISakilaApiResponse<object> sakilaApiResponse;
         try
         {
             await DeleteApiAsync(id);
-            apiResponse = new SakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
         }
         catch (ApiException exception)
         {
-            apiResponse = await HandleApiException<object>(exception);
+            sakilaApiResponse = await HandleApiException<object>(exception);
         }
         catch (HttpRequestException exception)
         {
-            apiResponse = new SakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
         }
 
-        if (apiResponse.IsSuccess)
+        if (sakilaApiResponse.IsSuccess)
             if (onSuccess != null)
-                await onSuccess(apiResponse);
-        if (!apiResponse.IsSuccess)
+                await onSuccess(sakilaApiResponse);
+
+        if (!sakilaApiResponse.IsSuccess)
+        {
+            EditContext.ApplyErrors(MessageStore, sakilaApiResponse);
             if (onFailure != null)
-                await onFailure(apiResponse.Errors);
+                await onFailure(sakilaApiResponse.Errors);
+        }
     }
 
-    private static Task<SakilaApiResponse<T>> HandleApiException<T>(ApiException exception)
+    private static Task<SakilaSakilaApiResponse<T>> HandleApiException<T>(ApiException exception)
     {
         try
         {
-            var document = JsonSerializer.Deserialize<JsonElement>(exception.Content!, Options);
+            JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
+            var document = JsonSerializer.Deserialize<JsonElement>(exception.Content!, options);
             if (exception.StatusCode == HttpStatusCode.BadRequest &&
                 document.TryGetProperty("errors", out var errorsElement))
             {
                 var errors =
-                    JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), Options)
+                    JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), options)
                     ?? new Dictionary<string, string[]>();
-                return Task.FromResult(new SakilaApiResponse<T>(errors));
+                return Task.FromResult(new SakilaSakilaApiResponse<T>(errors));
             }
 
             if (document.TryGetProperty("detail", out var detail))
                 return Task.FromResult(
-                    new SakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
+                    new SakilaSakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
         }
         catch (JsonException)
         {
             // ignore
         }
 
-        return Task.FromResult(new SakilaApiResponse<T>($"Unexpected status: {exception.StatusCode}"));
+        return Task.FromResult(new SakilaSakilaApiResponse<T>($"Unexpected status: {exception.StatusCode}"));
     }
 }
