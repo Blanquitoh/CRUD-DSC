@@ -101,6 +101,13 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 6. Ejecuta `Sakila.Web` (cliente Razor)
 7. Navega a `/films`, `/cities`, etc. para interactuar con el sistema
 
+### Generación de clientes API
+
+La capa `Sakila.Web` utiliza **Refit** para generar clientes HTTP fuertemente tipados.
+Las interfaces `ILanguagesApi` e `ICountriesApi` definen los endpoints y Refit
+genera el código en tiempo de compilación. No es necesario ejecutar comandos
+adicionales: al compilar el proyecto los clientes se crean automáticamente.
+
 ---
 
 ## 📚 Referencias

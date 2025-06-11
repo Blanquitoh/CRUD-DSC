@@ -4,8 +4,9 @@ using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Commands.Validators;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Commands.Validators;
+using Refit;
 using Sakila.Web.Abstractions;
-using Sakila.Web.Common;
+using Sakila.Web.Api;
 using Sakila.Web.Services.Implementations;
 
 namespace Sakila.Web.Extensions;
@@ -14,10 +15,13 @@ public static class ServiceCollectionExtensions
 {
     public static WebAssemblyHostBuilder AddSakilaServices(this WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
-        {
-            client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!);
-        });
+        builder.Services.AddRefitClient<ICountriesApi>()
+            .ConfigureHttpClient(client =>
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!));
+
+        builder.Services.AddRefitClient<ILanguagesApi>()
+            .ConfigureHttpClient(client =>
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]!));
 
         builder.Services.AddScoped<ILanguageService, LanguageService>();
         builder.Services.AddTransient<IValidator<LanguageCreateRequest>, LanguageCreateValidator>();
