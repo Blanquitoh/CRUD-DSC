@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Sakila.Application.Common.Handlers;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
 using Sakila.Infrastructure.Data;
@@ -11,17 +12,7 @@ public class CreateHandler(
     SakilaContext dbContext,
     IMapper mapper,
     IValidator<LanguageCreateRequest> validator)
-    : IRequestHandler<LanguageCreateRequest, int>
+    : CreateHandlerBase<LanguageCreateRequest, Language, int>(dbContext, mapper, validator)
 {
-    public async Task<int> Handle(LanguageCreateRequest request, CancellationToken cancellationToken)
-    {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
-
-        var language = mapper.Map<Language>(request);
-
-        dbContext.Languages.Add(language);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return language.LanguageId;
-    }
+    protected override int GetResponse(Language entity) => entity.LanguageId;
 }
