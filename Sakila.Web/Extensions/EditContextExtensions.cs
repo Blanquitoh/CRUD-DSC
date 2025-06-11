@@ -14,7 +14,12 @@ public static class EditContextExtensions
 
         if (response.IsSuccess) return;
 
-        foreach (var (field, messages) in response.Errors) messageStore.Add(editContext.Field(field), messages);
+
+        foreach (var (field, messages) in response.Errors)
+            messageStore.Add(editContext.Field(field), messages);
+
+        foreach (var message in response.GeneralErrors)
+            messageStore.Add(editContext.Field(string.Empty), new[] { message });
 
         editContext.NotifyValidationStateChanged();
     }
@@ -26,7 +31,11 @@ public static class EditContextExtensions
 
         if (response.IsSuccess) return;
 
-        foreach (var (field, messages) in response.Errors) messageStore.Add(editContext.Field(field), messages);
+        foreach (var (field, messages) in response.Errors)
+            messageStore.Add(editContext.Field(field), messages);
+
+        foreach (var message in response.GeneralErrors)
+            messageStore.Add(editContext.Field(string.Empty), new[] { message });
 
         editContext.NotifyValidationStateChanged();
     }
