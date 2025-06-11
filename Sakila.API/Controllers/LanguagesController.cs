@@ -11,21 +11,21 @@ namespace Sakila.API.Controllers;
 public class LanguagesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<LanguageGetAllResponse>> GetAll()
+    public async Task<ActionResult<LanguageGetAllResponse>> GetAllAsync()
     {
         var languages = await mediator.Send(new LanguageGetAllRequest());
         return Ok(languages);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<LanguageGetByIdResponse>> GetById(int id)
+    public async Task<ActionResult<LanguageGetByIdResponse>> GetByIdAsync(int id)
     {
         var language = await mediator.Send(new LanguageGetByIdRequest { Id = id });
         return language == null ? NotFound() : Ok(language);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutLanguage(int id, LanguageUpdateRequest command)
+    public async Task<IActionResult> PutLanguageAsync(int id, LanguageUpdateRequest command)
     {
         if (id != command.Id) return BadRequest();
 
@@ -34,15 +34,15 @@ public class LanguagesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLanguage(LanguageCreateRequest command)
+    public async Task<IActionResult> PostLanguageAsync(LanguageCreateRequest command)
     {
         var id = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetById), new { id }, command);
+        return CreatedAtAction(nameof(GetByIdAsync), new { id }, command);
     }
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteLanguage(int id)
+    public async Task<IActionResult> DeleteLanguageAsync(int id)
     {
         var result = await mediator.Send(new LanguageDeleteRequest { Id = id });
         return result ? NoContent() : NotFound();
