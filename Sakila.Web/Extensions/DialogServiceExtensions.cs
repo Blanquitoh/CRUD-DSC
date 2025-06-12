@@ -13,8 +13,10 @@ public static class DialogServiceExtensions
         Func<Task>? onCancel = null)
         where TDialog : IComponent
     {
-        var dialog = await dialogService.ShowAsync<TDialog>(title, parameters);
-        var result = await dialog.Result;
+        var dialog = parameters != null
+            ? await dialogService.ShowAsync<TDialog>(title, parameters)
+            : await dialogService.ShowAsync<TDialog>(title);
+        var result = (await dialog.Result)!;
 
         if (!result.Canceled)
         {
