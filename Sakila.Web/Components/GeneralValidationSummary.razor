@@ -1,4 +1,3 @@
-@using Microsoft.AspNetCore.Components.Forms
 @implements IDisposable
 
 @if (_messages.Any())
@@ -11,39 +10,4 @@
             }
         </ul>
     </MudAlert>
-}
-
-@code {
-    [CascadingParameter] private EditContext CurrentEditContext { get; set; } = default!;
-    private IEnumerable<string> _messages = Enumerable.Empty<string>();
-
-    protected override void OnInitialized()
-    {
-        if (CurrentEditContext == null)
-        {
-            throw new InvalidOperationException("GeneralValidationSummary must be used inside an EditForm.");
-        }
-        CurrentEditContext.OnValidationStateChanged += OnValidationStateChanged;
-        UpdateMessages();
-    }
-
-    private void OnValidationStateChanged(object? sender, ValidationStateChangedEventArgs e)
-    {
-        UpdateMessages();
-        StateHasChanged();
-    }
-
-    private void UpdateMessages()
-    {
-        var identifier = new FieldIdentifier(CurrentEditContext.Model, string.Empty);
-        _messages = CurrentEditContext.GetValidationMessages(identifier);
-    }
-
-    public void Dispose()
-    {
-        if (CurrentEditContext != null)
-        {
-            CurrentEditContext.OnValidationStateChanged -= OnValidationStateChanged;
-        }
-    }
 }
