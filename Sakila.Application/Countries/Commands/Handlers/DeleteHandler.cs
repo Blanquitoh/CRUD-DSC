@@ -3,12 +3,12 @@ using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class DeleteHandler(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IValidatorWithData<CountryDeleteRequest, CountryDeleteValidatorData> validator)
     : DeleteHandlerBase<CountryDeleteRequest, Country, CountryDeleteValidatorData>(dbContext, validator)
 {

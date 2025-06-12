@@ -3,11 +3,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Countries.Queries.Responses;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Queries.Handlers;
 
-public class GetAllHandler(SakilaContext dbContext, IMapper mapper)
+public class GetAllHandler(ISakilaContext dbContext, IMapper mapper)
     : IRequestHandler<CountryGetAllRequest, CountryGetAllResponse>
 {
     public async Task<CountryGetAllResponse> Handle(CountryGetAllRequest request,

@@ -1,12 +1,12 @@
 using AutoMapper;
 using MediatR;
 using Sakila.Application.Common.Validation;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Common.Handlers;
 
 public abstract class UpdateHandlerBase<TRequest, TEntity, TData>(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<TRequest, TData> validator) : IRequestHandler<TRequest, Unit>
     where TRequest : IRequest<Unit>

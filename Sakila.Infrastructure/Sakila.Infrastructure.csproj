@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sakila.Domain\Sakila.Domain.csproj" />
+    <ProjectReference Include="..\Sakila.Application\Sakila.Application.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

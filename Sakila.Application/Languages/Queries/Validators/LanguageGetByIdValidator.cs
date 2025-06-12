@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Queries.Validators.Data;
 using Sakila.Contracts.Languages.Queries;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Queries.Validators;
 
 public class LanguageGetByIdValidator : ValidatorWithData<LanguageGetByIdRequest, LanguageGetByIdValidatorData>
 {
-    public LanguageGetByIdValidator(SakilaContext dbContext)
+    public LanguageGetByIdValidator(ISakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>

@@ -3,12 +3,12 @@ using FluentValidation;
 using Sakila.Application.Common.Handlers;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Commands.Handlers;
 
 public class CreateHandler(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IMapper mapper,
     IValidator<LanguageCreateRequest> validator)
     : CreateHandlerBase<LanguageCreateRequest, Language, int>(dbContext, mapper, validator)

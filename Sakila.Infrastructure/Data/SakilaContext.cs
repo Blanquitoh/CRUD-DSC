@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Sakila.Domain.Models;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Infrastructure.Data;
 
-public partial class SakilaContext : DbContext
+public partial class SakilaContext : DbContext, ISakilaContext
 {
     public SakilaContext()
     {
