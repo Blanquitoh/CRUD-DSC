@@ -11,7 +11,7 @@ namespace Sakila.Web.Services;
 
 public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
     IValidator<TCreate> createValidator,
-    IValidator<TUpdate> updateValidator)
+    IValidator<TUpdate> updateValidator) : ICrudService<TCreate, TUpdate, TGetAll, TGetById>
 {
     public EditContext EditContext { get; private set; } = null!;
     public ValidationMessageStore MessageStore { get; private set; } = null!;
