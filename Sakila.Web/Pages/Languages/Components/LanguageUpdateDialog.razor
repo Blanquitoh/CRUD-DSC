@@ -1,6 +1,5 @@
 <DialogEditForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
     <DialogContent>
-        <MudText Typo="Typo.h6">Edit Language</MudText>
         <MudTextField @bind-Value="Model.Name" Label="Language Name" For="@(() => Model.Name)" Required="true"/>
     </DialogContent>
     <DialogActions>

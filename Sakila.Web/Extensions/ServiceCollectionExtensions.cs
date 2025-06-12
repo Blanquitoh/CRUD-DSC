@@ -14,7 +14,7 @@ namespace Sakila.Web.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddSakilaServices(this WebAssemblyHostBuilder builder)
+    public static void AddApplicationServices(this WebAssemblyHostBuilder builder)
     {
         var apiBaseUrl = new Uri(builder.Configuration["ApiBaseUrl"]!);
 

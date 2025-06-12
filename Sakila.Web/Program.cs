@@ -7,6 +7,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.AddSakilaServices();
+builder.AddApplicationServices();
 
 await builder.Build().RunAsync();
