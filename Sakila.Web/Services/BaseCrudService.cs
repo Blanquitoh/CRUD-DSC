@@ -43,7 +43,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         try
         {
             var result = await GetAllApiAsync();
-            sakilaApiResponse = new SakilaSakilaApiResponse<TGetAll>(result);
+            sakilaApiResponse = new SakilaApiResponse<TGetAll>(result);
         }
         catch (ApiException exception)
         {
@@ -51,7 +51,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
         catch (HttpRequestException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<TGetAll>(exception.Message);
+            sakilaApiResponse = new SakilaApiResponse<TGetAll>(exception.Message);
         }
 
         if (sakilaApiResponse.IsSuccess)
@@ -71,9 +71,9 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         {
             var result = await GetByIdApiAsync(id);
             if (result == null)
-                sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>("Not found");
+                sakilaApiResponse = new SakilaApiResponse<TGetById>("Not found");
             else
-                sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>(result);
+                sakilaApiResponse = new SakilaApiResponse<TGetById>(result);
         }
         catch (ApiException exception)
         {
@@ -81,7 +81,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
         catch (HttpRequestException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<TGetById>(exception.Message);
+            sakilaApiResponse = new SakilaApiResponse<TGetById>(exception.Message);
         }
 
         if (sakilaApiResponse.IsSuccess)
@@ -104,11 +104,11 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         {
             await createValidator.ValidateAndThrowAsync(request);
             await CreateApiAsync(request);
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaApiResponse<object>();
         }
         catch (ValidationException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception);
+            sakilaApiResponse = new SakilaApiResponse<object>(exception);
         }
         catch (ApiException exception)
         {
@@ -116,7 +116,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
         catch (HttpRequestException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaApiResponse<object>(exception.Message);
         }
 
         if (sakilaApiResponse.IsSuccess)
@@ -138,11 +138,11 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         {
             await updateValidator.ValidateAndThrowAsync(request);
             await UpdateApiAsync(GetUpdateId(request), request);
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaApiResponse<object>();
         }
         catch (ValidationException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception);
+            sakilaApiResponse = new SakilaApiResponse<object>(exception);
         }
         catch (ApiException exception)
         {
@@ -150,7 +150,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
         catch (HttpRequestException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaApiResponse<object>(exception.Message);
         }
 
         if (sakilaApiResponse.IsSuccess)
@@ -171,7 +171,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         try
         {
             await DeleteApiAsync(id);
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>();
+            sakilaApiResponse = new SakilaApiResponse<object>();
         }
         catch (ApiException exception)
         {
@@ -179,7 +179,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
         catch (HttpRequestException exception)
         {
-            sakilaApiResponse = new SakilaSakilaApiResponse<object>(exception.Message);
+            sakilaApiResponse = new SakilaApiResponse<object>(exception.Message);
         }
 
         if (sakilaApiResponse.IsSuccess)
@@ -194,7 +194,7 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
         }
     }
 
-    private static Task<SakilaSakilaApiResponse<T>> HandleApiException<T>(ApiException exception)
+    private static Task<SakilaApiResponse<T>> HandleApiException<T>(ApiException exception)
     {
         try
         {
@@ -206,18 +206,18 @@ public abstract class BaseCrudService<TCreate, TUpdate, TGetAll, TGetById>(
                 var errors =
                     JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), options)
                     ?? new Dictionary<string, string[]>();
-                return Task.FromResult(new SakilaSakilaApiResponse<T>(errors));
+                return Task.FromResult(new SakilaApiResponse<T>(errors));
             }
 
             if (document.TryGetProperty("detail", out var detail))
                 return Task.FromResult(
-                    new SakilaSakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
+                    new SakilaApiResponse<T>(detail.GetString() ?? $"Unexpected status: {exception.StatusCode}"));
         }
         catch (JsonException)
         {
             // ignore
         }
 
-        return Task.FromResult(new SakilaSakilaApiResponse<T>($"Unexpected status: {exception.StatusCode}"));
+        return Task.FromResult(new SakilaApiResponse<T>($"Unexpected status: {exception.StatusCode}"));
     }
 }
