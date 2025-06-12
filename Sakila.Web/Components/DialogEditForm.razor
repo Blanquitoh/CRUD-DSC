@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using MudBlazor
+
+<EditForm EditContext="@EditContext" OnValidSubmit="@OnValidSubmit">
+    <MudDialog>
+        <DialogContent>
+            @ChildContent
+            <DataAnnotationsValidator />
+        </DialogContent>
+        <DialogActions>
+            @DialogActions
+        </DialogActions>
+        <GeneralValidationSummary />
+    </MudDialog>
+</EditForm>
+
+@code {
+    [Parameter] public EditContext EditContext { get; set; } = default!;
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? DialogActions { get; set; }
+}
