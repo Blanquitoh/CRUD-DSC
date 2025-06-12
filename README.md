@@ -94,12 +94,11 @@ La solución está organizada siguiendo los principios de **Clean Architecture**
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clona el repositorio
-2. Ejecuta `libman restore` dentro de `Sakila.Web` para descargar Bootstrap y otras librerías
-3. Ejecutar en orden los scripts `01_sql-server-sakila-schema.sql` y `02_sql-server-sakila-insert-data.sql` del directorio `database/` en SQL Server para la creación de la base de datos Sakila
-4. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
-5. Ejecuta `Sakila.API` (API)
-6. Ejecuta `Sakila.Web` (cliente Razor)
-7. Navega a `/films`, `/cities`, etc. para interactuar con el sistema
+2. Ejecutar en orden los scripts `01_sql-server-sakila-schema.sql` y `02_sql-server-sakila-insert-data.sql` del directorio `database/` en SQL Server para la creación de la base de datos Sakila
+3. Configura la cadena de conexión a tu base de datos Sakila en `appsettings.json`
+4. Ejecuta `Sakila.API` (API)
+5. Ejecuta `Sakila.Web` (cliente Razor)
+6. Navega a `/countries` o `/languages` para interactuar con el sistema
 
 ### Generación de clientes API
 
@@ -108,14 +107,13 @@ Las interfaces `ILanguagesApi` e `ICountriesApi` definen los endpoints y Refit
 genera el código en tiempo de compilación. No es necesario ejecutar comandos
 adicionales: al compilar el proyecto los clientes se crean automáticamente.
 
-### Estado centralizado con Fluxor
+### Manejo de diálogos
 
-Para manejar la visibilidad de los diálogos y la entidad seleccionada se emplea
-el patrón **state store** mediante la librería [Fluxor](https://github.com/mrpm/Fluxor).
-Cada sección (`Countries`, `Languages`) dispone de un `*State` que expone las
-propiedades `IsCreateDialogOpen`, `IsUpdateDialogOpen`, `IsDeleteDialogOpen` y
-el modelo seleccionado. Las páginas despachan acciones para modificar el estado
-en lugar de mantener campos locales, logrando una UI más predecible.
+Las páginas muestran los formularios de creación, edición y borrado mediante el
+`DialogService` de **MudBlazor**. Cada operación se realiza a través de los
+servicios `CountryService` y `LanguageService`, y al cerrar un diálogo se
+actualiza la lista correspondiente. No se emplea una librería de manejo de
+estado global.
 
 ---
 
