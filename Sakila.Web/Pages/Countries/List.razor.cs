@@ -3,6 +3,7 @@ using MudBlazor;
 using Sakila.Contracts.Countries.Queries.Responses;
 using Sakila.Web.Abstractions;
 using Sakila.Web.Pages.Countries.Components;
+using Sakila.Web.Extensions;
 
 namespace Sakila.Web.Pages.Countries;
 
@@ -23,26 +24,28 @@ partial class List
         await CountryService.GetAllAsync(r => Task.FromResult(_getAllResponse = r));
     }
 
-    private async Task ShowCreateDialog()
+    private Task ShowCreateDialog()
     {
-        var dialog = await DialogService.ShowAsync<CountryCreateDialog>("Add Country");
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshCountries();
+        return DialogService.ShowDialogAsync<CountryCreateDialog>(
+            "Add Country",
+            onSuccess: RefreshCountries);
     }
 
-    private async Task ShowUpdateDialog(CountryGetByIdResponse country)
+    private Task ShowUpdateDialog(CountryGetByIdResponse country)
     {
         var parameters = new DialogParameters { [nameof(CountryUpdateDialog.Country)] = country };
-        var dialog = await DialogService.ShowAsync<CountryUpdateDialog>("Edit Country", parameters);
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshCountries();
+        return DialogService.ShowDialogAsync<CountryUpdateDialog>(
+            "Edit Country",
+            parameters,
+            RefreshCountries);
     }
 
-    private async Task ShowDeleteDialog(CountryGetByIdResponse country)
+    private Task ShowDeleteDialog(CountryGetByIdResponse country)
     {
         var parameters = new DialogParameters { [nameof(ConfirmDelete.Country)] = country };
-        var dialog = await DialogService.ShowAsync<ConfirmDelete>("Delete Country", parameters);
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshCountries();
+        return DialogService.ShowDialogAsync<ConfirmDelete>(
+            "Delete Country",
+            parameters,
+            RefreshCountries);
     }
 }

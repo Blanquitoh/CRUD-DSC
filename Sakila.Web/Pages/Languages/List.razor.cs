@@ -3,6 +3,7 @@ using MudBlazor;
 using Sakila.Contracts.Languages.Queries.Responses;
 using Sakila.Web.Abstractions;
 using Sakila.Web.Pages.Languages.Components;
+using Sakila.Web.Extensions;
 
 namespace Sakila.Web.Pages.Languages;
 
@@ -23,26 +24,28 @@ partial class List
         await LanguageService.GetAllAsync(r => Task.FromResult(_getAllResponse = r));
     }
 
-    private async Task ShowCreateDialog()
+    private Task ShowCreateDialog()
     {
-        var dialog = await DialogService.ShowAsync<LanguageCreateDialog>("Add Language");
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshLanguages();
+        return DialogService.ShowDialogAsync<LanguageCreateDialog>(
+            "Add Language",
+            onSuccess: RefreshLanguages);
     }
 
-    private async Task ShowUpdateDialog(LanguageGetByIdResponse language)
+    private Task ShowUpdateDialog(LanguageGetByIdResponse language)
     {
         var parameters = new DialogParameters { [nameof(LanguageUpdateDialog.Language)] = language };
-        var dialog = await DialogService.ShowAsync<LanguageUpdateDialog>("Edit Language", parameters);
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshLanguages();
+        return DialogService.ShowDialogAsync<LanguageUpdateDialog>(
+            "Edit Language",
+            parameters,
+            RefreshLanguages);
     }
 
-    private async Task ShowDeleteDialog(LanguageGetByIdResponse language)
+    private Task ShowDeleteDialog(LanguageGetByIdResponse language)
     {
         var parameters = new DialogParameters { [nameof(ConfirmDelete.Language)] = language };
-        var dialog = await DialogService.ShowAsync<ConfirmDelete>("Delete Language", parameters);
-        var result = (await dialog.Result)!;
-        if (!result.Canceled) await RefreshLanguages();
+        return DialogService.ShowDialogAsync<ConfirmDelete>(
+            "Delete Language",
+            parameters,
+            RefreshLanguages);
     }
 }
