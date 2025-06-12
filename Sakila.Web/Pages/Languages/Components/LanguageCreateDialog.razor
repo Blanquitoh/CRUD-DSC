@@ -1,5 +1,7 @@
 <DialogEditForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
-    <MudTextField @bind-Value="Language.Name" Label="Language Name" For="@(() => Language.Name)" Required="true"/>
+    <DialogContent>
+        <MudTextField @bind-Value="Language.Name" Label="Language Name" For="@(() => Language.Name)" Required="true"/>
+    </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>

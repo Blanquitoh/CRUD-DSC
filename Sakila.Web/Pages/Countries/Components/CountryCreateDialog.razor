@@ -1,5 +1,7 @@
 <DialogEditForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
-    <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true"/>
+    <DialogContent>
+        <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true" />
+    </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
