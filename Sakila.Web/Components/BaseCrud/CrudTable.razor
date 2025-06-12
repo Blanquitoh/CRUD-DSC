@@ -1,0 +1,26 @@
+@typeparam TItem
+
+@if (Items == null)
+{
+    <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="2">
+        <MudProgressCircular Indeterminate="true" />
+        <MudText Typo="Typo.subtitle2">Loading data...</MudText>
+    </MudStack>
+}
+else
+{
+    <MudTable Dense="true" Hover="true" Striped="true" Outlined="true" Items="Items">
+        <HeaderContent>
+            @HeaderContent
+        </HeaderContent>
+        <RowTemplate Context="context">
+            @RowTemplate(context)
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    [Parameter] public IEnumerable<TItem>? Items { get; set; }
+    [Parameter] public RenderFragment? HeaderContent { get; set; }
+    [Parameter] public RenderFragment<TItem>? RowTemplate { get; set; }
+}

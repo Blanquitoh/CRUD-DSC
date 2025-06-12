@@ -1,47 +1,25 @@
 @page "/countries"
+@using Sakila.Contracts.Countries.Commands
+@using Sakila.Contracts.Countries.Queries.Responses
+@using Sakila.Web.Pages.BaseCrud
 
-<MudGrid Class="mb-3 pt-3">
-    <MudItem xs="6">
-        <MudText Typo="Typo.h3" Class="my-0">Countries</MudText>
-    </MudItem>
-    <MudItem xs="6" Align="End" Class="d-flex justify-end">
-        <MudButton Size="Size.Small" Color="Color.Primary"
-                   Variant="Variant.Filled"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   OnClick="ShowCreateDialog">
-            Add Language
-        </MudButton>
-    </MudItem>
-</MudGrid>
-
-@if (_getAllResponse?.Data?.Countries == null)
-{
-    <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="2">
-        <MudProgressCircular Indeterminate="true" />
-        <MudText Typo="Typo.subtitle2">Loading data...</MudText>
-    </MudStack>
-}
-else
-{
-    <MudTable Dense="true" Hover="true" Striped="true" Outlined="true"
-              Items="_getAllResponse.Data!.Countries">
-        <HeaderContent>
-            <MudTh>Name</MudTh>
-            <MudTh Align="Right">Actions</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd Align="Right">
-                <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                               Color="Color.Warning"
-                               Size="Size.Small"
-                               OnClick="() => ShowUpdateDialog(context)"
-                               Class="me-1" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="() => ShowDeleteDialog(context)" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+<BaseCrudPage
+    TService="ICountryService"
+    TCreate="CountryCreateRequest"
+    TUpdate="CountryUpdateRequest"
+    TGetAll="CountryGetAllResponse"
+    TGetById="CountryGetByIdResponse"
+    TItem="CountryGetByIdResponse"
+    TCreateDialog="CountryCreateDialog"
+    TUpdateDialog="CountryUpdateDialog"
+    TDeleteDialog="ConfirmDelete"
+    Title="Countries"
+    AddButtonText="Add Country"
+    CreateDialogTitle="Add Country"
+    UpdateDialogTitle="Edit Country"
+    DeleteDialogTitle="Delete Country"
+    ItemsSelector="@(r => r.Countries)"
+    HeaderContent="@<MudTh>Name</MudTh>"
+    RowTemplate="@(context => @<MudTd DataLabel=\"Name\">@context.Name</MudTd>)"
+    UpdateDialogParameters="@(c => new DialogParameters { [nameof(CountryUpdateDialog.Country)] = c })"
+    DeleteDialogParameters="@(c => new DialogParameters { [nameof(ConfirmDelete.Country)] = c })" />

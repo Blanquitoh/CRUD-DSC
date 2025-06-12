@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Sakila.Web.Components;
+namespace Sakila.Web.Components.BaseCrud;
 
 public partial class DialogEditForm
 {

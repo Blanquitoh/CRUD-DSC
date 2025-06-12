@@ -1,47 +1,25 @@
 @page "/languages"
+@using Sakila.Contracts.Languages.Commands
+@using Sakila.Contracts.Languages.Queries.Responses
+@using Sakila.Web.Pages.BaseCrud
 
-<MudGrid Class="mb-3 pt-3">
-    <MudItem xs="6">
-        <MudText Typo="Typo.h3" Class="my-0">Languages</MudText>
-    </MudItem>
-    <MudItem xs="6" Align="End" Class="d-flex justify-end">
-        <MudButton Size="Size.Small" Color="Color.Primary"
-                   Variant="Variant.Filled"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   OnClick="ShowCreateDialog">
-            Add Language
-        </MudButton>
-    </MudItem>
-</MudGrid>
-
-@if (_getAllResponse?.Data?.Languages == null)
-{
-    <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="2">
-        <MudProgressCircular Indeterminate="true"/>
-        <MudText Typo="Typo.subtitle2">Loading data...</MudText>
-    </MudStack>
-}
-else
-{
-    <MudTable Dense="true" Hover="true" Striped="true" Outlined="true"
-              Items="_getAllResponse.Data!.Languages">
-        <HeaderContent>
-            <MudTh>Name</MudTh>
-            <MudTh Align="Right">Actions</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd Align="Right">
-                <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                               Color="Color.Warning"
-                               Size="Size.Small"
-                               OnClick="() => ShowUpdateDialog(context)"
-                               Class="me-1"/>
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="() => ShowDeleteDialog(context)"/>
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+<BaseCrudPage
+    TService="ILanguageService"
+    TCreate="LanguageCreateRequest"
+    TUpdate="LanguageUpdateRequest"
+    TGetAll="LanguageGetAllResponse"
+    TGetById="LanguageGetByIdResponse"
+    TItem="LanguageGetByIdResponse"
+    TCreateDialog="LanguageCreateDialog"
+    TUpdateDialog="LanguageUpdateDialog"
+    TDeleteDialog="ConfirmDelete"
+    Title="Languages"
+    AddButtonText="Add Language"
+    CreateDialogTitle="Add Language"
+    UpdateDialogTitle="Edit Language"
+    DeleteDialogTitle="Delete Language"
+    ItemsSelector="@(r => r.Languages)"
+    HeaderContent="@<MudTh>Name</MudTh>"
+    RowTemplate="@(context => @<MudTd DataLabel=\"Name\">@context.Name</MudTd>)"
+    UpdateDialogParameters="@(lang => new DialogParameters { [nameof(LanguageUpdateDialog.Language)] = lang })"
+    DeleteDialogParameters="@(lang => new DialogParameters { [nameof(ConfirmDelete.Language)] = lang })" />
