@@ -3,10 +3,14 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Sakila.API.Middleware;
 
-public class ExceptionHandlingMiddleware(RequestDelegate next, ProblemDetailsFactory problemDetailsFactory)
+public class ExceptionHandlingMiddleware(
+    RequestDelegate next,
+    ProblemDetailsFactory problemDetailsFactory,
+    ILogger<ExceptionHandlingMiddleware> logger)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -32,39 +36,39 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ProblemDetailsFac
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
         {
+            logger.LogError(sqlEx, "Database update error");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var problem = problemDetailsFactory.CreateProblemDetails(
                 context,
                 StatusCodes.Status500InternalServerError,
                 "A database error occurred.",
-                detail: sqlEx.Message,
                 type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
             await context.Response.WriteAsJsonAsync(problem);
         }
         catch (SqlException ex)
         {
+            logger.LogError(ex, "Database error");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var problem = problemDetailsFactory.CreateProblemDetails(
                 context,
                 StatusCodes.Status500InternalServerError,
                 "A database error occurred.",
-                detail: ex.Message,
                 type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
             await context.Response.WriteAsJsonAsync(problem);
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Unhandled exception");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var problem = problemDetailsFactory.CreateProblemDetails(
                 context,
                 StatusCodes.Status500InternalServerError,
                 "An internal server error occurred.",
-                detail: ex.Message,
                 type: "https://tools.ietf.org/html/rfc7231#section-6.6.1");
 
             await context.Response.WriteAsJsonAsync(problem);
