@@ -1,11 +1,11 @@
 using MediatR;
 using Sakila.Application.Common.Validation;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Common.Handlers;
 
 public abstract class DeleteHandlerBase<TRequest, TEntity, TData>(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IValidatorWithData<TRequest, TData> validator) : IRequestHandler<TRequest, bool>
     where TRequest : IRequest<bool> where TEntity : class
 {

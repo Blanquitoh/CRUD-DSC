@@ -1,12 +1,12 @@
 using FluentValidation;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
 public class CountryCreateValidator : AbstractValidator<CountryCreateRequest>
 {
-    public CountryCreateValidator(SakilaContext dbContext)
+    public CountryCreateValidator(ISakilaContext dbContext)
     {
         Include(new Contracts.Countries.Commands.Validators.CountryCreateValidator());
 

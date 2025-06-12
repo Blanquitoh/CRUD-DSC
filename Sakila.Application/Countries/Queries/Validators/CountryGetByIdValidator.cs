@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Queries.Validators.Data;
 using Sakila.Contracts.Countries.Queries;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Queries.Validators;
 
 public class CountryGetByIdValidator : ValidatorWithData<CountryGetByIdRequest, CountryGetByIdValidatorData>
 {
-    public CountryGetByIdValidator(SakilaContext dbContext)
+    public CountryGetByIdValidator(ISakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>

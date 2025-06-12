@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
 public class CountryUpdateValidator : ValidatorWithData<CountryUpdateRequest, CountryUpdateValidatorData>
 {
-    public CountryUpdateValidator(SakilaContext dbContext)
+    public CountryUpdateValidator(ISakilaContext dbContext)
     {
         Include(new Contracts.Countries.Commands.Validators.CountryUpdateValidator());
 

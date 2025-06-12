@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Commands.Validators.Data;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
 public class LanguageDeleteValidator : ValidatorWithData<LanguageDeleteRequest, LanguageDeleteValidatorData>
 {
-    public LanguageDeleteValidator(SakilaContext dbContext)
+    public LanguageDeleteValidator(ISakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>

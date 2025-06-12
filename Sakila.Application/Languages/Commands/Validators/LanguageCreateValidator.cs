@@ -1,12 +1,12 @@
 using FluentValidation;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
 public class LanguageCreateValidator : AbstractValidator<LanguageCreateRequest>
 {
-    public LanguageCreateValidator(SakilaContext dbContext)
+    public LanguageCreateValidator(ISakilaContext dbContext)
     {
         Include(new Contracts.Languages.Commands.Validators.LanguageCreateValidator());
 

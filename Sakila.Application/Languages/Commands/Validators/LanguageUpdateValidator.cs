@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Commands.Validators.Data;
 using Sakila.Contracts.Languages.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Commands.Validators;
 
 public class LanguageUpdateValidator : ValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData>
 {
-    public LanguageUpdateValidator(SakilaContext dbContext)
+    public LanguageUpdateValidator(ISakilaContext dbContext)
     {
         Include(new Contracts.Languages.Commands.Validators.LanguageUpdateValidator());
 

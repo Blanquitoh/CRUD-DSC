@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Sakila.Contracts\Sakila.Contracts.csproj" />
     <ProjectReference Include="..\Sakila.Domain\Sakila.Domain.csproj" />
-    <ProjectReference Include="..\Sakila.Infrastructure\Sakila.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

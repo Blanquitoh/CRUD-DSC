@@ -4,12 +4,12 @@ using Sakila.Application.Common.Validation;
 using Sakila.Application.Languages.Commands.Validators.Data;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Domain.Models;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Languages.Commands.Handlers;
 
 public class UpdateHandler(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IMapper mapper,
     IValidatorWithData<LanguageUpdateRequest, LanguageUpdateValidatorData> validator)
     : UpdateHandlerBase<LanguageUpdateRequest, Language, LanguageUpdateValidatorData>(dbContext, mapper, validator)

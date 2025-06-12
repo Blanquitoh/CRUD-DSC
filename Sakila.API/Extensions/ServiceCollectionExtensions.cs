@@ -18,6 +18,7 @@ using Sakila.Contracts.Countries.Commands;
 using Sakila.Contracts.Countries.Queries;
 using Sakila.Contracts.Languages.Commands;
 using Sakila.Contracts.Languages.Queries;
+using Sakila.Application.Common.Interfaces;
 using Sakila.Infrastructure.Data;
 
 namespace Sakila.API.Extensions;
@@ -47,6 +48,7 @@ public static class ServiceCollectionExtensions
                 options.EnableSensitiveDataLogging()
                     .LogTo(Console.WriteLine, LogLevel.Information);
         });
+        services.AddScoped<ISakilaContext>(sp => sp.GetRequiredService<SakilaContext>());
 
         services
             .AddMediatR(serviceConfiguration =>

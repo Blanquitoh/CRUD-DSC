@@ -3,12 +3,12 @@ using FluentValidation;
 using Sakila.Application.Common.Handlers;
 using Sakila.Contracts.Countries.Commands;
 using Sakila.Domain.Models;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Commands.Handlers;
 
 public class CreateHandler(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IMapper mapper,
     IValidator<CountryCreateRequest> validator) :
     CreateHandlerBase<CountryCreateRequest, Country, int>(dbContext, mapper, validator)

@@ -1,12 +1,12 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Common.Handlers;
 
 public abstract class CreateHandlerBase<TRequest, TEntity, TResponse>(
-    SakilaContext dbContext,
+    ISakilaContext dbContext,
     IMapper mapper,
     IValidator<TRequest> validator) : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse> where TEntity : class

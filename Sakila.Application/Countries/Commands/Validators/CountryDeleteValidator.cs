@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Sakila.Application.Common.Validation;
 using Sakila.Application.Countries.Commands.Validators.Data;
 using Sakila.Contracts.Countries.Commands;
-using Sakila.Infrastructure.Data;
+using Sakila.Application.Common.Interfaces;
 
 namespace Sakila.Application.Countries.Commands.Validators;
 
 public class CountryDeleteValidator : ValidatorWithData<CountryDeleteRequest, CountryDeleteValidatorData>
 {
-    public CountryDeleteValidator(SakilaContext dbContext)
+    public CountryDeleteValidator(ISakilaContext dbContext)
     {
         RuleFor(x => x.Id)
             .MustAsync(async (_, id, ctx, ct) =>
