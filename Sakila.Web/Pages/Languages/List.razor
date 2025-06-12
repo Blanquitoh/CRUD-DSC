@@ -1,28 +1,46 @@
 @page "/languages"
-@using Sakila.Contracts.Languages.Commands
-@using Sakila.Contracts.Languages.Queries.Responses
-@using Sakila.Web.Pages.BaseCrud
 
-<MudText Typo="Typo.h3">Languages</MudText>
-
-<MudButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Class="mb-3" OnClick="ShowCreateDialog">Add Language</MudButton>
+<MudGrid Class="mb-3 pt-3">
+    <MudItem xs="6">
+        <MudText Typo="Typo.h3" Class="my-0">Languages</MudText>
+    </MudItem>
+    <MudItem xs="6" Align="End" Class="d-flex justify-end">
+        <MudButton Size="Size.Small" Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="ShowCreateDialog">
+            Add Language
+        </MudButton>
+    </MudItem>
+</MudGrid>
 
 @if (_getAllResponse?.Data?.Languages == null)
 {
-    <MudProgressCircular Indeterminate="true"/>
+    <MudStack Direction="Row" AlignItems="AlignItems.Center" Spacing="2">
+        <MudProgressCircular Indeterminate="true" />
+        <MudText Typo="Typo.subtitle2">Loading data...</MudText>
+    </MudStack>
 }
 else
 {
-    <MudTable Items="_getAllResponse.Data!.Languages">
+    <MudTable Dense="true" Hover="true" Striped="true" Outlined="true"
+              Items="_getAllResponse.Data!.Languages">
         <HeaderContent>
             <MudTh>Name</MudTh>
-            <MudTh>Actions</MudTh>
+            <MudTh Align="Right">Actions</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Name">@context.Name</MudTd>
-            <MudTd>
-                <MudButton Size="Size.Small" Color="Color.Warning" Variant="Variant.Text" OnClick="() => ShowUpdateDialog(context)" Class="me-1">Edit</MudButton>
-                <MudButton Size="Size.Small" Color="Color.Error" Variant="Variant.Text" OnClick="() => ShowDeleteDialog(context)">Delete</MudButton>
+            <MudTd Align="Right">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                               Color="Color.Warning"
+                               Size="Size.Small"
+                               OnClick="() => ShowUpdateDialog(context)"
+                               Class="me-1" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="() => ShowDeleteDialog(context)" />
             </MudTd>
         </RowTemplate>
     </MudTable>
