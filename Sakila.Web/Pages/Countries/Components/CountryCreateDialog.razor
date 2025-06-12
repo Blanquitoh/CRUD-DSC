@@ -1,13 +1,7 @@
-<EditForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
-    <MudDialog>
-        <DialogContent>
-            <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true"/>
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-        </DialogContent>
-        <DialogActions>
-            <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
-        </DialogActions>
-    </MudDialog>
-</EditForm>
+<DialogEditForm EditContext="CountryService.EditContext" OnValidSubmit="SubmitAsync">
+    <MudTextField @bind-Value="Country.Name" Label="Country Name" For="@(() => Country.Name)" Required="true"/>
+    <DialogActions>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
+    </DialogActions>
+</DialogEditForm>

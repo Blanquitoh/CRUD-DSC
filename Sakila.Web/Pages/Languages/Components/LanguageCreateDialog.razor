@@ -1,13 +1,7 @@
-<EditForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
-    <MudDialog>
-        <DialogContent>
-            <MudTextField @bind-Value="Language.Name" Label="Language Name" For="@(() => Language.Name)" Required="true"/>
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-        </DialogContent>
-        <DialogActions>
-            <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
-        </DialogActions>
-    </MudDialog>
-</EditForm>
+<DialogEditForm EditContext="LanguageService.EditContext" OnValidSubmit="SubmitAsync">
+    <MudTextField @bind-Value="Language.Name" Label="Language Name" For="@(() => Language.Name)" Required="true"/>
+    <DialogActions>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Add</MudButton>
+    </DialogActions>
+</DialogEditForm>
