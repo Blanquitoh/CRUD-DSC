@@ -125,3 +125,6 @@ en lugar de mantener campos locales, logrando una UI más predecible.
 - [ASP.NET Core Blazor WebAssembly](https://learn.microsoft.com/en-us/aspnet/core/blazor/)
 - [SQL Server Documentation](https://learn.microsoft.com/en-us/sql/)
 - [SQL Server Sakila Sample DB](https://github.com/jOOQ/sakila/tree/main)
+## 📑 Licencia
+
+Este proyecto se distribuye bajo la licencia [MIT](LICENSE).
